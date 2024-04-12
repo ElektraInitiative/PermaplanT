@@ -5,16 +5,10 @@ use actix_web::{
     web::{Data, Json, Path, Query},
     HttpResponse, Result,
 };
-use uuid::Uuid;
 
-use crate::{
-    config::auth::user_info::UserInfo,
-    config::data::AppDataInner,
-    model::dto::actions::{
-        Action, CreateShadingActionPayload, DeleteShadingActionPayload, UpdateShadingActionPayload,
-        UpdateShadingAddDateActionPayload, UpdateShadingRemoveDateActionPayload,
-    },
-};
+use crate::model::dto::actions::Action;
+use crate::model::dto::core::ActionDtoWrapper;
+use crate::{config::auth::user_info::UserInfo, config::data::AppDataInner};
 use crate::{
     model::dto::shadings::{
         DeleteShadingDto, NewShadingDto, ShadingSearchParameters, UpdateShadingDto,
@@ -68,26 +62,25 @@ pub async fn find(
 #[post("")]
 pub async fn create(
     path: Path<i32>,
-    json: Json<NewShadingDto>,
+    new_shadings: Json<ActionDtoWrapper<Vec<NewShadingDto>>>,
     app_data: Data<AppDataInner>,
     user_info: UserInfo,
 ) -> Result<HttpResponse> {
-    let new_shading = json.0;
-    let dto = shadings::create(new_shading.clone(), &app_data).await?;
+    let map_id = path.into_inner();
+
+    let ActionDtoWrapper { action_id, dto } = new_shadings.into_inner();
+
+    let created_shadings = shadings::create(dto, &app_data).await?;
 
     app_data
         .broadcaster
         .broadcast(
-            path.into_inner(),
-            Action::CreateShading(CreateShadingActionPayload::new(
-                dto.clone(),
-                user_info.id,
-                new_shading.action_id,
-            )),
+            map_id,
+            Action::new_create_shading_action(&created_shadings, user_info.id, action_id),
         )
         .await;
 
-    Ok(HttpResponse::Created().json(dto))
+    Ok(HttpResponse::Created().json(created_shadings))
 }
 
 /// Endpoint for updating a `Shading`.
@@ -99,9 +92,9 @@ pub async fn create(
     params(
         ("map_id" = i32, Path, description = "The id of the map the layer is on"),
     ),
-    request_body = UpdateShadingDto,
+    request_body = ActionDtoWrapperUpdateShadings,
     responses(
-        (status = 200, description = "Update a shading", body = ShadingDto)
+        (status = 200, description = "Update a shading", body = Vec<ShadingDto>)
     ),
     security(
         ("oauth2" = [])
@@ -109,26 +102,27 @@ pub async fn create(
 )]
 #[patch("/{shading_id}")]
 pub async fn update(
-    path: Path<(i32, Uuid)>,
-    json: Json<UpdateShadingDto>,
+    path: Path<i32>,
+    update_shading: Json<ActionDtoWrapper<UpdateShadingDto>>,
     app_data: Data<AppDataInner>,
     user_info: UserInfo,
 ) -> Result<HttpResponse> {
-    let (map_id, shading_id) = path.into_inner();
-    let update_shading = json.0;
+    let map_id = path.into_inner();
 
-    let shading = shadings::update(shading_id, update_shading.clone(), &app_data).await?;
+    let ActionDtoWrapper { action_id, dto } = update_shading.into_inner();
 
-    let action = match update_shading {
-        UpdateShadingDto::Update(action_dto) => Action::UpdateShading(
-            UpdateShadingActionPayload::new(shading.clone(), user_info.id, action_dto.action_id),
-        ),
-        UpdateShadingDto::UpdateAddDate(action_dto) => Action::UpdateShadingAddDate(
-            UpdateShadingAddDateActionPayload::new(&shading, user_info.id, action_dto.action_id),
-        ),
-        UpdateShadingDto::UpdateRemoveDate(action_dto) => Action::UpdateShadingRemoveDate(
-            UpdateShadingRemoveDateActionPayload::new(&shading, user_info.id, action_dto.action_id),
-        ),
+    let shading = shadings::update(dto.clone(), &app_data).await?;
+
+    let action = match &dto {
+        UpdateShadingDto::Update(dto) => {
+            Action::new_update_shading_action(dto, user_info.id, action_id)
+        }
+        UpdateShadingDto::UpdateAddDate(dto) => {
+            Action::new_update_shading_add_date_action(dto, user_info.id, action_id)
+        }
+        UpdateShadingDto::UpdateRemoveDate(dto) => {
+            Action::new_update_shading_remove_date_action(dto, user_info.id, action_id)
+        }
     };
 
     app_data.broadcaster.broadcast(map_id, action).await;
@@ -155,25 +149,22 @@ pub async fn update(
 )]
 #[delete("/{shading_id}")]
 pub async fn delete(
-    path: Path<(i32, Uuid)>,
-    json: Json<DeleteShadingDto>,
+    path: Path<i32>,
+    delete_shadings: Json<ActionDtoWrapper<Vec<DeleteShadingDto>>>,
     app_data: Data<AppDataInner>,
     user_info: UserInfo,
 ) -> Result<HttpResponse> {
-    let (map_id, shading_id) = path.into_inner();
-    let delete_shading = json.0;
+    let map_id = path.into_inner();
 
-    shadings::delete_by_id(shading_id, &app_data).await?;
+    let ActionDtoWrapper { action_id, dto } = delete_shadings.into_inner();
+
+    shadings::delete_by_ids(dto.clone(), &app_data).await?;
 
     app_data
         .broadcaster
         .broadcast(
             map_id,
-            Action::DeleteShading(DeleteShadingActionPayload::new(
-                shading_id,
-                user_info.id,
-                delete_shading.action_id,
-            )),
+            Action::new_delete_shading_action(&dto, user_info.id, action_id),
         )
         .await;
 

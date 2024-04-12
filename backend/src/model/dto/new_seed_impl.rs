@@ -10,7 +10,6 @@ impl From<(NewSeedDto, Uuid)> for NewSeed {
     fn from((new_seed, owner_id): (NewSeedDto, Uuid)) -> Self {
         Self {
             name: new_seed.name,
-            variety: new_seed.variety,
             plant_id: new_seed.plant_id,
             harvest_year: new_seed.harvest_year,
             quantity: new_seed.quantity,

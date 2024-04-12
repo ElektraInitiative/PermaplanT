@@ -6,12 +6,14 @@ import blog from './blog.json';
 import blossoms from './blossoms.json';
 import common from './common.json';
 import contact from './contact.json';
+import drawings from './drawings.json';
 import enums from './enums.json';
 import featureDescriptions from './featureDescriptions.json';
 import fileSelector from './fileSelector.json';
 import geomap from './geomap.json';
 import guidedTour from './guidedTour.json';
 import imprint from './imprint.json';
+import keybindings from './keybindings.json';
 import landingPage from './landingPage.json';
 import layerSettings from './layerSettings.json';
 import layers from './layers.json';
@@ -19,6 +21,7 @@ import maps from './maps.json';
 import nextcloudIntegration from './nextcloudIntegration.json';
 import overview from './overview.json';
 import plantAndSeedSearch from './plantAndSeedSearch.json';
+import plantRelations from './plantRelations.json';
 import plantSearch from './plantSearch.json';
 import plantingSuggestions from './plantingSuggestions.json';
 import plantings from './plantings.json';
@@ -66,10 +69,13 @@ export default {
   layers,
   timeline,
   plantings,
+  drawings,
   guidedTour,
   blossoms,
   readOnly,
   toolboxTooltips,
   polygon,
+  plantRelations,
+  keybindings,
   shadeLayer,
 };

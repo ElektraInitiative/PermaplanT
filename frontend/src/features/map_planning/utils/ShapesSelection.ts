@@ -31,7 +31,7 @@ export const selectIntersectingShapes = (
       // To exclude Konva's transformer, check if node contains children.
       // 'listening' is explicitly checked for '!== false' because
       // Konva treats it as true if it's undefined or missing at all.
-      return shape?.attrs.listening !== false && shape?.hasChildren();
+      return shape?.attrs.listening !== false;
     });
 
   if (!allShapes) return;

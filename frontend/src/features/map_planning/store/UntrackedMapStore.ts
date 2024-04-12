@@ -7,12 +7,14 @@ import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_
 import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 import { convertToDate } from '../utils/date-utils';
 import { filterVisibleObjects } from '../utils/filterVisibleObjects';
+import { isOneAreaOfPlanting } from '../utils/planting-utils';
 import {
   ViewRect,
   TrackedMapSlice,
   UNTRACKED_DEFAULT_STATE,
   UntrackedMapSlice,
 } from './MapStoreTypes';
+import { TransformerStore, useTransformerStore } from './transformer/TransformerStore';
 import { clearInvalidSelection, typeOfLayer } from './utils';
 
 export const createUntrackedMapSlice: StateCreator<
@@ -65,18 +67,20 @@ export const createUntrackedMapSlice: StateCreator<
   lastActions: [],
   updateSelectedLayer(selectedLayer) {
     // Disable all layer specific actions.
-    get().setInhibitTransformer(false);
-    get().removeNodesFromTransformer();
+    //useTransformerStore.getState().actions.setInhibitTransformer(false);
+    useTransformerStore.getState().actions.removeAllNodesFromSelection();
+    // Clear the transformer's nodes.
+    useTransformerStore.getState().actions.clearSelection();
     get().baseLayerDeactivatePolygonManipulation();
     get().shadeLayerDeactivatePolygonManipulation();
     get().clearStatusPanelContent();
 
     if (typeOfLayer(selectedLayer) === LayerType.Shade) {
-      get().transformer.current?.rotateEnabled(false);
-      get().transformer.current?.resizeEnabled(false);
+      useTransformerStore.getState().actions.enableRotation(false);
+      useTransformerStore.getState().actions.enableRotation(false);
     } else {
-      get().transformer.current?.rotateEnabled(true);
-      get().transformer.current?.resizeEnabled(true);
+      useTransformerStore.getState().actions.enableRotation(true);
+      useTransformerStore.getState().actions.enableRotation(true);
     }
 
     set((state) => ({
@@ -96,6 +100,12 @@ export const createUntrackedMapSlice: StateCreator<
             measurePoint1: null,
             measurePoint2: null,
             measureStep: 'inactive',
+          },
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            selectedDrawings: null,
+            selectedShape: null,
+            editMode: undefined,
           },
           shade: {
             ...state.untrackedState.layers.shade,
@@ -152,7 +162,15 @@ export const createUntrackedMapSlice: StateCreator<
       },
     }));
   },
-  selectPlantings(plantings) {
+  selectPlantings(plantings, transformerStore?: TransformerStore) {
+    if (transformerStore) {
+      if (isOneAreaOfPlanting(plantings)) {
+        transformerStore.actions.enableAllAnchors();
+      } else {
+        transformerStore.actions.enableDefaultAnchors();
+      }
+    }
+
     set((state) => ({
       ...state,
       untrackedState: {
@@ -195,6 +213,7 @@ export const createUntrackedMapSlice: StateCreator<
       },
     }));
   },
+
   async updateTimelineDate(date) {
     const bounds = get().untrackedState.timelineBounds;
     const from = convertToDate(bounds.from);
@@ -227,6 +246,11 @@ export const createUntrackedMapSlice: StateCreator<
       date,
     );
 
+    const drawingsVisibleRelativeToTimelineDate = filterVisibleObjects(
+      get().trackedState.layers.drawing.loadedObjects,
+      date,
+    );
+
     const shadingsVisibleRelativeToTimelineDate = filterVisibleObjects(
       get().trackedState.layers.shade.loadedObjects,
       date,
@@ -246,9 +270,14 @@ export const createUntrackedMapSlice: StateCreator<
             ...state.trackedState.layers.shade,
             objects: shadingsVisibleRelativeToTimelineDate,
           },
+          drawing: {
+            ...state.trackedState.layers.drawing,
+            objects: drawingsVisibleRelativeToTimelineDate,
+          },
         },
       },
     }));
+
     clearInvalidSelection(get);
   },
   setTooltipText(content) {
@@ -371,8 +400,8 @@ export const createUntrackedMapSlice: StateCreator<
   },
   baseLayerActivateDeletePolygonPoints() {
     get().baseLayerDeactivateMeasurement();
-    get().transformer.current?.rotateEnabled(false);
-    get().transformer.current?.resizeEnabled(false);
+    useTransformerStore.getState().actions.enableRotation(false);
+    useTransformerStore.getState().actions.enableResizing(false);
     set((state) => ({
       ...state,
       untrackedState: {
@@ -392,8 +421,8 @@ export const createUntrackedMapSlice: StateCreator<
   },
   baseLayerActivateMovePolygonPoints() {
     get().baseLayerDeactivateMeasurement();
-    get().transformer.current?.rotateEnabled(false);
-    get().transformer.current?.resizeEnabled(false);
+    useTransformerStore.getState().actions.enableRotation(false);
+    useTransformerStore.getState().actions.enableResizing(false);
     set((state) => ({
       ...state,
       untrackedState: {
@@ -412,8 +441,8 @@ export const createUntrackedMapSlice: StateCreator<
     }));
   },
   baseLayerDeactivatePolygonManipulation() {
-    get().transformer.current?.rotateEnabled(true);
-    get().transformer.current?.resizeEnabled(true);
+    useTransformerStore.getState().actions.enableRotation(true);
+    useTransformerStore.getState().actions.enableResizing(true);
     set((state) => ({
       ...state,
       untrackedState: {
@@ -433,8 +462,8 @@ export const createUntrackedMapSlice: StateCreator<
   },
   shadeLayerSelectShadings(shadings: ShadingDto[] | null) {
     if (shadings === null) {
-      get().removeNodesFromTransformer();
-      get().setInhibitTransformer(false);
+      useTransformerStore.getState().actions.removeAllNodesFromSelection();
+      //useTransformerStore.getState().actions.setInhibitTransformer(false);
       get().shadeLayerDeactivatePolygonManipulation();
       get().clearStatusPanelContent();
     }
@@ -519,7 +548,7 @@ export const createUntrackedMapSlice: StateCreator<
   shadeLayerSelectShadeForNewShading(shade: Shade | null) {
     if (shade !== null) {
       get().shadeLayerDeactivatePolygonManipulation();
-      get().shadeLayerSelectShadings(null);
+      get().shadeLayerSelectShadings(null, useTransformerStore.getState());
     }
     set((state) => ({
       ...state,
@@ -530,6 +559,153 @@ export const createUntrackedMapSlice: StateCreator<
           shade: {
             ...state.untrackedState.layers.shade,
             selectedShadeForNewShading: shade,
+          },
+        },
+      },
+    }));
+  },
+
+  disableShapeSelection() {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        shapeSelectionEnabled: false,
+      },
+    }));
+  },
+
+  enableShapeSelection() {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        shapeSelectionEnabled: true,
+      },
+    }));
+  },
+
+  drawingLayerSetSelectedColor(color) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            selectedColor: color,
+          },
+        },
+      },
+    }));
+  },
+
+  drawingLayerSetFillEnabled(fill: boolean) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            fillEnabled: fill,
+          },
+        },
+      },
+    }));
+  },
+
+  drawingLayerSetSelectedStrokeWidth(strokeWidth) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            selectedStrokeWidth: strokeWidth,
+          },
+        },
+      },
+    }));
+  },
+
+  drawingLayerActivateDrawingMode(shape) {
+    get().drawingLayerClearSelectedShape();
+    get().disableShapeSelection();
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            selectedShape: shape,
+            selectedDrawings: null,
+          },
+        },
+      },
+    }));
+  },
+
+  drawingLayerSetEditMode(drawingId, editMode) {
+    if (drawingId != undefined) {
+      get().disableShapeSelection();
+    }
+
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            editDrawingId: drawingId,
+            editMode: editMode,
+          },
+        },
+      },
+    }));
+  },
+
+  drawingLayerClearSelectedShape() {
+    get().enableShapeSelection();
+    get().clearStatusPanelContent();
+    useTransformerStore.getState().actions.clearSelection();
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            selectedShape: null,
+            editMode: undefined,
+          },
+        },
+      },
+    }));
+  },
+  selectDrawings(drawings, transformerStore?: TransformerStore) {
+    if (transformerStore) {
+      transformerStore.actions.enableAllAnchors();
+    }
+
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            selectedDrawings: drawings,
           },
         },
       },
@@ -566,8 +742,6 @@ export const createUntrackedMapSlice: StateCreator<
     }));
   },
   __removeLastAction({ actionId, entityId }) {
-    console.log('Removing action', actionId, entityId);
-
     set((state) => ({
       ...state,
       lastActions: state.lastActions.filter(

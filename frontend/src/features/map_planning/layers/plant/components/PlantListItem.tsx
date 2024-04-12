@@ -6,7 +6,7 @@ import { PlantNameFromPlant } from '@/utils/plant-naming';
 
 export type PlantListElementProps = {
   plant: PlantsSummaryDto;
-  onClick: () => void;
+  onClick: (plant: PlantsSummaryDto) => void;
   isHighlighted?: boolean;
   disabled?: boolean;
 };
@@ -28,7 +28,7 @@ export function PlantListItem({
     >
       <button
         disabled={disabled}
-        onClick={onClick}
+        onClick={() => onClick(plant)}
         className={`${highlightedClass} flex flex-1 items-center gap-2 rounded-md stroke-neutral-400 px-2 py-1 hover:bg-neutral-200 hover:stroke-primary-400 hover:text-primary-400 focus:outline-none focus:ring-4 focus:ring-primary-300 disabled:cursor-not-allowed disabled:border-neutral-300 disabled:bg-neutral-300 disabled:text-neutral-500 dark:hover:bg-neutral-300-dark dark:disabled:border-neutral-300-dark dark:disabled:bg-neutral-300-dark dark:disabled:text-neutral-500-dark`}
       >
         <PublicNextcloudImage

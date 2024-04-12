@@ -8,12 +8,20 @@ import {
 } from '@/features/map_planning/layers/shade/actions';
 import { UpdateBaseLayerAction, UpdateMapGeometry } from '../layers/base/actions';
 import {
+  CreateDrawingAction,
+  UpdateDrawingAction,
+  DeleteDrawingAction,
+  UpdateDrawingAddDateAction,
+  UpdateDrawingRemoveDateAction,
+} from '../layers/drawing/actions';
+import {
   CreatePlantAction,
   DeletePlantAction,
   MovePlantAction,
   TransformPlantAction,
   UpdateAddDatePlantAction,
   UpdatePlantingAdditionalName,
+  UpdatePlantingNotesAction,
   UpdateRemoveDatePlantAction,
 } from '../layers/plant/actions';
 import useMapStore from './MapStore';
@@ -40,7 +48,7 @@ export function handleRemoteAction(ev: MessageEvent<unknown>, userId: string) {
 
   const action = convertToAction(remoteAction);
 
-  if (remoteAction.payload.userId === userId) {
+  if (remoteAction.userId === userId) {
     // Ignore actions that are sent back to the user that initiated them.
     // see https://www.figma.com/blog/how-figmas-multiplayer-technology-works/#syncing-object-properties
     const lastActions = useMapStore.getState().lastActions;
@@ -58,37 +66,34 @@ export function handleRemoteAction(ev: MessageEvent<unknown>, userId: string) {
 }
 
 function convertToAction(remoteAction: RemoteAction): Action<unknown, unknown> {
-  switch (remoteAction.type) {
+  switch (remoteAction.action.type) {
     case 'CreatePlanting':
-      return new CreatePlantAction({ ...remoteAction.payload }, remoteAction.payload.actionId);
+      return new CreatePlantAction(remoteAction.action.payload, remoteAction.actionId);
     case 'DeletePlanting':
-      return new DeletePlantAction({ ...remoteAction.payload }, remoteAction.payload.actionId);
+      return new DeletePlantAction(remoteAction.action.payload, remoteAction.actionId);
     case 'MovePlanting':
-      return new MovePlantAction([{ ...remoteAction.payload }], remoteAction.payload.actionId);
+      return new MovePlantAction(remoteAction.action.payload, remoteAction.actionId);
     case 'TransformPlanting':
-      return new TransformPlantAction([{ ...remoteAction.payload }], remoteAction.payload.actionId);
+      return new TransformPlantAction(remoteAction.action.payload, remoteAction.actionId);
     case 'UpdatePlantingAddDate':
-      return new UpdateAddDatePlantAction(
-        { ...remoteAction.payload },
-        remoteAction.payload.actionId,
-      );
+      return new UpdateAddDatePlantAction(remoteAction.action.payload, remoteAction.actionId);
     case 'UpdatePlantingRemoveDate':
-      return new UpdateRemoveDatePlantAction(
-        { ...remoteAction.payload },
-        remoteAction.payload.actionId,
-      );
+      return new UpdateRemoveDatePlantAction(remoteAction.action.payload, remoteAction.actionId);
     case 'UpdateBaseLayerImage':
       return new UpdateBaseLayerAction(
-        { ...remoteAction.payload, layer_id: remoteAction.payload.layerId },
-        remoteAction.payload.actionId,
+        { ...remoteAction.action.payload, layer_id: remoteAction.action.payload.layerId },
+        remoteAction.actionId,
       );
     case 'UpdateMapGeometry':
-      return new UpdateMapGeometry({ ...remoteAction.payload }, remoteAction.payload.actionId);
+      return new UpdateMapGeometry({ ...remoteAction.action.payload }, remoteAction.actionId);
     case 'UpdatePlantingAdditionalName':
       return new UpdatePlantingAdditionalName(
-        { ...remoteAction.payload },
-        remoteAction.payload.actionId,
+        { ...remoteAction.action.payload },
+        remoteAction.actionId,
       );
+    case 'UpdatePlatingNotes':
+      return new UpdatePlantingNotesAction(remoteAction.action.payload, remoteAction.actionId);
+
     case 'CreateShading':
       return new CreateShadingAction(
         { ...remoteAction.payload, layerId: remoteAction.payload.layerId },
@@ -108,7 +113,20 @@ function convertToAction(remoteAction: RemoteAction): Action<unknown, unknown> {
         { ...remoteAction.payload },
         remoteAction.payload.actionId,
       );
+
+    case 'CreateDrawing':
+      return new CreateDrawingAction(remoteAction.action.payload, remoteAction.actionId);
+    case 'UpdateDrawing':
+      return new UpdateDrawingAction(remoteAction.action.payload, remoteAction.actionId);
+    case 'DeleteDrawing':
+      return new DeleteDrawingAction(remoteAction.action.payload, remoteAction.actionId);
+
+    case 'UpdateDrawingAddDate':
+      return new UpdateDrawingAddDateAction(remoteAction.action.payload, remoteAction.actionId);
+    case 'UpdateDrawingRemoveDate':
+      return new UpdateDrawingRemoveDateAction(remoteAction.action.payload, remoteAction.actionId);
+
     default:
-      throw new Error(`Unknown remote action`) as never;
+      throw new Error(`Unknown remote action '${remoteAction.action.type}'`) as never;
   }
 }

@@ -1,18 +1,29 @@
+import { t } from 'i18next';
 import Konva from 'konva';
 import { KonvaEventListener, KonvaEventObject, Node } from 'konva/lib/Node';
 import { useCallback, useEffect, useRef } from 'react';
 import { Layer } from 'react-konva';
 import * as uuid from 'uuid';
-import { LayerType, PlantingDto, PlantsSummaryDto, SeedDto } from '@/api_types/definitions';
+import {
+  LayerType,
+  MovePlantActionPayload,
+  PlantingDto,
+  PlantsSummaryDto,
+  SeedDto,
+  TransformPlantActionPayload,
+} from '@/api_types/definitions';
+import IconButton from '@/components/Button/IconButton';
 import {
   KEYBINDINGS_SCOPE_PLANTS_LAYER,
   createKeyBindingsAccordingToConfig,
+  useGetFormattedKeybindingDescriptionForAction,
 } from '@/config/keybindings';
-import { StatusPanelContentWrapper } from '@/features/map_planning/components/statuspanel/StatusPanelContentWrapper';
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';
-import { getNameFromPlant, getPlantNameFromSeedAndPlant } from '@/utils/plant-naming';
+import CloseIcon from '@/svg/icons/close.svg?react';
+import { PlantNameFromPlant, PlantNameFromSeedAndPlant } from '@/utils/plant-naming';
 import useMapStore from '../../store/MapStore';
 import { PlantForPlanting } from '../../store/MapStoreTypes';
+import { useTransformerStore } from '../../store/transformer/TransformerStore';
 import { useIsReadOnlyMode } from '../../utils/ReadOnlyModeContext';
 import { useIsPlantLayerActive } from '../../utils/layer-utils';
 import { isPlacementModeActive } from '../../utils/planting-utils';
@@ -55,7 +66,7 @@ function usePlantLayerListeners(listening: boolean) {
 
   const createPlanting = useCallback(
     (args: CreatePlantingArgs) => {
-      const data: Omit<ConstructorParameters<typeof CreatePlantAction>[0], 'width' | 'height'> = {
+      const data = {
         id: uuid.v4(),
         plantId: args.selectedPlantForPlanting.plant.id,
         seedId: args.selectedPlantForPlanting.seed?.id,
@@ -63,28 +74,35 @@ function usePlantLayerListeners(listening: boolean) {
         x: Math.round(args.xCoordinate),
         y: Math.round(args.yCoordinate),
         rotation: 0,
-        scaleX: 1,
-        scaleY: 1,
         addDate: timelineDate,
         additionalName: args.selectedPlantForPlanting.seed?.name,
         isArea: args.isArea,
-      };
+        // This `satisfies` gives us type safety while omitting the `sizeX` and `sizeY` properties
+        // they get set later in this function
+      } satisfies Omit<
+        ConstructorParameters<typeof CreatePlantAction>[0][number],
+        'sizeX' | 'sizeY'
+      >;
 
       if (args.isArea) {
         executeAction(
-          new CreatePlantAction({
-            ...data,
-            width: Math.round(args.width),
-            height: Math.round(args.height),
-          }),
+          new CreatePlantAction([
+            {
+              ...data,
+              sizeX: Math.round(args.width),
+              sizeY: Math.round(args.height),
+            },
+          ]),
         );
       } else {
         executeAction(
-          new CreatePlantAction({
-            ...data,
-            height: getPlantWidth(args.selectedPlantForPlanting.plant),
-            width: getPlantWidth(args.selectedPlantForPlanting.plant),
-          }),
+          new CreatePlantAction([
+            {
+              ...data,
+              sizeX: getPlantWidth(args.selectedPlantForPlanting.plant),
+              sizeY: getPlantWidth(args.selectedPlantForPlanting.plant),
+            },
+          ]),
         );
       }
     },
@@ -101,7 +119,7 @@ function usePlantLayerListeners(listening: boolean) {
       } = useMapStore.getState().selectionRectAttributes;
 
       const plantSize = getPlantWidth(selectedPlantForPlanting.plant);
-      const { horizontalPlantCount, verticalPlantCount } = calculatePlantCount(
+      const { perRow: horizontalPlantCount, perColumn: verticalPlantCount } = calculatePlantCount(
         plantSize,
         fieldWidth,
         fieldHeight,
@@ -136,6 +154,7 @@ function usePlantLayerListeners(listening: boolean) {
       }
 
       const position = getPositionForPlantPlacement(e);
+
       if (!position) {
         return;
       }
@@ -171,14 +190,9 @@ function usePlantLayerListeners(listening: boolean) {
 
   /**
    * Event handler for selecting plants via the selection rectangle or, if a plant is currently
-   * selected for planting, creating a whole field of that plant inside the selection rectangle
+   * selected for planting, creating an area of plantings inside the selection rectangle
    */
   const handleSelectPlanting: KonvaEventListener<Konva.Stage, MouseEvent> = useCallback(() => {
-    const selectedPlantings = (foundPlantings: PlantingDto[], konvaNode: Node) => {
-      const plantingNode = konvaNode.getAttr('planting');
-      return plantingNode ? [...foundPlantings, plantingNode] : [foundPlantings];
-    };
-
     if (isPlacementModeActive()) {
       const selectedPlantForPlanting =
         useMapStore.getState().untrackedState.layers.plants.selectedPlantForPlanting;
@@ -187,11 +201,19 @@ function usePlantLayerListeners(listening: boolean) {
       return;
     }
 
-    const transformer = useMapStore.getState().transformer.current;
-    const plantings = transformer?.nodes().reduce(selectedPlantings, []);
+    const plantings = useTransformerStore
+      .getState()
+      .actions.getSelection()
+      .reduce(selectedPlantings, []);
 
     if (plantings?.length) {
-      useMapStore.getState().selectPlantings(plantings);
+      useMapStore.getState().selectPlantings(plantings, useTransformerStore.getState());
+    }
+
+    function selectedPlantings(foundPlantings: PlantingDto[], konvaNode: Node) {
+      const plantingNode = konvaNode.getAttr('planting');
+
+      return plantingNode ? [...foundPlantings, plantingNode] : [foundPlantings];
     }
   }, [drawPlantField]);
 
@@ -200,14 +222,26 @@ function usePlantLayerListeners(listening: boolean) {
    */
   const handleTransformPlanting: KonvaEventListener<Konva.Transformer, unknown> =
     useCallback(() => {
-      const updates = (useMapStore.getState().transformer.current?.getNodes() || []).map((node) => {
+      const transformerActions = useTransformerStore.getState().actions;
+      const nodes = transformerActions.getSelection();
+      if (!nodes.length) {
+        return;
+      }
+
+      const updates: TransformPlantActionPayload[] = nodes.map((node) => {
+        const width = node.width() * node.scaleX();
+        const height = node.height() * node.scaleY();
+        // reset scale to 1 to avoid scaling the plant again when transforming it again
+        // the transformers node is not the same as the plant node, so we need to reset the scale
+        node.scaleX(1).scaleY(1);
+
         return {
           id: node.id(),
           x: Math.round(node.x()),
           y: Math.round(node.y()),
+          sizeX: Math.round(width),
+          sizeY: Math.round(height),
           rotation: node.rotation(),
-          scaleX: node.scaleX(),
-          scaleY: node.scaleY(),
         };
       });
 
@@ -218,7 +252,13 @@ function usePlantLayerListeners(listening: boolean) {
    * Event handler for moving plants
    */
   const handleMovePlanting: KonvaEventListener<Konva.Transformer, unknown> = useCallback(() => {
-    const updates = (useMapStore.getState().transformer.current?.getNodes() || []).map((node) => {
+    const transformerActions = useTransformerStore.getState().actions;
+    const nodes = transformerActions.getSelection();
+    if (!nodes.length) {
+      return;
+    }
+
+    const updates: MovePlantActionPayload[] = nodes.map((node) => {
       return {
         id: node.id(),
         x: Math.round(node.x()),
@@ -233,18 +273,19 @@ function usePlantLayerListeners(listening: boolean) {
     if (!listening) {
       return;
     }
+    const transformerActions = useTransformerStore.getState().actions;
     useMapStore.getState().stageRef.current?.on('click.placePlant', handleCreatePlanting);
     useMapStore.getState().stageRef.current?.on('click.unselectPlanting', handleUnselectPlanting);
     useMapStore.getState().stageRef.current?.on('mouseup.selectPlanting', handleSelectPlanting);
-    useMapStore.getState().transformer.current?.on('transformend.plants', handleTransformPlanting);
-    useMapStore.getState().transformer.current?.on('dragend.plants', handleMovePlanting);
+    transformerActions.addEventListener('transformend.plants', handleTransformPlanting);
+    transformerActions.addEventListener('dragend.plants', handleMovePlanting);
 
     return () => {
       useMapStore.getState().stageRef.current?.off('click.placePlant');
       useMapStore.getState().stageRef.current?.off('click.unselectPlanting');
-      useMapStore.getState().transformer.current?.off('transformend.plants');
-      useMapStore.getState().transformer.current?.off('dragend.plants');
       useMapStore.getState().stageRef.current?.off('mouseup.selectPlanting');
+      transformerActions.removeEventListener('transformend.plants');
+      transformerActions.removeEventListener('dragend.plants');
     };
   }, [
     listening,
@@ -324,11 +365,31 @@ function SelectedPlantInfo({ plant, seed }: { plant: PlantsSummaryDto; seed: See
     createKeyBindingsAccordingToConfig(KEYBINDINGS_SCOPE_PLANTS_LAYER, keyHandlerActions),
   );
 
+  // TODO: refactor using StatusPanelContentWrapper
   return (
-    <StatusPanelContentWrapper
-      content={seed ? getPlantNameFromSeedAndPlant(seed, plant) : getNameFromPlant(plant)}
-      onClose={() => selectPlant(null)}
-    />
+    <>
+      <div className="flex flex-row items-center justify-center">
+        {seed ? (
+          <PlantNameFromSeedAndPlant seed={seed} plant={plant} />
+        ) : (
+          <PlantNameFromPlant plant={plant} />
+        )}
+      </div>
+      <div className="flex items-center justify-center">
+        <IconButton
+          className="m-2 h-8 w-8 border border-neutral-500 p-1"
+          onClick={() => selectPlant(null)}
+          data-tourid="placement_cancel"
+          title={useGetFormattedKeybindingDescriptionForAction(
+            KEYBINDINGS_SCOPE_PLANTS_LAYER,
+            'exitPlantingMode',
+            t('common:cancel'),
+          )}
+        >
+          <CloseIcon />
+        </IconButton>
+      </div>
+    </>
   );
 }
 

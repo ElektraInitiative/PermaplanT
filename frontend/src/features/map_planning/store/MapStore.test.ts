@@ -18,6 +18,7 @@ describe('MapHistoryStore', () => {
       if (layerName === LayerType.Base) continue;
       if (layerName === LayerType.Plants) continue;
       if (layerName === LayerType.Shade) continue;
+      if (layerName === LayerType.Drawing) continue;
 
       expect(trackedState.layers[layerName as keyof TrackedLayers]).toEqual({
         id: -1,
@@ -52,7 +53,7 @@ describe('MapHistoryStore', () => {
 
   it('adds a history entry for each call to executeAction', () => {
     const { executeAction } = useMapStore.getState();
-    const createAction = new CreatePlantAction(createPlantTestObject(1));
+    const createAction = new CreatePlantAction([createPlantTestObject(1)]);
 
     executeAction(createAction);
 
@@ -63,7 +64,7 @@ describe('MapHistoryStore', () => {
 
   it('it adds an entry to the history that is the inverse of the action', () => {
     const { executeAction } = useMapStore.getState();
-    const createAction = new CreatePlantAction(createPlantTestObject(1));
+    const createAction = new CreatePlantAction([createPlantTestObject(1)]);
 
     executeAction(createAction);
 
@@ -75,7 +76,7 @@ describe('MapHistoryStore', () => {
 
   it('does not add a history entry for a remote action', () => {
     const { __applyRemoteAction } = useMapStore.getState();
-    const createAction = new CreatePlantAction(createPlantTestObject(1));
+    const createAction = new CreatePlantAction([createPlantTestObject(1)]);
 
     __applyRemoteAction(createAction);
 
@@ -87,8 +88,8 @@ describe('MapHistoryStore', () => {
   // REFACTOR: tests involving plants should go into their own files.
   it('adds plant objects to the plants layer on CreatePlantAction', () => {
     const { executeAction } = useMapStore.getState();
-    const createAction1 = new CreatePlantAction(createPlantTestObject(1));
-    const createAction2 = new CreatePlantAction(createPlantTestObject(2));
+    const createAction1 = new CreatePlantAction([createPlantTestObject(1)]);
+    const createAction2 = new CreatePlantAction([createPlantTestObject(2)]);
 
     executeAction(createAction1);
     executeAction(createAction2);
@@ -109,7 +110,7 @@ describe('MapHistoryStore', () => {
 
   it("updates a single plants's position on MovePlantAction", () => {
     const { executeAction } = useMapStore.getState();
-    const createAction = new CreatePlantAction(createPlantTestObject(1));
+    const createAction = new CreatePlantAction([createPlantTestObject(1)]);
     const moveAction = new MovePlantAction([
       {
         id: '1',
@@ -132,15 +133,15 @@ describe('MapHistoryStore', () => {
 
   it("updates a single plants's transform on TransformPlantAction", () => {
     const { executeAction } = useMapStore.getState();
-    const createAction = new CreatePlantAction(createPlantTestObject(1));
+    const createAction = new CreatePlantAction([createPlantTestObject(1)]);
     const transformAction = new TransformPlantAction([
       {
         id: '1',
         x: 123,
         y: 123,
         rotation: 123,
-        scaleX: 1.23,
-        scaleY: 1.23,
+        sizeX: 123,
+        sizeY: 123,
       },
     ]);
 
@@ -154,15 +155,15 @@ describe('MapHistoryStore', () => {
       x: 123,
       y: 123,
       rotation: 123,
-      scaleX: 1.23,
-      scaleY: 1.23,
+      sizeX: 123,
+      sizeY: 123,
     });
   });
 
   it('updates multiple plants on MovePlantAction', () => {
     const { executeAction } = useMapStore.getState();
-    const createAction1 = new CreatePlantAction(createPlantTestObject(1));
-    const createAction2 = new CreatePlantAction(createPlantTestObject(2));
+    const createAction1 = new CreatePlantAction([createPlantTestObject(1)]);
+    const createAction2 = new CreatePlantAction([createPlantTestObject(2)]);
     const moveAction = new MovePlantAction([
       {
         id: '1',
@@ -196,24 +197,24 @@ describe('MapHistoryStore', () => {
 
   it('updates multiple objects on TransformPlatAction', () => {
     const { executeAction } = useMapStore.getState();
-    const createAction1 = new CreatePlantAction(createPlantTestObject(1));
-    const createAction2 = new CreatePlantAction(createPlantTestObject(2));
+    const createAction1 = new CreatePlantAction([createPlantTestObject(1)]);
+    const createAction2 = new CreatePlantAction([createPlantTestObject(2)]);
     const transformAction = new TransformPlantAction([
       {
         id: '1',
         x: 111,
         y: 111,
         rotation: 111,
-        scaleX: 1.11,
-        scaleY: 1.11,
+        sizeX: 123,
+        sizeY: 123,
       },
       {
         id: '2',
         x: 222,
         y: 222,
         rotation: 222,
-        scaleX: 2.22,
-        scaleY: 2.22,
+        sizeX: 123,
+        sizeY: 123,
       },
     ]);
 
@@ -228,22 +229,22 @@ describe('MapHistoryStore', () => {
       x: 111,
       y: 111,
       rotation: 111,
-      scaleX: 1.11,
-      scaleY: 1.11,
+      sizeX: 123,
+      sizeY: 123,
     });
     expect(newState.layers.plants.objects[1]).toMatchObject({
       id: '2',
       x: 222,
       y: 222,
       rotation: 222,
-      scaleX: 2.22,
-      scaleY: 2.22,
+      sizeX: 123,
+      sizeY: 123,
     });
   });
 
   it('reverts one action on undo()', () => {
     const { executeAction } = useMapStore.getState();
-    const createAction = new CreatePlantAction(createPlantTestObject(1));
+    const createAction = new CreatePlantAction([createPlantTestObject(1)]);
     const moveAction = new MovePlantAction([
       {
         id: '1',
@@ -268,8 +269,8 @@ describe('MapHistoryStore', () => {
 
   it('reverts multiple plants to their original position on undo()', () => {
     const { executeAction } = useMapStore.getState();
-    const createAction1 = new CreatePlantAction(createPlantTestObject(1));
-    const createAction2 = new CreatePlantAction(createPlantTestObject(2));
+    const createAction1 = new CreatePlantAction([createPlantTestObject(1)]);
+    const createAction2 = new CreatePlantAction([createPlantTestObject(2)]);
     const moveAction = new MovePlantAction([
       {
         id: '1',
@@ -298,7 +299,7 @@ describe('MapHistoryStore', () => {
   it('repeats one action per redo() after undo()', () => {
     const { executeAction } = useMapStore.getState();
 
-    const createAction = new CreatePlantAction(createPlantTestObject(1));
+    const createAction = new CreatePlantAction([createPlantTestObject(1)]);
     const moveAction = new MovePlantAction([
       {
         id: '1',
@@ -357,7 +358,7 @@ describe('MapHistoryStore', () => {
     useMapStore.getState().updateSelectedLayer(createTestLayerObject());
 
     const { executeAction } = useMapStore.getState();
-    const createAction = new CreatePlantAction(createPlantTestObject(1));
+    const createAction = new CreatePlantAction([createPlantTestObject(1)]);
 
     executeAction(createAction);
     useMapStore.getState().undo();
@@ -400,13 +401,11 @@ function createPlantTestObject(testValue: number): PlantingDto {
     id: testValue.toString(),
     layerId: 1,
     plantId: 1,
-    height: testValue,
-    width: testValue,
+    sizeX: testValue,
+    sizeY: testValue,
     x: testValue,
     y: testValue,
     rotation: testValue,
-    scaleX: testValue,
-    scaleY: testValue,
     isArea: false,
   };
 }

@@ -10,7 +10,11 @@ import Select, {
   StylesConfig,
 } from 'react-select';
 import filterObject from '../../utils/filterObject';
-import { SelectOption } from './SelectMenuTypes';
+
+export interface SelectOption {
+  value: string | number;
+  label: string;
+}
 
 export interface SelectMenuProps<
   T extends FieldValues,
@@ -115,12 +119,14 @@ export default function SelectMenu<
   const customStyles: StylesConfig<Option, IsMulti, GroupBase<Option>> = {
     // remove css attributes from predefined styles
     // this needs to be done so the custom css classes take effect
+    menu: (styles) => filterObject(styles, ['backgroundColor', 'color']),
     control: (styles) =>
       filterObject(styles, [
         'border',
         'borderColor',
         'borderRadius',
         'boxShadow',
+        'backgroundColor',
         'color',
         '&:hover',
       ]),

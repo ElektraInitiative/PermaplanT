@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import SimpleFormInput from './SimpleFormInput';
 
 const meta: Meta<typeof SimpleFormInput> = {
-  title: 'Components/Form/SelectMenu/SimpleFormInput',
+  title: 'Components/Form/Input/SimpleFormInput',
   component: SimpleFormInput,
   decorators: [
     (Story) => (

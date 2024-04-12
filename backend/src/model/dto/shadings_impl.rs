@@ -1,5 +1,8 @@
 //! Contains the implementations related to [`ShadingDto`].
 
+use crate::model::dto::shadings::{
+    UpdateAddDateShadingDto, UpdateRemoveDateShadingDto, UpdateValuesShadingDto,
+};
 use uuid::Uuid;
 
 use crate::model::entity::shadings::{Shading, UpdateShading};
@@ -32,22 +35,48 @@ impl From<NewShadingDto> for Shading {
     }
 }
 
-impl From<UpdateShadingDto> for UpdateShading {
+impl From<UpdateShadingDto> for Vec<UpdateShading> {
     fn from(dto: UpdateShadingDto) -> Self {
         match dto {
-            UpdateShadingDto::Update(dto) => Self {
-                shade: dto.shade,
-                geometry: dto.geometry,
-                ..Default::default()
-            },
-            UpdateShadingDto::UpdateAddDate(dto) => Self {
-                add_date: Some(dto.add_date),
-                ..Default::default()
-            },
-            UpdateShadingDto::UpdateRemoveDate(dto) => Self {
-                remove_date: Some(dto.remove_date),
-                ..Default::default()
-            },
+            UpdateShadingDto::Update(vec) => vec.into_iter().map(Into::into).collect(),
+            UpdateShadingDto::UpdateAddDate(vec) => vec.into_iter().map(Into::into).collect(),
+            UpdateShadingDto::UpdateRemoveDate(vec) => vec.into_iter().map(Into::into).collect(),
+        }
+    }
+}
+
+impl From<UpdateValuesShadingDto> for UpdateShading {
+    fn from(dto: UpdateValuesShadingDto) -> Self {
+        Self {
+            id: dto.id,
+            shade: dto.shade,
+            geometry: dto.geometry,
+            add_date: None,
+            remove_date: None,
+        }
+    }
+}
+
+impl From<UpdateAddDateShadingDto> for UpdateShading {
+    fn from(dto: UpdateAddDateShadingDto) -> Self {
+        Self {
+            id: dto.id,
+            shade: None,
+            geometry: None,
+            add_date: Some(dto.add_date),
+            remove_date: None,
+        }
+    }
+}
+
+impl From<UpdateRemoveDateShadingDto> for UpdateShading {
+    fn from(dto: UpdateRemoveDateShadingDto) -> Self {
+        Self {
+            id: dto.id,
+            shade: None,
+            geometry: None,
+            add_date: None,
+            remove_date: Some(dto.remove_date),
         }
     }
 }

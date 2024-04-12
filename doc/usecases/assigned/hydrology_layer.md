@@ -6,8 +6,7 @@
 - **Level:** User Goal
 - **Actors:** App User
 - **Brief:** The user can add, edit, move, removed and delete moisture or dry areas in their map in the moisture layer.
-- **Assignee:** Daniel
-- **Note:** Lowest priority of the layers
+- **Assignee:** Daniel, Lukas
 
 ## Scenarios
 

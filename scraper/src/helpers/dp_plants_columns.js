@@ -26,7 +26,7 @@ export default [
   { name: "herbaceous_or_woody", cast: "herbaceous_or_woody" },
   { name: "life_cycle", cast: "life_cycle[]" },
   { name: "growth_rate", cast: "growth_rate[]" },
-  { name: "height", cast: "plant_height" },
+  { name: "height" },
   //{ name: 'width' },
   { name: "fertility", cast: "fertility[]" },
   //{ name: 'flower_colour' },
@@ -60,7 +60,7 @@ export default [
   { name: 'seed_planting_depth_en' },
   { name: 'seed_viability' },
   { name: 'slug' },*/
-  { name: "spread", cast: "plant_spread" },
+  { name: "spread" },
   //{ name: 'utility' },
   { name: "warning" },
   /*{ name: 'when_to_plant_cuttings_en' },

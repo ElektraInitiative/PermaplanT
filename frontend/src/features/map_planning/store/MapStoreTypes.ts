@@ -1,9 +1,10 @@
 import Konva from 'konva';
-import { Node } from 'konva/lib/Node';
 import * as uuid from 'uuid';
 import { StateCreator } from 'zustand';
 import {
   BaseLayerImageDto,
+  DrawingDto,
+  DrawingShapeType,
   LayerDto,
   LayerType,
   PlantingDto,
@@ -15,6 +16,7 @@ import {
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { PolygonGeometry } from '@/features/map_planning/types/PolygonTypes';
 import { convertToDateString } from '../utils/date-utils';
+import { TransformerStore } from './transformer/TransformerStore';
 
 import Vector2d = Konva.Vector2d;
 
@@ -96,32 +98,6 @@ export interface TrackedMapSlice {
   canUndo: boolean;
   canRedo: boolean;
   /**
-   * A reference to the Konva Transformer.
-   * It is used to transform selected objects.
-   * The transformer is coupled with the selected objects in the `trackedState`, so it should be here.
-   */
-  transformer: React.RefObject<Konva.Transformer>;
-  /**
-   * If this is true, all functions that manipulate the Konva transformer will be disabled.
-   */
-  inhibitTransformer: boolean;
-
-  /** Temporarily disable all functions that manipulate the transformer. */
-  setInhibitTransformer: (inhibit: boolean) => void;
-
-  /** Discard the transformer's current nodes and set a single node in the transformer */
-  setSingleNodeInTransformer: (node: Node, overrideInhibitTransformer?: boolean) => void;
-
-  /** Add a new node to the transformer's current set of nodes */
-  addNodeToTransformer: (node: Node, overrideInhibitTransformer?: boolean) => void;
-
-  /** Removes given node from the transformer's current set of nodes */
-  removeNodeFromTransformer: (node: Node, overrideInhibitTransformer?: boolean) => void;
-
-  /** Discard the transformer's current nodes */
-  removeNodesFromTransformer: (overrideInhibitTransformer?: boolean) => void;
-
-  /**
    * Execute a user initiated action.
    * @param action the action to be executed
    */
@@ -160,6 +136,12 @@ export interface TrackedMapSlice {
    *  Initialize the shade layer.
    */
   initShadeLayer: (shadeLayer: ShadingDto[]) => void;
+
+  /**
+   * Initializes the drawing layer.
+   */
+  initDrawingLayer: (drawingLayer: DrawingDto[]) => void;
+
   initLayerId: (layer: LayerType, layerId: number) => void;
 }
 
@@ -205,7 +187,7 @@ export interface UntrackedMapSlice {
   ) => void;
   lastActions: LastAction[];
   selectPlantForPlanting: (plant: PlantForPlanting | null) => void;
-  selectPlantings: (plantings: PlantingDto[] | null) => void;
+  selectPlantings: (plantings: PlantingDto[] | null, transformerStore?: TransformerStore) => void;
   toggleShowPlantLabel: () => void;
   baseLayerActivateMeasurement: () => void;
   baseLayerDeactivateMeasurement: () => void;
@@ -214,12 +196,28 @@ export interface UntrackedMapSlice {
   baseLayerActivateMovePolygonPoints: () => void;
   baseLayerActivateDeletePolygonPoints: () => void;
   baseLayerDeactivatePolygonManipulation: () => void;
-  shadeLayerSelectShadings: (shadings: ShadingDto[] | null) => void;
+
+  shadeLayerSelectShadings: (
+    shadings: ShadingDto[] | null,
+    transformerStore: TransformerStore,
+  ) => void;
   shadeLayerActivateAddPolygonPoints: () => void;
   shadeLayerActivateMovePolygonPoints: () => void;
   shadeLayerActivateDeletePolygonPoints: () => void;
   shadeLayerDeactivatePolygonManipulation: () => void;
   shadeLayerSelectShadeForNewShading: (shade: Shade | null) => void;
+
+  drawingLayerActivateDrawingMode: (shape: DrawingShapeType) => void;
+  drawingLayerClearSelectedShape: () => void;
+  drawingLayerSetSelectedColor: (color: string) => void;
+  drawingLayerSetFillEnabled: (fill: boolean) => void;
+  drawingLayerSetSelectedStrokeWidth: (strokeWidth: number) => void;
+  drawingLayerSetEditMode: (drawingId?: string, editMode?: DrawingLayerEditMode) => void;
+  selectDrawings: (drawings: DrawingDto[] | null, transformerStore?: TransformerStore) => void;
+
+  disableShapeSelection: () => void;
+  enableShapeSelection: () => void;
+
   updateTimelineDate: (date: string) => void;
   setTimelineBounds: (from: string, to: string) => void;
   getSelectedLayerType: () => CombinedLayerType;
@@ -228,6 +226,7 @@ export interface UntrackedMapSlice {
   setTooltipPosition: (position: { x: number; y: number }) => void;
   setStatusPanelContent: (content: React.ReactElement) => void;
   clearStatusPanelContent: () => void;
+
   /**
    * Only used by the EventSource to remove actions from the list of last actions.
    * Removes the last action from the list of last actions.
@@ -263,6 +262,13 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
         objects: [],
         loadedObjects: [],
       },
+      [LayerType.Drawing]: {
+        layerId: 0,
+        id: -1,
+        index: LayerType.Drawing,
+        objects: [],
+        loadedObjects: [],
+      },
       [LayerType.Shade]: {
         id: -1,
         index: LayerType.Shade,
@@ -294,6 +300,7 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
   tooltipContent: '',
   tooltipPosition: { x: 0, y: 0 },
   bottomStatusPanelContent: null,
+  shapeSelectionEnabled: true,
   layers: COMBINED_LAYER_TYPES.reduce(
     (acc, layerName) => ({
       ...acc,
@@ -306,6 +313,18 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
         opacity: 1,
         showLabels: true,
       } as UntrackedPlantLayerState,
+      [LayerType.Drawing]: {
+        index: LayerType.Drawing,
+        visible: true,
+        opacity: 1,
+        selectedShape: null,
+        selectedColor: 'black',
+        fillEnabled: false,
+        selectedStrokeWidth: 3,
+        selectedDrawings: [],
+        editMode: undefined,
+        editDrawingId: undefined,
+      } as UntrackedDrawingLayerState,
       [LayerType.Base]: {
         visible: true,
         opacity: 1,
@@ -327,6 +346,15 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
     }),
     {} as UntrackedLayers,
   ),
+  timeLineEvents: {
+    daily: [],
+    monthly: [],
+    yearly: [],
+  },
+  timeLineVisibleYears: {
+    from: new Date().getFullYear() - 100,
+    to: new Date().getFullYear() + 100,
+  },
 };
 
 /**
@@ -374,12 +402,13 @@ export type UntrackedLayerState = {
 export type TrackedLayers = {
   [key in Exclude<
     LayerType,
-    LayerType.Plants | LayerType.Base | LayerType.Shade
+    LayerType.Plants | LayerType.Base | LayerType.Shade | LayerType.Drawing
   >]: TrackedLayerState;
 } & {
   [LayerType.Plants]: TrackedPlantLayerState;
   [LayerType.Base]: TrackedBaseLayerState;
   [LayerType.Shade]: TrackedShadeLayerState;
+  [LayerType.Drawing]: TrackedDrawingLayerState;
 };
 
 export type TrackedPlantLayerState = {
@@ -395,6 +424,36 @@ export type TrackedPlantLayerState = {
    * The objects that have been loaded from the backend.
    */
   loadedObjects: PlantingDto[];
+};
+
+export type TimelineDailyEvent = {
+  key: number;
+  year: number;
+  month: number;
+  day: number;
+  added: number;
+  removed: number;
+};
+
+export type TimelineMonthlyEvent = {
+  key: number;
+  year: number;
+  month: number;
+  added: number;
+  removed: number;
+};
+
+export type TimelineYearlyEvent = {
+  key: number;
+  year: number;
+  added: number;
+  removed: number;
+};
+
+export type TimeLineEvents = {
+  daily: TimelineDailyEvent[];
+  monthly: TimelineMonthlyEvent[];
+  yearly: TimelineYearlyEvent[];
 };
 
 export type TrackedBaseLayerState = {
@@ -420,17 +479,25 @@ export type TrackedShadeLayerState = {
   loadedObjects: ShadingDto[];
 };
 
+export type TrackedDrawingLayerState = {
+  id: number;
+  layerId: number;
+  objects: DrawingDto[];
+  loadedObjects: DrawingDto[];
+};
+
 /**
  * The state of the layers of the map.
  */
 export type UntrackedLayers = {
   [key in Exclude<
     CombinedLayerType,
-    LayerType.Plants | LayerType.Base | LayerType.Shade
+    LayerType.Plants | LayerType.Base | LayerType.Drawing
   >]: UntrackedLayerState;
 } & {
   [LayerType.Plants]: UntrackedPlantLayerState;
   [LayerType.Base]: UntrackedBaseLayerState;
+  [LayerType.Drawing]: UntrackedDrawingLayerState;
   [LayerType.Shade]: UntrackedShadeLayerState;
 };
 
@@ -438,6 +505,16 @@ export type UntrackedPlantLayerState = UntrackedLayerState & {
   selectedPlantForPlanting: PlantForPlanting | null;
   selectedPlantings: PlantingDto[] | null;
   showLabels: boolean;
+};
+
+export type UntrackedDrawingLayerState = UntrackedLayerState & {
+  selectedShape: DrawingShapeType | null;
+  selectedDrawings: DrawingDto[] | null;
+  selectedColor: string;
+  fillEnabled: boolean;
+  selectedStrokeWidth: number;
+  editMode: DrawingLayerEditMode;
+  editDrawingId?: string;
 };
 
 export type UntrackedBaseLayerState = UntrackedLayerState & {
@@ -467,6 +544,8 @@ export type PlantForPlanting = {
   seed: SeedDto | null;
 };
 
+export type DrawingLayerEditMode = 'draw' | 'add' | 'remove' | undefined;
+
 /**
  * The state of the map tracked by the history.
  */
@@ -484,18 +563,24 @@ export type UntrackedMapState = {
   // The backend does not know about frontend only layers, hence they are not part of LayerDto.
   selectedLayer: LayerDto | FrontendOnlyLayerType;
   /** used for the bounds calculation */
-  timelineDate: string;
-  /** used for fetching */
-  fetchDate: string;
   timelineBounds: {
     from: string;
     to: string;
   };
+  shapeSelectionEnabled: boolean;
+  timelineDate: string;
+  /** used for fetching */
+  fetchDate: string;
   /** Storing the current content prevents constant rerenders of the tooltip component.  */
   tooltipContent: string;
   tooltipPosition: { x: number; y: number };
   bottomStatusPanelContent: React.ReactNode | null;
   layers: UntrackedLayers;
+  timeLineEvents: TimeLineEvents;
+  timeLineVisibleYears: {
+    from: number;
+    to: number;
+  };
 };
 
 /**

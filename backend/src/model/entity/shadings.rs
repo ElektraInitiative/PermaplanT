@@ -31,6 +31,8 @@ pub struct Shading {
 #[derive(Debug, Clone, Default, AsChangeset)]
 #[diesel(table_name = shadings)]
 pub struct UpdateShading {
+    /// The id of the shading.
+    pub id: Uuid,
     /// The type/strength of shade.
     pub shade: Option<Shade>,
     /// The position of the shade on the map.

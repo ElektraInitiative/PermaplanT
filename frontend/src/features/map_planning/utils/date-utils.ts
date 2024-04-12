@@ -25,8 +25,8 @@ export function convertToDateString(date: Date) {
  * @returns short name of month in given language (e.g. 'Jan')
  */
 export function getShortMonthNameFromNumber(monthNumber: number, language?: string) {
-  const date = new Date();
-  date.setMonth(monthNumber - 1);
-
+  // use a fixed timestamp to avoid timezone issues
+  const utcTimestamp = Date.UTC(2000, monthNumber - 1, 1, 12, 0, 0, 0);
+  const date = new Date(utcTimestamp);
   return date.toLocaleString(language, { month: 'short' });
 }

@@ -65,17 +65,19 @@ pub struct NewShadingDto {
 #[serde(tag = "type", content = "content")]
 pub enum UpdateShadingDto {
     /// Update values of a shading.
-    Update(UpdateValuesShadingDto),
+    Update(Vec<UpdateValuesShadingDto>),
     /// Change the `add_date` of a shading.
-    UpdateAddDate(UpdateAddDateShadingDto),
+    UpdateAddDate(Vec<UpdateAddDateShadingDto>),
     /// Change the `remove_date` of a shading.
-    UpdateRemoveDate(UpdateRemoveDateShadingDto),
+    UpdateRemoveDate(Vec<UpdateRemoveDateShadingDto>),
 }
 
 /// Used to update the values of an existing shading.
 #[typeshare]
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
 pub struct UpdateValuesShadingDto {
+    /// The id of the shading.
+    pub id: Uuid,
     /// The type/strength of shade.
     pub shade: Option<Shade>,
     /// The position of the shade on the map.
@@ -92,6 +94,8 @@ pub struct UpdateValuesShadingDto {
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct UpdateAddDateShadingDto {
+    /// The id of the shading.
+    pub id: Uuid,
     /// The date the shading was added to the map.
     /// If None, the shading always existed.
     pub add_date: Option<NaiveDate>,
@@ -104,6 +108,8 @@ pub struct UpdateAddDateShadingDto {
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct UpdateRemoveDateShadingDto {
+    /// The id of the shading.
+    pub id: Uuid,
     /// The date the shading was removed from the map.
     /// If None, the shading is still on the map.
     pub remove_date: Option<NaiveDate>,
@@ -117,6 +123,8 @@ pub struct UpdateRemoveDateShadingDto {
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct DeleteShadingDto {
+    /// The id of the shading.
+    pub id: Uuid,
     /// Id of the action (for identifying the action in the frontend).
     pub action_id: Uuid,
 }

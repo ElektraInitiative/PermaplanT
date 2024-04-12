@@ -1,3 +1,4 @@
+import Konva from 'konva';
 import { useEffect, useMemo, useState } from 'react';
 import { Layer, Line } from 'react-konva';
 import { LayerType, RelationType } from '@/api_types/definitions';
@@ -18,7 +19,7 @@ export function PlantLayerRelationsOverlay() {
     (s) => s.untrackedState.layers.plants.selectedPlantForPlanting,
   );
   const selectedPlantings = useMapStore((s) => s.untrackedState.layers.plants.selectedPlantings);
-  const selectedPlanting = selectedPlantings?.length === 1 ? selectedPlantings[0] : null;
+  const selectedPlanting = selectedPlantings?.[0] ?? null;
 
   const plantId = selectedPlantForPlanting?.plant.id ?? selectedPlanting?.plantId ?? null;
   const plantingNode = useMemo(
@@ -29,10 +30,10 @@ export function PlantLayerRelationsOverlay() {
   useEffect(() => {
     if (!plantingNode) return;
 
-    setLineEnd(plantingNode.position());
+    setLineEnd(getPosition(plantingNode));
 
     plantingNode.on('dragmove.plants', () => {
-      setLineEnd(plantingNode.position());
+      setLineEnd(getPosition(plantingNode));
     });
 
     return () => {
@@ -60,7 +61,7 @@ export function PlantLayerRelationsOverlay() {
 
   const layers = stage?.children;
 
-  const relatedVisiblePlantings = useMemo(() => {
+  const visiblePlantingNodes = useMemo(() => {
     return layers
       ?.filter((l) => l.name() === LayerType.Plants)
       .flatMap((l) => l.children ?? [])
@@ -70,21 +71,30 @@ export function PlantLayerRelationsOverlay() {
 
   return (
     <Layer listening={false}>
-      {!areRelationsLoading && lineEnd && relatedVisiblePlantings
-        ? relatedVisiblePlantings.map((s) => {
-            const relation = relations?.get(s.attrs.plantId)?.relation;
+      {!areRelationsLoading && lineEnd && visiblePlantingNodes
+        ? visiblePlantingNodes.map((node) => {
+            const relation = relations?.get(node.attrs.plantId)?.relation;
             if (!relation || relation === RelationType.Neutral) return null;
+
+            const { x, y } = getPosition(node);
 
             return (
               <Line
                 stroke={relationColors[relation]}
                 strokeWidth={4}
-                key={s.id()}
-                points={[lineEnd.x, lineEnd.y, s.x(), s.y()]}
+                key={node.id()}
+                points={[lineEnd.x, lineEnd.y, x, y]}
               />
             );
           })
         : null}
     </Layer>
   );
+}
+
+function getPosition(node: Konva.Node) {
+  const isArea = Boolean(node.attrs.isArea);
+  const x = isArea ? node.x() + node.width() / 2 : node.x();
+  const y = isArea ? node.y() + node.height() / 2 : node.y();
+  return { x, y };
 }

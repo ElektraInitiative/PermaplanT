@@ -3,14 +3,13 @@
 use actix_http::StatusCode;
 use actix_web::web::Data;
 use chrono::Days;
-use uuid::Uuid;
 
 use crate::config::data::AppDataInner;
 use crate::error::ServiceError;
+use crate::model::dto::core::TimelinePage;
 use crate::model::dto::shadings::{
-    NewShadingDto, ShadingDto, ShadingSearchParameters, UpdateShadingDto,
+    DeleteShadingDto, NewShadingDto, ShadingDto, ShadingSearchParameters, UpdateShadingDto,
 };
-use crate::model::dto::TimelinePage;
 use crate::model::entity::shadings::Shading;
 use crate::model::entity::shadings_impl::FindShadingsParameters;
 
@@ -66,9 +65,9 @@ pub async fn find(
 /// # Errors
 /// If the connection to the database could not be established.
 pub async fn create(
-    dto: NewShadingDto,
+    dto: Vec<NewShadingDto>,
     app_data: &Data<AppDataInner>,
-) -> Result<ShadingDto, ServiceError> {
+) -> Result<Vec<ShadingDto>, ServiceError> {
     let mut conn = app_data.pool.get().await?;
     let result = Shading::create(dto, &mut conn).await?;
     Ok(result)
@@ -79,12 +78,11 @@ pub async fn create(
 /// # Errors
 /// If the connection to the database could not be established.
 pub async fn update(
-    id: Uuid,
     dto: UpdateShadingDto,
     app_data: &Data<AppDataInner>,
-) -> Result<ShadingDto, ServiceError> {
+) -> Result<Vec<ShadingDto>, ServiceError> {
     let mut conn = app_data.pool.get().await?;
-    let result = Shading::update(id, dto, &mut conn).await?;
+    let result = Shading::update(dto, &mut conn).await?;
     Ok(result)
 }
 
@@ -92,8 +90,11 @@ pub async fn update(
 ///
 /// # Errors
 /// If the connection to the database could not be established.
-pub async fn delete_by_id(id: Uuid, app_data: &Data<AppDataInner>) -> Result<(), ServiceError> {
+pub async fn delete_by_ids(
+    dtos: Vec<DeleteShadingDto>,
+    app_data: &Data<AppDataInner>,
+) -> Result<(), ServiceError> {
     let mut conn = app_data.pool.get().await?;
-    let _ = Shading::delete_by_id(id, &mut conn).await?;
+    let _ = Shading::delete_by_ids(dtos, &mut conn).await?;
     Ok(())
 }

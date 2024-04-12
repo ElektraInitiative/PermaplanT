@@ -25,5 +25,6 @@
 - **Postcondition:**
   The user's map includes the added, edited, moved, remove or deleted zone elements as desired.
 - **Non-functional Constraints:**
+  - Is an additional layer
   - Supports alternatives (different perspectives, e.g. guests)
   - Performance: Map sizes with more than 1ha in 10000 raster elements (m²) per year should be usable without noticeable delays and acceptable memory overhead

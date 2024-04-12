@@ -29,8 +29,8 @@ help:
 
 
 .PHONY: run-frontend
-run-frontend: build-frontend ## Build & Run frontend
-	@cd frontend && npm run dev -- --host
+run-frontend: ## Build & Run frontend
+	@cd frontend && npm run generate-api-types && npm run dev -- --host
 
 .PHONY: run-backend
 run-backend: build-backend ## Build & Run backend

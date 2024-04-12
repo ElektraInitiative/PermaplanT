@@ -1,0 +1,16 @@
+{
+  "windows_linux": {
+    "Delete": "Entf",
+    "Escape": "Esc",
+    "Shift": "Umschalt",
+    "Control": "Strg"
+  },
+  "macos": {
+    "Delete": "Entf",
+    "Escape": "Esc",
+    "Shift": "Umschalt",
+    "Control": "Strg",
+    "Cmd": "Command",
+    "Opt": "Option"
+  }
+}

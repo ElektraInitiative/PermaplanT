@@ -1,26 +1,26 @@
 // Plant layer util functions
-import { PlantSpread } from '@/api_types/definitions';
 
 export function calculatePlantCount(
   plantSize: number,
   fieldWidth: number,
   fieldHeight: number,
-): { horizontalPlantCount: number; verticalPlantCount: number } {
-  const horizontalPlantCount = Math.floor(fieldWidth / plantSize);
-  const verticalPlantCount = Math.floor(fieldHeight / plantSize);
+): { perRow: number; perColumn: number; total: number } {
+  const perRow = Math.floor(fieldWidth / plantSize);
+  const perColumn = Math.floor(fieldHeight / plantSize);
 
   return {
-    horizontalPlantCount,
-    verticalPlantCount,
+    perRow: perRow,
+    perColumn: perColumn,
+    total: perRow * perColumn,
   };
 }
 
-const PLANT_WIDTHS = new Map<PlantSpread, number>([
-  [PlantSpread.Narrow, 10],
-  [PlantSpread.Medium, 50],
-  [PlantSpread.Wide, 100],
-]);
+const MINIMUM_PLANT_WIDTH = 10; // in cm
 
-export function getPlantWidth({ spread = PlantSpread.Medium }): number {
-  return PLANT_WIDTHS.get(spread) ?? (PLANT_WIDTHS.get(PlantSpread.Medium) as number);
+/**
+ * @param the plant object which has a spread property
+ * @returns the width of the plant in cm
+ */
+export function getPlantWidth({ spread = MINIMUM_PLANT_WIDTH }): number {
+  return Math.max(spread, MINIMUM_PLANT_WIDTH);
 }

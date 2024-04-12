@@ -1,8 +1,5 @@
-import Konva from 'konva';
-import { Node } from 'konva/lib/Node';
-import { createRef } from 'react';
 import type { StateCreator } from 'zustand';
-import { BaseLayerImageDto, PlantingDto, ShadingDto } from '@/api_types/definitions';
+import { BaseLayerImageDto, DrawingDto, PlantingDto, ShadingDto } from '@/api_types/definitions';
 import { filterVisibleObjects } from '../utils/filterVisibleObjects';
 import type { Action, GetFn, SetFn, TrackedMapSlice, UntrackedMapSlice } from './MapStoreTypes';
 import { UNTRACKED_DEFAULT_STATE, TRACKED_DEFAULT_STATE } from './MapStoreTypes';
@@ -15,53 +12,16 @@ export const createTrackedMapSlice: StateCreator<
   TrackedMapSlice
 > = (set, get) => {
   return {
-    transformer: createRef<Konva.Transformer>(),
     trackedState: TRACKED_DEFAULT_STATE,
     history: [],
     step: 0,
     canUndo: false,
     canRedo: false,
-    inhibitTransformer: false,
     executeAction: (action: Action<unknown, unknown>) => executeAction(action, set, get),
     undo: () => undo(set, get),
     redo: () => redo(set, get),
     __applyRemoteAction: (action: Action<unknown, unknown>) => applyAction(action, set, get),
-    setInhibitTransformer: (inhibit: boolean) => {
-      set((state) => ({
-        ...state,
-        inhibitTransformer: inhibit,
-      }));
-    },
-    setSingleNodeInTransformer: (node: Node, overrideInhibitTransformer?: boolean) => {
-      if (get().inhibitTransformer && !overrideInhibitTransformer) return;
 
-      get().transformer?.current?.nodes([node]);
-    },
-    addNodeToTransformer: (node: Node, overrideInhibitTransformer?: boolean) => {
-      if (get().inhibitTransformer && !overrideInhibitTransformer) return;
-
-      const currentNodes = get().transformer.current?.nodes() ?? [];
-      if (!currentNodes.includes(node)) {
-        get().transformer?.current?.nodes([...currentNodes, node]);
-      }
-    },
-    removeNodeFromTransformer: (node: Node, overrideInhibitTransformer?: boolean) => {
-      if (get().inhibitTransformer && !overrideInhibitTransformer) return;
-
-      const currentNodes = get().transformer.current?.nodes() ?? [];
-      const nodeToRemove = currentNodes.indexOf(node);
-
-      if (nodeToRemove !== -1) {
-        const newNodes = currentNodes.slice();
-        newNodes.splice(nodeToRemove, 1);
-        get().transformer.current?.nodes(newNodes);
-      }
-    },
-    removeNodesFromTransformer: (overrideInhibitTransformer?: boolean) => {
-      if (get().inhibitTransformer && !overrideInhibitTransformer) return;
-
-      get().transformer.current?.nodes([]);
-    },
     initPlantLayer: (plants: PlantingDto[]) => {
       set((state) => ({
         ...state,
@@ -73,6 +33,23 @@ export const createTrackedMapSlice: StateCreator<
               ...state.trackedState.layers.plants,
               objects: filterVisibleObjects(plants, state.untrackedState.timelineDate),
               loadedObjects: plants,
+            },
+          },
+        },
+      }));
+    },
+    initDrawingLayer: (drawings: DrawingDto[]) => {
+      console.log('drawings', drawings);
+      set((state) => ({
+        ...state,
+        trackedState: {
+          ...state.trackedState,
+          layers: {
+            ...state.trackedState.layers,
+            drawing: {
+              ...state.trackedState.layers.drawing,
+              objects: filterVisibleObjects(drawings, state.untrackedState.timelineDate),
+              loadedObjects: drawings,
             },
           },
         },
@@ -153,6 +130,7 @@ function executeAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn)
 
   executeActionImpl(action, set, get);
   trackReverseActionInHistory(action, get().step, set, get);
+
   applyAction(action, set, get);
 
   set((state) => ({
@@ -170,10 +148,9 @@ function executeAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn)
  */
 function applyAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn): void {
   applyActionToStore(action, set, get);
-  // REFACTORING: these functions should not be here in the map store.
-  // Actions should get some sort of mechanism for updating the untracked store.
   updateSelectedPlantings(set, get);
   updateSelectedShadings(set, get);
+  updateSelectedDrawings(set, get);
 
   clearInvalidSelection(get);
 }
@@ -205,6 +182,7 @@ function trackReverseActionInHistory(
   get: GetFn,
 ): void {
   const reverseAction = action.reverse(get().trackedState);
+
   if (!reverseAction) {
     throw new Error('Cannot reverse action');
   }
@@ -380,4 +358,46 @@ function getUpdatesForSelectedShadings(get: GetFn, selectedShadings: ShadingDto[
   };
 
   return selectedShadings.reduce(updateShadings, []);
+}
+
+/**
+ * Replaces the selected drawings with fresh versions from the backend.
+ */
+function updateSelectedDrawings(set: SetFn, get: GetFn) {
+  const selectedDrawings = get().untrackedState.layers.drawing.selectedDrawings;
+  if (!selectedDrawings?.length) {
+    return;
+  }
+
+  const updatedSelectedDrawings = getUpdatesForSelectedDrawings(get, selectedDrawings);
+
+  set((state) => ({
+    ...state,
+    untrackedState: {
+      ...state.untrackedState,
+      layers: {
+        ...state.untrackedState.layers,
+        drawing: {
+          ...state.untrackedState.layers.drawing,
+          selectedDrawings: updatedSelectedDrawings,
+        },
+      },
+    },
+  }));
+}
+
+function getUpdatesForSelectedDrawings(get: GetFn, selectedDrawings: DrawingDto[]) {
+  const loadUpdateForSelectedDrawing = (selectedDrawing: DrawingDto) => {
+    return get().trackedState.layers.drawing.loadedObjects.find(
+      (loadedDrawing) => loadedDrawing.id === selectedDrawing.id,
+    );
+  };
+
+  const updateDrawings = (updatedDrawings: DrawingDto[], selectedDrawing: DrawingDto) => {
+    const updatedDrawing = loadUpdateForSelectedDrawing(selectedDrawing);
+
+    return updatedDrawing ? [...updatedDrawings, updatedDrawing] : updatedDrawings;
+  };
+
+  return selectedDrawings.reduce(updateDrawings, []);
 }

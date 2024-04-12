@@ -5,8 +5,8 @@ use actix_web::{middleware::NormalizePath, web};
 use actix_web_httpauth::middleware::HttpAuthentication;
 
 use crate::controller::{
-    base_layer_image, blossoms, config, guided_tours, layers, map, plant_layer, plantings, plants,
-    seed, shadings, sse, users,
+    base_layer_image, blossoms, config, drawings, guided_tours, layers, map, plant_layer,
+    plantings, plants, seed, shadings, sse, timeline, users,
 };
 
 use super::auth::middleware::validator;
@@ -38,30 +38,41 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                 .service(map::update)
                 .service(map::update_geometry)
                 .service(
-                    web::scope("/{map_id}/layers")
-                        .service(layers::find)
-                        .service(layers::find_by_id)
-                        .service(layers::create)
-                        .service(layers::delete)
+                    web::scope("/{map_id}")
                         .service(
-                            web::scope("/base/images")
-                                .service(base_layer_image::create)
-                                .service(base_layer_image::update)
-                                .service(base_layer_image::delete),
-                        )
-                        .service(
-                            web::scope("/base/{layer_id}/images").service(base_layer_image::find),
-                        )
-                        .service(
-                            web::scope("/plants")
-                                .service(plant_layer::heatmap)
-                                .service(plant_layer::find_relations)
+                            web::scope("/layers")
+                                .service(layers::find)
+                                .service(layers::find_by_id)
+                                .service(layers::create)
+                                .service(layers::delete)
                                 .service(
-                                    web::scope("/plantings")
-                                        .service(plantings::find)
-                                        .service(plantings::create)
-                                        .service(plantings::update)
-                                        .service(plantings::delete),
+                                    web::scope("/base/images")
+                                        .service(base_layer_image::create)
+                                        .service(base_layer_image::update)
+                                        .service(base_layer_image::delete),
+                                )
+                                .service(
+                                    web::scope("/base/{layer_id}/images")
+                                        .service(base_layer_image::find),
+                                )
+                                .service(
+                                    web::scope("/drawings")
+                                        .service(drawings::find)
+                                        .service(drawings::create)
+                                        .service(drawings::update)
+                                        .service(drawings::delete),
+                                )
+                                .service(
+                                    web::scope("/plants")
+                                        .service(plant_layer::heatmap)
+                                        .service(plant_layer::find_relations)
+                                        .service(
+                                            web::scope("/plantings")
+                                                .service(plantings::find)
+                                                .service(plantings::create)
+                                                .service(plantings::update)
+                                                .service(plantings::delete),
+                                        ),
                                 ),
                         )
                         .service(
@@ -72,7 +83,15 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                                     .service(shadings::update)
                                     .service(shadings::delete),
                             ),
-                        ),
+                        )
+                        .service(
+                            web::scope("/drawings")
+                                .service(drawings::find)
+                                .service(drawings::create)
+                                .service(drawings::update)
+                                .service(drawings::delete),
+                        )
+                        .service(timeline::get_timeline),
                 ),
         )
         .service(
@@ -83,6 +102,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
         )
         .service(web::scope("/users").service(users::create))
         .service(web::scope("/blossoms").service(blossoms::gain))
+        .service(web::scope("/timeline").service(timeline::get_timeline))
         .wrap(NormalizePath::trim())
         .wrap(auth);
 

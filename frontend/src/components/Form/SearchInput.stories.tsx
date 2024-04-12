@@ -3,7 +3,7 @@ import { useState } from 'react';
 import SearchInput from './SearchInput';
 
 const meta: Meta<typeof SearchInput> = {
-  title: 'Components/Form/SearchInput',
+  title: 'Components/Form/Input/SearchInput',
   component: SearchInput,
 };
 

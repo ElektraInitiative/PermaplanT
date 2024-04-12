@@ -3,11 +3,12 @@
 use chrono::NaiveDate;
 use diesel::pg::Pg;
 use diesel::{debug_query, BoolExpressionMethods, ExpressionMethods, QueryDsl, QueryResult};
-use diesel_async::{AsyncPgConnection, RunQueryDsl};
+use diesel_async::{AsyncConnection, AsyncPgConnection, RunQueryDsl};
 use log::debug;
+use std::future::Future;
 use uuid::Uuid;
 
-use crate::model::dto::shadings::{NewShadingDto, ShadingDto, UpdateShadingDto};
+use crate::model::dto::shadings::{DeleteShadingDto, NewShadingDto, ShadingDto, UpdateShadingDto};
 use crate::model::entity::shadings::{Shading, UpdateShading};
 use crate::schema::shadings::{self, all_columns, layer_id};
 
@@ -61,13 +62,22 @@ impl Shading {
     /// * If the `layer_id` references a layer that is not of type `plant`.
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn create(
-        dto: NewShadingDto,
+        dto_vec: Vec<NewShadingDto>,
         conn: &mut AsyncPgConnection,
-    ) -> QueryResult<ShadingDto> {
-        let shading = Self::from(dto);
-        let query = diesel::insert_into(shadings::table).values(&shading);
+    ) -> QueryResult<Vec<ShadingDto>> {
+        let new_shadings: Vec<Self> = dto_vec.into_iter().map(Into::into).collect();
+        let query = diesel::insert_into(shadings::table).values(&new_shadings);
+
         debug!("{}", debug_query::<Pg, _>(&query));
-        query.get_result::<Self>(conn).await.map(Into::into)
+
+        let result = query
+            .get_results::<Self>(conn)
+            .await?
+            .into_iter()
+            .map(Into::into)
+            .collect::<Vec<ShadingDto>>();
+
+        Ok(result)
     }
 
     /// Partially update a shading in the database.
@@ -75,22 +85,58 @@ impl Shading {
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
     pub async fn update(
-        shading_id: Uuid,
         dto: UpdateShadingDto,
         conn: &mut AsyncPgConnection,
-    ) -> QueryResult<ShadingDto> {
-        let shading = UpdateShading::from(dto);
-        let query = diesel::update(shadings::table.find(shading_id)).set(&shading);
-        debug!("{}", debug_query::<Pg, _>(&query));
-        query.get_result::<Self>(conn).await.map(Into::into)
+    ) -> QueryResult<Vec<ShadingDto>> {
+        let shading_updates = Vec::from(dto);
+
+        let result = conn
+            .transaction(|transaction| {
+                Box::pin(async {
+                    let futures = Self::do_update(shading_updates, transaction);
+
+                    let results = futures_util::future::try_join_all(futures).await?;
+
+                    Ok(results) as QueryResult<Vec<Self>>
+                })
+            })
+            .await?;
+
+        Ok(result.into_iter().map(Into::into).collect())
+    }
+
+    /// Performs the actual update of the plantings using pipelined requests.
+    /// See [`diesel_async::AsyncPgConnection`] for more information.
+    /// Because the type system can not easily infer the type of futures
+    /// this helper function is needed, with explicit type annotations.
+    fn do_update(
+        updates: Vec<UpdateShading>,
+        conn: &mut AsyncPgConnection,
+    ) -> Vec<impl Future<Output = QueryResult<Self>>> {
+        let mut futures = Vec::with_capacity(updates.len());
+
+        for update in updates {
+            let updated_shadings = diesel::update(shadings::table.find(update.id))
+                .set(update)
+                .get_result::<Self>(conn);
+
+            futures.push(updated_shadings);
+        }
+
+        futures
     }
 
     /// Delete the shading from the database.
     ///
     /// # Errors
     /// * Unknown, diesel doesn't say why it might error.
-    pub async fn delete_by_id(id: Uuid, conn: &mut AsyncPgConnection) -> QueryResult<usize> {
-        let query = diesel::delete(shadings::table.find(id));
+    pub async fn delete_by_ids(
+        dtos: Vec<DeleteShadingDto>,
+        conn: &mut AsyncPgConnection,
+    ) -> QueryResult<usize> {
+        let ids: Vec<Uuid> = dtos.iter().map(|&DeleteShadingDto { id, .. }| id).collect();
+
+        let query = diesel::delete(shadings::table.filter(shadings::id.eq_any(ids)));
         debug!("{}", debug_query::<Pg, _>(&query));
         query.execute(conn).await
     }

@@ -29,4 +29,5 @@
 - **Postcondition:**
   The user's map includes elements added using hand-drawn or common shapes.
 - **Non-functional Constraints:**
+  - Is an additional layer
   - Performance: more than 200 elements per year should be usable without noticeable delays and acceptable memory overhead

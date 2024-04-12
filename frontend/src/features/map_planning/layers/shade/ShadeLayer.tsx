@@ -10,6 +10,7 @@ import { LayerType, Shade, ShadingDto } from '@/api_types/definitions';
 import { CreateShadingAction } from '@/features/map_planning/layers/shade/actions';
 import { Shading } from '@/features/map_planning/layers/shade/components/Shading';
 import useMapStore from '@/features/map_planning/store/MapStore';
+import { useTransformerStore } from '@/features/map_planning/store/transformer/TransformerStore';
 import { typeOfLayer } from '@/features/map_planning/store/utils';
 import { DEFAULT_SRID } from '@/features/map_planning/types/PolygonTypes';
 import { ringGeometryAroundPoint } from '@/features/map_planning/utils/PolygonUtils';
@@ -148,11 +149,13 @@ export function ShadeLayer(props: ShadeLayerProps) {
       return shadingNode ? [...foundPlantings, shadingNode] : [foundPlantings];
     };
 
-    const transformer = useMapStore.getState().transformer.current;
-    const shadings = transformer?.nodes().reduce(selectedShadings, []);
+    const shadings = useTransformerStore
+      .getState()
+      .actions.getSelection()
+      .reduce(selectedShadings, []);
 
     if (shadings?.length) {
-      useMapStore.getState().shadeLayerSelectShadings(shadings);
+      useMapStore.getState().shadeLayerSelectShadings(shadings, useTransformerStore.getState());
     }
   }, [selectedShadeForNewShading]);
 
@@ -171,7 +174,7 @@ export function ShadeLayer(props: ShadeLayerProps) {
       }
 
       if (!isShading(e.target)) {
-        shadeLayerSelectShading(null);
+        shadeLayerSelectShading(null, useTransformerStore.getState());
       }
     },
     [selectedShadeForNewShading, shadeLayerSelectShading],
@@ -219,8 +222,10 @@ export function ShadeLayer(props: ShadeLayerProps) {
         ?.filter((ref) => isSelected(ref.id))
         .map((ref) => ref.ref);
 
-      useMapStore.getState().transformer.current?.nodes([]);
-      useMapStore.getState().transformer.current?.nodes(filteredShadingRefs ?? []);
+      useTransformerStore.getState().actions.removeAllNodesFromSelection();
+      useTransformerStore
+        .getState()
+        .actions.replaceNodesInSelectionSelection(filteredShadingRefs ?? []);
     },
     // For some reason using only shadingRefs is not enough to detect changes made to shadingRefs.current
     [shadingRefs.current], // eslint-disable-line react-hooks/exhaustive-deps
