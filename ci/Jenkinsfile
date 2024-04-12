@@ -1,12 +1,13 @@
 // Pipeline for PR's, master merges and production
-// Some code is shared between this pipeline and `Jenkinsfile.release`
 
 import org.jenkinsci.plugins.pipeline.modeldefinition.Utils
 
+// Function duplicated in `Jenkinsfile.release`
 def node_info() {
     echo "Running stage on ${env.NODE_NAME}"
 }
 
+// Function duplicated in `Jenkinsfile.release` without the command parameter
 def wait_for_db(String command) {
     retry(6) {
         sleep(time: 5, unit: 'SECONDS')
@@ -34,6 +35,7 @@ def abortPreviousRunUnlessMaster() {
     }
 }
 
+// function content duplicated in `Jenkinsfile.release`
 /**
  * This method runs a Docker container with a Postgres sidecar and executes the specified command inside the container.
  *
@@ -78,6 +80,7 @@ def runDockerPostgresSidecar(String command,  List<String> stashsrc = [], List<S
     }
 }
 
+// function content duplicated in `Jenkinsfile.release`
 /**
  * Run a script inside a desired docker image with custom docker arguments.
  * @param command The command to be executed inside the Docker container.
@@ -102,6 +105,7 @@ def runDocker(String command, String dockerImage, String dockerBuildArgs, boolea
     }
 }
 
+// mdbook build duplicated in `Jenkinsfile.release`
 /**
  * Test, Build and stash Mdbook inside permaplants docker image.
  *
@@ -252,6 +256,7 @@ timeout(time: 2, unit: 'HOURS') {
 }
 
 lock("${env.NODE_NAME}-exclusive") {
+    // `Deploy PR` stage similar to `Deploy Dev` and `Jenkinsfile.release.Deploy Prod`
     stage('Deploy PR') {
         node('permaplant && pr') {
             node_info()
@@ -327,6 +332,7 @@ lock("${env.NODE_NAME}-exclusive") {
 // Deploying to Dev only happens on branch "master"
 if (env.BRANCH_NAME == 'master') {
     try {
+        // `Deploy Dev` stage similar to `Deploy PR` and `Jenkinsfile.release.Deploy Prod`
         stage('Deploy Dev') {
             node('permaplant && dev') {
                 node_info()
