@@ -45,7 +45,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Added Meeting Agenda&Notes for 02.04.2024 9:00 _(Markus Raab, Lukas)_
 - Added Meeting Agenda&Notes for 08.04.2024 9:00 _(Markus Raab, Filip)_
 - _()_
-- _()_
+- Added Meeting Notes for 04.04.2024 14:00 _(Andrei Dinu)_
 - Add 'Christoph Schreiner' as team member _(Christoph Schreiner)_
 - _()_
 - Migrate from Jest to Vitest, update Vite to v5, update Node to 20, .env should be .env.local _(Paul)_
