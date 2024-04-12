@@ -370,11 +370,13 @@ function SelectedPlantInfo({ plant, seed }: { plant: PlantsSummaryDto; seed: See
   return (
     <>
       <div className="flex flex-row items-center justify-center">
-        {seed ? (
-          <PlantNameFromSeedAndPlant seed={seed} plant={plant} language={i18n.language} />
-        ) : (
-          <PlantNameFromPlant plant={plant} language={i18n.language} />
-        )}
+        <span>
+          {seed ? (
+            <PlantNameFromSeedAndPlant seed={seed} plant={plant} language={i18n.language} />
+          ) : (
+            <PlantNameFromPlant plant={plant} language={i18n.language} />
+          )}
+        </span>
       </div>
       <div className="flex items-center justify-center">
         <IconButton

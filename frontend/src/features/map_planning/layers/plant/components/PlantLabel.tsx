@@ -5,7 +5,7 @@ import { Label } from 'react-konva';
 import { PlantingDto } from '@/api_types/definitions';
 import { useFindPlantById } from '@/features/map_planning/layers/plant/hooks/plantHookApi';
 import { MapLabel } from '@/features/map_planning/utils/MapLabel';
-import { getCommonName } from '@/utils/plant-naming';
+import { getCommonOrUniqueName } from '@/utils/plant-naming';
 
 export interface PlantLabelProps {
   /** Contains plant name that will be displayed on the label. */
@@ -40,7 +40,7 @@ export const PlantLabel = React.memo(function PlantLabel({ planting }: PlantLabe
       ref={labelRef}
       x={planting.x + (planting.isArea ? labelOffsetXArea : labelOffsetX)}
       y={planting.y + (planting.isArea ? labelOffsetYArea : labelOffsetY)}
-      content={getCommonName(plant, i18n.language)}
+      content={getCommonOrUniqueName(plant, i18n.language)}
     />
   );
 });
