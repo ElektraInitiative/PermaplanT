@@ -6,7 +6,7 @@ Use a not-yet-used-in-any-PR random line in the top-most version.
 
 Syntax: `- short text describing the change _(Your Name)_`
 
-## 0.3.7 - UNRELEASED
+## 0.4.0 - UNRELEASED
 
 - needs new migrations
 - needs new scraper data (integer for plant spread and height)
@@ -18,7 +18,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Add notes to plantings in backend #1156 _(Jannis Adamek)_
 - Fix seed routes and add naming convention guideline _(Daniel Steinkogler)_
 - Enable automatic image scaling in base layer _(Moritz)_
-- _()_
+- changed release name from 0.3.7 to 0.4.0 _(Filip Markovic)_
 - Add [guideline](guidelines/frontend-keyhandling.md) and [decisions](decisions/frontend_keyhandling.md) for key handling) _(Daniel Steinkogler)_
 - _()_
 - Fix ref warning in PlantLabel, center labels as intended _(Paul)_
