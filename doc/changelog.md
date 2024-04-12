@@ -6,7 +6,7 @@ Use a not-yet-used-in-any-PR random line in the top-most version.
 
 Syntax: `- short text describing the change _(Your Name)_`
 
-## 0.3.7 - UNRELEASED
+## 0.4.0 - UNRELEASED
 
 - needs new migrations
 - needs new scraper data (integer for plant spread and height)
@@ -18,14 +18,14 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Add notes to plantings in backend #1156 _(Jannis Adamek)_
 - Fix seed routes and add naming convention guideline _(Daniel Steinkogler)_
 - Enable automatic image scaling in base layer _(Moritz)_
-- _()_
+- changed release name from 0.3.7 to 0.4.0 _(Filip Markovic)_
 - Add [guideline](guidelines/frontend-keyhandling.md) and [decisions](decisions/frontend_keyhandling.md) for key handling) _(Daniel Steinkogler)_
 - _()_
 - Fix ref warning in PlantLabel, center labels as intended _(Paul)_
 - Fix planting cursor preventing the placement of an area of plants _(Paul)_
 - Refactor nearly all api calls to idiomatic react query _(Paul)_
 - Add an area of plant indicator _(Paul)_
-- _()_
+- CI: fixed bug for release in Jenkinsfile.release (cargo doc not running in backend folder) _(Filip Markovic)_
 - Added Meeting Agenda&Notes for 20.10. 9:00 _(Markus Raab, Samuel)_
 - Added Meeting Agenda&Notes for 27.10. 9:00 _(Markus Raab, Jannis)_
 - Added Meeting Agenda&Notes for 04.12. 9:00 _(Markus Raab, Daniel)_
@@ -119,7 +119,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Refactor transformer into a separate store _(Paul)_
 - Replace old date picker with new timeline component using sliders to select date _(Daniel Steinkogler)_
 - Fix broken dark mode for LanguageSwitcher, SelectMenu & PaginatedSelectMenu _(Lukas Anton Lakits)_
-- _()_
+- Fix validation in PlantingAttributeEditForm for multi-selected plants and areas _(Lukas Anton Lakits)_
 - Fixed small issues in the documentation (typos/links/phrasing) _(Andrei Dinu)_
 
 ## 0.3.6 - 21.11.2023 (151 commits)
