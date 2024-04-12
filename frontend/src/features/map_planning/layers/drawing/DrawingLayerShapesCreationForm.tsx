@@ -13,7 +13,7 @@ import { useTransformerStore } from '../../store/transformer/TransformerStore';
 import { DrawingLayerFillPatterns } from './DrawingLayerFillPatterns';
 import { DrawingLayerStatusPanelContent } from './DrawingLayerStatusPanelContent';
 
-export function DrawingLayerShapesToolForm() {
+export function DrawingLayerShapesCreationForm() {
   const { t } = useTranslation(['common', 'drawings']);
 
   const drawingLayerActivateDrawingMode = useMapStore(

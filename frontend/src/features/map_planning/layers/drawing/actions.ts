@@ -148,9 +148,8 @@ export class UpdateDrawingAction
             };
           }
         }
-
         return drawing;
-      });
+      }) as DrawingDto[];
     };
 
     return {
@@ -159,11 +158,7 @@ export class UpdateDrawingAction
         ...state.layers,
         drawing: {
           ...state.layers.drawing,
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          //@ts-ignore
           objects: updateDrawings(state.layers.drawing.objects),
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          //@ts-ignore
           loadedObjects: updateDrawings(state.layers.drawing.loadedObjects),
         },
       },

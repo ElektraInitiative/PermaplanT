@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import useMapStore from '../../store/MapStore';
-import { DrawingLayerIconToolForm } from './DrawingLayerIconToolForm';
-import { DrawingLayerLabelToolForm } from './DrawingLayerLabelToolForm';
-import { DrawingLayerShapesToolForm } from './DrawingLayerShapesToolForm';
+import { DrawingLayerIconCreationForm } from './DrawingLayerIconCreationForm';
+import { DrawingLayerLabelCreationForm } from './DrawingLayerLabelCreationForm';
+import { DrawingLayerShapesCreationForm } from './DrawingLayerShapesCreationForm';
 import 'react-tabs/style/react-tabs.css';
 
 export const DrawingLayerRightToolbar = () => {
@@ -23,13 +23,13 @@ export const DrawingLayerRightToolbar = () => {
         </TabList>
 
         <TabPanel>
-          <DrawingLayerShapesToolForm />
+          <DrawingLayerShapesCreationForm />
         </TabPanel>
         <TabPanel>
-          <DrawingLayerLabelToolForm />
+          <DrawingLayerLabelCreationForm />
         </TabPanel>
         <TabPanel>
-          <DrawingLayerIconToolForm />
+          <DrawingLayerIconCreationForm />
         </TabPanel>
       </Tabs>
     </div>

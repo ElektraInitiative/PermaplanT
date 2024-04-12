@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { DrawingDto, DrawingShapeType } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
-import { DebouncedFillPatternSelector } from '@/components/Form/DebouncedFillPatternInput';
+import { DebouncedFillPatternSelector } from '@/components/Form/DebouncedFillPatternSelector';
 import { DebouncedSimpleFormInput } from '@/components/Form/DebouncedSimpleFormInput';
 import { DebouncedSimpleFormTextArea } from '@/components/Form/DebouncedSimpleFormTextArea';
 import EditIcon from '@/svg/icons/edit.svg?react';
@@ -50,7 +50,7 @@ export type DrawingFormData =
       text?: string;
     };
 
-export type DrawingFromElement = {
+export type DrawingFormInput = {
   id: string;
   type: DrawingShapeType;
   addDate?: string;
@@ -62,11 +62,11 @@ export type DrawingFromElement = {
 };
 
 export type EditSingleDrawingProps = EditDrawingAttributesProps & {
-  drawing: DrawingFromElement;
+  drawing: DrawingFormInput;
 };
 
 export type EditMultipleDrawingsProps = EditDrawingAttributesProps & {
-  drawings: DrawingFromElement[];
+  drawings: DrawingFormInput[];
 };
 
 export type DrawingAttributeEditFormProps = EditDrawingAttributesProps & {

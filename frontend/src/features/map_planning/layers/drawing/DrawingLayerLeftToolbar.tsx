@@ -3,7 +3,7 @@ import useMapStore from '@/features/map_planning/store/MapStore';
 import { useIsReadOnlyMode } from '../../utils/ReadOnlyModeContext';
 import {
   DrawingFormData,
-  DrawingFromElement as DrawingFormElement,
+  DrawingFormInput as DrawingFormElement,
   MultipleDrawingAttributeForm,
   SingleDrawingAttributeForm,
 } from './DrawingAttributeEditForm';
@@ -57,9 +57,9 @@ export function DrawingLayerLeftToolbar() {
     if (!selectedDrawings?.length || color === undefined) return;
 
     const hasChanged = selectedDrawings.some(
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      (selectedDrawing) => selectedDrawing.variant.properties.color !== color,
+      (selectedDrawing) =>
+        selectedDrawing.variant.type !== DrawingShapeType.Image &&
+        selectedDrawing.variant.properties.color !== color,
     );
     if (!hasChanged) return;
 
@@ -72,10 +72,8 @@ export function DrawingLayerLeftToolbar() {
           color,
         },
       },
-    }));
+    })) as DrawingDto[];
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     executeAction(new UpdateDrawingAction(updatedDrawings));
   };
 
@@ -83,9 +81,10 @@ export function DrawingLayerLeftToolbar() {
     if (!selectedDrawings?.length || strokeWidth === undefined || strokeWidth === 0) return;
 
     const hasChanged = selectedDrawings.some(
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      (selectedDrawing) => selectedDrawing.variant.properties.strokeWidth !== strokeWidth,
+      (selectedDrawing) =>
+        selectedDrawing.variant.type !== DrawingShapeType.Image &&
+        selectedDrawing.variant.type !== DrawingShapeType.LabelText &&
+        selectedDrawing.variant.properties.strokeWidth !== strokeWidth,
     );
     if (!hasChanged) return;
 
@@ -98,10 +97,8 @@ export function DrawingLayerLeftToolbar() {
           strokeWidth,
         },
       },
-    }));
+    })) as DrawingDto[];
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     executeAction(new UpdateDrawingAction(updatedDrawings));
   };
 
@@ -109,9 +106,9 @@ export function DrawingLayerLeftToolbar() {
     if (!selectedDrawings?.length || text === undefined) return;
 
     const hasChanged = selectedDrawings.some(
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      (selectedDrawing) => selectedDrawing.variant.properties.text !== text,
+      (selectedDrawing) =>
+        selectedDrawing.variant.type === DrawingShapeType.LabelText &&
+        selectedDrawing.variant.properties.text !== text,
     );
     if (!hasChanged) return;
 
@@ -124,10 +121,8 @@ export function DrawingLayerLeftToolbar() {
           text,
         },
       },
-    }));
+    })) as DrawingDto[];
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     executeAction(new UpdateDrawingAction(updatedDrawings));
   };
 
@@ -135,9 +130,10 @@ export function DrawingLayerLeftToolbar() {
     if (!selectedDrawings?.length || fillPattern === undefined) return;
 
     const hasChanged = selectedDrawings.some(
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      (selectedDrawing) => selectedDrawing.variant.properties.fillPattern !== fillPattern,
+      (selectedDrawing) =>
+        selectedDrawing.variant.type !== DrawingShapeType.Image &&
+        selectedDrawing.variant.type !== DrawingShapeType.LabelText &&
+        selectedDrawing.variant.properties.fillPattern !== fillPattern,
     );
     if (!hasChanged) return;
 
@@ -150,10 +146,8 @@ export function DrawingLayerLeftToolbar() {
           fillPattern,
         },
       },
-    }));
+    })) as DrawingDto[];
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     executeAction(new UpdateDrawingAction(updatedDrawings));
   };
 
@@ -167,7 +161,7 @@ export function DrawingLayerLeftToolbar() {
 
   return singeleDrawingSelected ? (
     <SingleDrawingAttributeForm
-      drawing={mapDtotoFormData(selectedDrawings[0])}
+      drawing={mapDtotoFormInput(selectedDrawings[0])}
       onAddDateChange={onAddDateChange}
       onRemoveDateChange={onRemoveDateChange}
       onColorChange={onColorChange}
@@ -179,7 +173,7 @@ export function DrawingLayerLeftToolbar() {
     />
   ) : (
     <MultipleDrawingAttributeForm
-      drawings={selectedDrawings.map(mapDtotoFormData)}
+      drawings={selectedDrawings.map(mapDtotoFormInput)}
       onAddDateChange={onAddDateChange}
       onRemoveDateChange={onRemoveDateChange}
       onColorChange={onColorChange}
@@ -192,7 +186,7 @@ export function DrawingLayerLeftToolbar() {
   );
 }
 
-function mapDtotoFormData(drawing: DrawingDto): DrawingFormElement {
+function mapDtotoFormInput(drawing: DrawingDto): DrawingFormElement {
   if (drawing.variant.type === DrawingShapeType.Image) {
     return {
       id: drawing.id,

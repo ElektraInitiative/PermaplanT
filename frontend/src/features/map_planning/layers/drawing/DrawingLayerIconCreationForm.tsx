@@ -7,7 +7,7 @@ import useMapStore from '@/features/map_planning/store/MapStore';
 import FileSelectorModal from '@/features/nextcloud_integration/components/FileSelectorModal';
 import { DrawingLayerStatusPanelContent } from './DrawingLayerStatusPanelContent';
 
-export function DrawingLayerIconToolForm() {
+export function DrawingLayerIconCreationForm() {
   const { t } = useTranslation(['common', 'drawings']);
 
   const [showFileSelector, setShowFileSelector] = useState(false);

@@ -9,7 +9,7 @@ import TextIcon from '@/svg/icons/text.svg?react';
 import { useTransformerStore } from '../../store/transformer/TransformerStore';
 import { DrawingLayerStatusPanelContent } from './DrawingLayerStatusPanelContent';
 
-export function DrawingLayerLabelToolForm() {
+export function DrawingLayerLabelCreationForm() {
   const { t } = useTranslation(['common', 'drawings']);
 
   const drawingLayerActivateDrawingMode = useMapStore(

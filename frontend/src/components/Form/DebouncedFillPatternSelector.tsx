@@ -30,16 +30,6 @@ type DebouncedSimpleFormInputProps<T extends FieldValues = FieldValues> = {
 
 type SimpleFormInputProps = ComponentPropsWithoutRef<typeof SimpleFormInput>;
 
-/**
- * A wrapper around {@link SimpleFormInput} that adds a loading spinner or checkmark
- * to the right of the input depending on the state of a debounced submit.
- *
- * # Important
- * It is using the {@link useFormContext} hook, so it must be rendered inside a FormProvider.
- *
- * @param props - {@link DebouncedSimpleFormInputProps}
- * @returns
- */
 export function DebouncedFillPatternSelector<T extends FieldValues>({
   onValid,
   onInvalid,
