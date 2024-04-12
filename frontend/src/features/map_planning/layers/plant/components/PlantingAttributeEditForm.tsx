@@ -23,8 +23,8 @@ const PlantingAttributeEditFormSchema = z
     addDate: z.nullable(z.string()).transform((value) => value || undefined),
     removeDate: z.nullable(z.string()).transform((value) => value || undefined),
     plantingNotes: z.nullable(z.string()),
-    sizeX: z.number().int().nullable(),
-    sizeY: z.number().int().nullable(),
+    sizeX: z.optional(z.number().int()),
+    sizeY: z.optional(z.number().int()),
   })
   .refine((schema) => !schema.removeDate || !schema.addDate || schema.addDate < schema.removeDate, {
     path: ['dateRelation'],
@@ -139,12 +139,12 @@ export function MultiplePlantingsAttributeForm({
 
   const getCommonWidth = () => {
     const comparisonWidth = plantings[0].sizeX;
-    const existsCommonWidth = plantings.every((planting) => planting.sizeY === comparisonWidth);
+    const existsCommonWidth = plantings.every((planting) => planting.sizeX === comparisonWidth);
     return existsCommonWidth ? comparisonWidth : undefined;
   };
 
   const getCommonHeight = () => {
-    const comparisonHeight = plantings[0].sizeX;
+    const comparisonHeight = plantings[0].sizeY;
     const existsCommonHeight = plantings.every((planting) => planting.sizeY === comparisonHeight);
     return existsCommonHeight ? comparisonHeight : undefined;
   };
