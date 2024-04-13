@@ -1,0 +1,19 @@
+{
+  "global": {
+    "cancelModal": ["Escape"],
+    "redo": ["Cmd+y"],
+    "undo": ["Cmd+z"]
+  },
+  "base_layer": {
+    "activatePolygonMovePoints": ["Shift+M"],
+    "activatePolygonAddPoints": ["Shift+A"],
+    "activatePolygonDeletePoints": ["Shift+D"]
+  },
+  "plants_layer": {
+    "exitPlantingMode": ["Escape"],
+    "deleteSelectedPlantings": ["Delete"]
+  },
+  "_just_for_documentation_":{
+    "clearSearchInput": ["Escape"]
+  }
+}

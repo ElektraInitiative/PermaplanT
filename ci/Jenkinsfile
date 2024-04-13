@@ -1,21 +1,17 @@
+// Pipeline for PR's, master merges and production
+
 import org.jenkinsci.plugins.pipeline.modeldefinition.Utils
 
+// Function duplicated in `Jenkinsfile.release`
 def node_info() {
     echo "Running stage on ${env.NODE_NAME}"
 }
 
-def wait_for_db() {
+// Function duplicated in `Jenkinsfile.release` without the command parameter
+def wait_for_db(String command) {
     retry(6) {
         sleep(time: 5, unit: 'SECONDS')
-        sh '/usr/bin/pg_isready --host=db --username=ci --dbname=ci --timeout=60'
-    }
-}
-
-def wait_for_pr_db() {
-    retry(6) {
-        // groovylint-disable-next-line
-        sleep(time: 5, unit: 'SECONDS')
-        sh 'curl --fail https://pr.permaplant.net/api/config'
+        sh "${command}"
     }
 }
 
@@ -39,6 +35,7 @@ def abortPreviousRunUnlessMaster() {
     }
 }
 
+// function content duplicated in `Jenkinsfile.release`
 /**
  * This method runs a Docker container with a Postgres sidecar and executes the specified command inside the container.
  *
@@ -66,7 +63,7 @@ def runDockerPostgresSidecar(String command,  List<String> stashsrc = [], List<S
                 -e 'RUSTDOCFLAGS=-D warnings'"
                 ) {
                     checkout scm
-                    wait_for_db()
+                    wait_for_db('/usr/bin/pg_isready --host=db --username=ci --dbname=ci --timeout=60')
                     sh './ci/build-scripts/build-schema.sh'
                     // Because in Deploy the path for /target is a
                     //env in permaplant-deploy.sh, we can only solve it with prepending cd backend
@@ -83,6 +80,7 @@ def runDockerPostgresSidecar(String command,  List<String> stashsrc = [], List<S
     }
 }
 
+// function content duplicated in `Jenkinsfile.release`
 /**
  * Run a script inside a desired docker image with custom docker arguments.
  * @param command The command to be executed inside the Docker container.
@@ -107,6 +105,7 @@ def runDocker(String command, String dockerImage, String dockerBuildArgs, boolea
     }
 }
 
+// mdbook build duplicated in `Jenkinsfile.release`
 /**
  * Test, Build and stash Mdbook inside permaplants docker image.
  *
@@ -198,6 +197,39 @@ def testMigrations() {
     }
 }
 
+// /**
+//  * Copy the documentation to doc.permaplant.net server
+//  */
+def copyDocumentation(String location) {
+    echo 'Copying Documentation ...'
+    sshPublisher(
+        publishers: [
+        sshPublisherDesc(
+            verbose: true,
+            configName: 'doc.permaplant.net',
+            transfers: [
+                sshTransfer(
+                    sourceFiles: 'backend/target/doc/**/*',
+                    removePrefix: 'backend/target/doc/',
+                    remoteDirectory: "${location}/cargodoc"
+                ),
+                sshTransfer(
+                    sourceFiles: 'book/html/**/*',
+                    removePrefix: 'book/html/',
+                    remoteDirectory: "${location}/mdbook"
+                ),
+                sshTransfer(
+                    sourceFiles: 'frontend/storybook-static/**/*',
+                    removePrefix: 'frontend/storybook-static/',
+                    remoteDirectory: "${location}/storybook"
+                )
+            ]
+        )
+        ]
+    )
+
+}
+
 // PIPELINE BEGIN
 abortPreviousRunUnlessMaster()
 
@@ -241,7 +273,11 @@ timeout(time: 2, unit: 'HOURS') {
                     ['backend/target/release/backend'],
                     ['backend']
                 ),
-                'cargo-clippy/doc': runDockerPostgresSidecar('cargo clippy && cargo doc'),
+                'cargo-clippy-doc': runDockerPostgresSidecar(
+                    'cargo clippy && cargo doc --document-private-items',
+                    ['backend/target/doc/**/*'],
+                    ['cargodoc']
+                ),
                 'cargo-test': runDockerPostgresSidecar('cargo test'),
                 'frontend': testAndBuildFrontend(),
                 'mdbook': testAndBuildMdbook(),
@@ -256,7 +292,9 @@ timeout(time: 2, unit: 'HOURS') {
     }
 }
 
+if (env.BRANCH_NAME.startsWith('PR')){
 lock("${env.NODE_NAME}-exclusive") {
+    // `Deploy PR` stage similar to `Deploy Dev` and `Jenkinsfile.release.Deploy Prod`
     stage('Deploy PR') {
         node('permaplant && pr') {
             node_info()
@@ -278,6 +316,7 @@ lock("${env.NODE_NAME}-exclusive") {
                 unstash 'storybook'
                 unstash 'typedoc'
                 unstash 'mdbook'
+                unstash 'cargodoc'
 
                 echo 'Deploying to PR'
                 sh "sudo /usr/local/bin/permaplant-deploy.sh pr ${WORKSPACE}"
@@ -286,13 +325,13 @@ lock("${env.NODE_NAME}-exclusive") {
                 dir('scraper') {
                     sh 'npm ci'
                     sh 'mkdir ./data/'
-                    sh 'cp /nextcloud/Database/scraper-data/mergedDatasets.csv ./data/'
-                    sh 'cp /nextcloud/Database/scraper-data/Companions.csv ./data/'
-                    sh 'cp /nextcloud/Database/scraper-data/Antagonist.csv ./data/'
+                    sh 'cp /data/*.csv ./data/'
                     sh 'npm run insert'
                     sh 'rm -rf ./data/'
                     sh 'rm -rf ./node_modules/'
                 }
+
+                copyDocumentation('pr')
             }
         }
     }
@@ -308,7 +347,7 @@ lock("${env.NODE_NAME}-exclusive") {
             }
             try {
                 docker.build('permaplant-e2e:ci', './e2e').inside('-e E2E_URL=' + target) {
-                    wait_for_pr_db()
+                    wait_for_db('curl --fail https://pr.permaplant.net/api/config')
                     sh 'make test-e2e'
                 }
             } catch (err) {
@@ -327,10 +366,12 @@ lock("${env.NODE_NAME}-exclusive") {
         }
     }
 }
+}
 
 // Deploying to Dev only happens on branch "master"
 if (env.BRANCH_NAME == 'master') {
     try {
+        // `Deploy Dev` stage similar to `Deploy PR` and `Jenkinsfile.release.Deploy Prod`
         stage('Deploy Dev') {
             node('permaplant && dev') {
                 node_info()
@@ -344,9 +385,12 @@ if (env.BRANCH_NAME == 'master') {
                 unstash 'storybook'
                 unstash 'typedoc'
                 unstash 'mdbook'
+                unstash 'cargodoc'
 
                 echo 'Deploying to Dev ...'
                 sh "sudo /usr/local/bin/permaplant-deploy.sh dev ${WORKSPACE}"
+
+                copyDocumentation('dev')
             }
         }
     } catch (Exception e) { // groovylint-disable-line

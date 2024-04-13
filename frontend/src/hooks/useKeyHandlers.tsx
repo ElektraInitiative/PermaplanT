@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { createShortcutIncludingModifierKeys } from '@/utils/key-combinations';
+import { createShortcutIncludingModifierKeys } from '@/config/keybindings';
 
 /**
  * Custom React Hook: useKeyHandlers
@@ -53,6 +53,7 @@ export function useKeyHandlers(
         event.ctrlKey,
         event.altKey,
         event.shiftKey,
+        event.metaKey,
         event.key,
       );
 
