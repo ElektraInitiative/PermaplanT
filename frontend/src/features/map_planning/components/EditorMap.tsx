@@ -61,6 +61,7 @@ export type MapProps = {
  */
 export const EditorMap = ({ layers }: MapProps) => {
   const layersState = useMapStore((map) => map.untrackedState.layers);
+
   const canUndo = useMapStore((map) => map.canUndo);
   const canRedo = useMapStore((map) => map.canRedo);
   const undo = useMapStore((map) => map.undo);
@@ -74,7 +75,10 @@ export const EditorMap = ({ layers }: MapProps) => {
   const { t } = useTranslation(['timeline', 'blossoms', 'common', 'guidedTour', 'toolboxTooltips']);
   const isReadOnlyMode = useIsReadOnlyMode();
   const [show, setShow] = useState(false);
+
   const [timeLineState, setTimeLineState] = useState<'loading' | 'idle'>('idle');
+
+  const getSelectedLayerId = useMapStore((state) => state.getSelectedLayerId);
 
   const { mutate: reenableTour } = useReenableTour();
   const { mutate: completeTour } = useCompleteTour();
@@ -338,14 +342,15 @@ export const EditorMap = ({ layers }: MapProps) => {
               listening={getSelectedLayerType() === LayerType.Base}
             />
 
-            {layersState.drawing.states.length > 0 &&
-              layersState.drawing.states.map((state) => (
+            {layers
+              .filter((l) => l.type_ === LayerType.Drawing)
+              .map((layer) => (
                 <DrawingLayer
-                  layerId={state.layerId}
-                  key={state.layerId}
-                  opacity={state.opacity}
-                  visible={state.visible}
-                  listening={getSelectedLayerType() === LayerType.Drawing}
+                  layerId={layer.id}
+                  key={layer.id}
+                  opacity={layersState.drawing.layerStates[layer.id]?.opacity}
+                  visible={layersState.drawing.layerStates[layer.id]?.visible}
+                  listening={getSelectedLayerId() === layer.id}
                 />
               ))}
 

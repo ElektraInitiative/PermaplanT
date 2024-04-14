@@ -28,7 +28,7 @@ interface LayerListProps {
 
 function isLayerVisible(layer: LayerDto, layers: UntrackedLayers) {
   if (layer.type_ === LayerType.Drawing) {
-    const drawingLayer = layers.drawing.states.find((l) => l.layerId === layer.id);
+    const drawingLayer = layers.drawing.layerStates[layer.id];
     return drawingLayer?.visible;
   }
 

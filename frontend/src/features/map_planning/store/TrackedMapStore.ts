@@ -39,7 +39,6 @@ export const createTrackedMapSlice: StateCreator<
       }));
     },
     initDrawingLayer: (drawings: DrawingDto[]) => {
-      console.log('drawings', drawings);
       set((state) => ({
         ...state,
         trackedState: {
@@ -54,6 +53,8 @@ export const createTrackedMapSlice: StateCreator<
           },
         },
       }));
+
+      console.log('drawings', get().trackedState.layers.drawing);
     },
     initBaseLayer(dto: BaseLayerImageDto) {
       set((state) => ({

@@ -9,6 +9,7 @@ import ModalContainer from '@/components/Modals/ModalContainer';
 import TransparentBackground from '@/components/TransparentBackground';
 import AddIcon from '@/svg/icons/add.svg?react';
 import RemoveIcon from '@/svg/icons/trash.svg?react';
+import { deleteDrawing } from '../../api/drawingApi';
 import { useCreateLayer, useDeleteLayer } from '../../hooks/mapEditorHookApi';
 import { useMapId } from '../../hooks/useMapId';
 import useMapStore from '../../store/MapStore';
@@ -22,6 +23,7 @@ export type LayerListProps = {
 export const LayerList = ({ layers }: LayerListProps) => {
   const updateSelectedLayer = useMapStore((map) => map.updateSelectedLayer);
   const selectedLayer = useMapStore((map) => map.untrackedState.selectedLayer) as LayerDto;
+
   const updateLayerOpacity = useMapStore((map) => map.updateLayerOpacity);
   const { t } = useTranslation(['layers', 'layerSettings', 'common']);
 
@@ -62,7 +64,9 @@ export const LayerList = ({ layers }: LayerListProps) => {
   };
 
   const handleRemoveLayer = () => {
+    deleteDrawing;
     deleteLayer();
+
     setShowConfirmDeleteModal(false);
   };
 
@@ -84,10 +88,10 @@ export const LayerList = ({ layers }: LayerListProps) => {
         </section>
       </div>
 
-      <TransparentBackground show={showNameModal} />
+      <TransparentBackground show={showNameModal || showConfirmDeleteModal} />
 
       <ModalContainer show={showNameModal} onCancelKeyPressed={() => setShowNameModal(false)}>
-        <div className="flex h-[15vh] w-[30vw] flex-col rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark">
+        <div className="flex w-[30vw] flex-col rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark">
           <h2 className="mb-3">{t('layerSettings:enter_layer_name')}</h2>
           <SimpleFormInput
             value={newLayerName}
@@ -110,7 +114,7 @@ export const LayerList = ({ layers }: LayerListProps) => {
         show={showConfirmDeleteModal}
         onCancelKeyPressed={() => setShowConfirmDeleteModal(false)}
       >
-        <div className="flex h-[10vh] w-[30vw] flex-col rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark">
+        <div className="flex w-[30vw] flex-col rounded-lg bg-neutral-100 p-6 dark:bg-neutral-100-dark">
           <h2 className="mb-3">{t('layerSettings:confirm_delete')}</h2>
 
           <div className="grid grid-cols-2 gap-2">

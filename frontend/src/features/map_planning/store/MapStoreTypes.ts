@@ -250,7 +250,6 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
         loadedObjects: [],
       },
       [LayerType.Drawing]: {
-        layerId: 0,
         id: -1,
         index: LayerType.Drawing,
         objects: [],
@@ -295,7 +294,6 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
         showLabels: true,
       } as UntrackedPlantLayerState,
       [LayerType.Drawing]: {
-        index: LayerType.Drawing,
         visible: true,
         opacity: 1,
         selectedShape: null,
@@ -305,10 +303,11 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
         selectedDrawings: [],
         editMode: undefined,
         editDrawingId: undefined,
-        states: [
+        layerStates: [
           {
+            index: LayerType.Drawing,
             layerId: 0,
-            visble: true,
+            visible: true,
             opacity: 1,
           },
         ],
@@ -447,7 +446,6 @@ export type TrackedBaseLayerState = {
 
 export type TrackedDrawingLayerState = {
   id: number;
-  layerId: number;
   objects: DrawingDto[];
   loadedObjects: DrawingDto[];
 };
@@ -480,7 +478,9 @@ export type UntrackedDrawingLayerState = {
   selectedStrokeWidth: number;
   editMode: DrawingLayerEditMode;
   editDrawingId?: string;
-  states: UntrackedLayerState[];
+  layerStates: {
+    [key: number]: UntrackedLayerState;
+  };
 };
 
 export type UntrackedBaseLayerState = UntrackedLayerState & {

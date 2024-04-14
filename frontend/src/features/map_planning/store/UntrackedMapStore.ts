@@ -109,9 +109,13 @@ export const createUntrackedMapSlice: StateCreator<
             ...state.untrackedState.layers,
             drawing: {
               ...state.untrackedState.layers.drawing,
-              states: state.untrackedState.layers.drawing.states.map((l) =>
-                l.layerId === layerId ? { ...l, visible: visible } : l,
-              ),
+              layerStates: {
+                ...state.untrackedState.layers.drawing.layerStates,
+                [layerId]: {
+                  ...state.untrackedState.layers.drawing.layerStates[layerId],
+                  visible: visible,
+                },
+              },
             },
           },
         },
@@ -142,9 +146,13 @@ export const createUntrackedMapSlice: StateCreator<
             ...state.untrackedState.layers,
             drawing: {
               ...state.untrackedState.layers.drawing,
-              states: state.untrackedState.layers.drawing.states.map((l) =>
-                l.layerId === layerId ? { ...l, opacity: opacity } : l,
-              ),
+              layerStates: {
+                ...state.untrackedState.layers.drawing.layerStates,
+                [layerId]: {
+                  ...state.untrackedState.layers.drawing.layerStates[layerId],
+                  opacity: opacity,
+                },
+              },
             },
           },
         },
@@ -600,21 +608,19 @@ export const createUntrackedMapSlice: StateCreator<
   },
 
   initDrawingLayersUntrackedState: (drawingLayers: LayerDto[]) => {
-    const drawingLayersState = drawingLayers.map((layer) => {
-      const existingLayer = get().untrackedState?.layers?.drawing?.states?.find(
-        (existing) => existing.layerId === layer.id,
-      );
-
+    const drawingLayersState = drawingLayers.reduce((acc, layer) => {
+      const existingLayer = get().untrackedState?.layers?.drawing?.layerStates?.[layer.id];
       if (!existingLayer) {
-        return {
-          layerId: layer.id,
+        acc[layer.id] = {
           visible: true,
           index: layer.type_,
           opacity: 1,
         };
+      } else {
+        acc[layer.id] = existingLayer;
       }
-      return existingLayer;
-    });
+      return acc;
+    }, {});
 
     set((state) => ({
       ...state,
@@ -624,7 +630,7 @@ export const createUntrackedMapSlice: StateCreator<
           ...state.untrackedState.layers,
           drawing: {
             ...state.untrackedState.layers.drawing,
-            states: drawingLayersState,
+            layerStates: drawingLayersState,
           },
         },
       },

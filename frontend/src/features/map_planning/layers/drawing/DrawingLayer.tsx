@@ -1,5 +1,4 @@
 import Konva from 'konva';
-import { LayerConfig } from 'konva/lib/Layer';
 import { KonvaEventListener, KonvaEventObject } from 'konva/lib/Node';
 import { Vector2d } from 'konva/lib/types';
 import { useCallback, useEffect, useRef, useState } from 'react';

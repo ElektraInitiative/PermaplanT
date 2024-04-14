@@ -29,8 +29,8 @@ const MAP_EDITOR_KEYS = {
     [{ ...MAP_EDITOR_KEYS._helpers.plant()[0], mapId, layerId, fetchDate }] as const,
   baseLayer: (mapId: number, layerId: number) =>
     [{ ...MAP_EDITOR_KEYS._helpers.base()[0], mapId, layerId }] as const,
-  drawingLayer: (mapId: number, layerId: number, fetchDate: string) =>
-    [{ ...MAP_EDITOR_KEYS._helpers.drawing()[0], mapId, layerId, fetchDate }] as const,
+  drawingLayer: (mapId: number, fetchDate: string) =>
+    [{ ...MAP_EDITOR_KEYS._helpers.drawing()[0], mapId, fetchDate }] as const,
   timeline: (mapId: number, startDate: string, endDate: string) =>
     [{ ...MAP_EDITOR_KEYS._helpers.timeline()[0], mapId, startDate, endDate }] as const,
 };
@@ -152,12 +152,12 @@ type UseLayerArgs = {
 /**
  * Hook that initializes the drawing layer by fetching all drawings
  */
-export function useDrawingLayer({ mapId, layerId, enabled }: UseLayerArgs) {
+export function useDrawingLayer({ mapId, enabled }: UseLayerArgs) {
   const fetchDate = useMapStore((state) => state.untrackedState.fetchDate);
   const { t } = useTranslation(['plantSearch']);
 
   const queryInfo = useQuery({
-    queryKey: MAP_EDITOR_KEYS.drawingLayer(mapId, layerId, fetchDate),
+    queryKey: MAP_EDITOR_KEYS.drawingLayer(mapId, fetchDate),
     queryFn: drawingLayerQueryFn,
     // We want to refetch manually.
     refetchOnWindowFocus: false,
@@ -182,8 +182,8 @@ export function useDrawingLayer({ mapId, layerId, enabled }: UseLayerArgs) {
 function drawingLayerQueryFn({
   queryKey,
 }: QueryFunctionContext<ReturnType<(typeof MAP_EDITOR_KEYS)['drawingLayer']>>) {
-  const { mapId, layerId, fetchDate } = queryKey[0];
-  return getDrawings(mapId, { layer_id: layerId, relative_to_date: fetchDate });
+  const { mapId, fetchDate } = queryKey[0];
+  return getDrawings(mapId, { relative_to_date: fetchDate });
 }
 
 /**
