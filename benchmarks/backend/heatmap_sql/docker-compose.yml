@@ -1,0 +1,44 @@
+version: "3"
+
+services:
+  benchmark-postgis:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.pg
+    # image: postgis/postgis:13-3.1
+    container_name: benchmark-postgis
+    env_file:
+      - .env.db
+    ports:
+      - "5432:5432"
+    networks:
+      - permaplant-bechmark
+    restart: unless-stopped
+    volumes:
+      - postgis-data-benchmark:/var/lib/postgresql/data
+
+  bechmark-pgadmin:
+    build:
+      context: .
+      dockerfile: Dockerfile.pga
+    image: dpage/pgadmin4
+    restart: unless-stopped
+    volumes:
+      - pgadmin-data-benchmark:/var/lib/pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: name@example.com
+      PGADMIN_DEFAULT_PASSWORD: permaplant
+    networks:
+      - permaplant-bechmark
+    ports:
+      - "5050:80"
+
+volumes:
+  pgadmin-data-benchmark:
+    external: false
+  postgis-data-benchmark:
+    external: false
+
+networks:
+  permaplant-bechmark:
+    external: false

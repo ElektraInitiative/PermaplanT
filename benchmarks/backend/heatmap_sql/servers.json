@@ -1,0 +1,14 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "permaplant",
+      "Group": "Servers",
+      "Host": "benchmark-postgis",
+      "Port": 5432,
+      "MaintenanceDB": "postgres",
+      "Username": "permaplant",
+      "PassFile": "/pgpass",
+      "SSLMode": "prefer"
+    }
+  }
+}
