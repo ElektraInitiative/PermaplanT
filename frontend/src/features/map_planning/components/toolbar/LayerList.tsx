@@ -61,12 +61,12 @@ export const LayerList = ({ layers }: LayerListProps) => {
   const handleSumbitName = () => {
     createLayer();
     setShowNameModal(false);
+    setNewLayerName('');
   };
 
   const handleRemoveLayer = () => {
     deleteDrawing;
     deleteLayer();
-
     setShowConfirmDeleteModal(false);
   };
 
