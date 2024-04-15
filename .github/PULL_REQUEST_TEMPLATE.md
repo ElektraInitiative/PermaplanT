@@ -23,7 +23,8 @@ We will help you, but we cannot accept PRs that do not fulfill the basics.
 
 <!--
 For documentation fixes, spell checking, and similar none of these points below need to be checked.
-Otherwise please check these points when getting a PR done:
+Otherwise please check below points when getting a PR done.
+If nothing is to be done, please check them, too.
 -->
 
 - [ ] I fully described what my PR does in the documentation
@@ -58,9 +59,11 @@ Also the checklist above can be used.
 But also the PR creator should check these points when getting a PR done:
 -->
 
-- [ ] I've tested the code
-- [ ] I've read through the whole code
-- [ ] I've read through the whole documentation
+- [ ] I've tested the code via issue description
+- [ ] I've tested the code via requirements
+- [ ] I've tested the code with concurrency (several browsers on the same map)
+- [ ] I've read through the code
+- [ ] I've read through the documentation
 - [ ] I've checked conformity to guidelines
 - [ ] I've checked conformity to requirements
-- [ ] I've checked that the requirements are tested
+- [ ] I've checked that the requirements are automatically tested
