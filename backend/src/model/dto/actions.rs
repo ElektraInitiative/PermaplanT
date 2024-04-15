@@ -251,8 +251,6 @@ impl Action {
             action: ActionType::CreateShading(
                 dtos.iter()
                     .map(|dto| CreateShadingActionPayload {
-                        user_id,
-                        action_id,
                         id: dto.id,
                         layer_id: dto.layer_id,
                         shade: dto.shade,
@@ -276,11 +274,7 @@ impl Action {
             user_id,
             action: ActionType::DeleteShading(
                 dtos.iter()
-                    .map(|dto| DeleteShadingActionPayload {
-                        user_id,
-                        action_id,
-                        id: dto.id,
-                    })
+                    .map(|dto| DeleteShadingActionPayload { id: dto.id })
                     .collect(),
             ),
         }
@@ -298,8 +292,6 @@ impl Action {
             action: ActionType::UpdateShading(
                 dtos.iter()
                     .map(|dto| UpdateShadingActionPayload {
-                        user_id,
-                        action_id,
                         id: dto.id,
                         shade: dto.shade,
                         geometry: dto.clone().geometry,
@@ -321,8 +313,6 @@ impl Action {
             action: ActionType::UpdateShadingRemoveDate(
                 dtos.iter()
                     .map(|dto| UpdateShadingRemoveDateActionPayload {
-                        user_id,
-                        action_id,
                         id: dto.id,
                         remove_date: dto.remove_date,
                     })
@@ -343,8 +333,6 @@ impl Action {
             action: ActionType::UpdateShadingAddDate(
                 dtos.iter()
                     .map(|dto| UpdateShadingAddDateActionPayload {
-                        user_id,
-                        action_id,
                         id: dto.id,
                         add_date: dto.add_date,
                     })
@@ -410,8 +398,6 @@ pub struct TransformPlantActionPayload {
 #[derive(Debug, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct CreateShadingActionPayload {
-    user_id: Uuid,
-    action_id: Uuid,
     id: Uuid,
     layer_id: i32,
     shade: Shade,
@@ -422,10 +408,8 @@ pub struct CreateShadingActionPayload {
 
 impl CreateShadingActionPayload {
     #[must_use]
-    pub fn new(payload: ShadingDto, user_id: Uuid, action_id: Uuid) -> Self {
+    pub fn new(payload: ShadingDto) -> Self {
         Self {
-            user_id,
-            action_id,
             id: payload.id,
             layer_id: payload.layer_id,
             shade: payload.shade,
@@ -441,8 +425,6 @@ impl CreateShadingActionPayload {
 /// The payload of the [`Action::UpdateShading`].
 #[serde(rename_all = "camelCase")]
 pub struct UpdateShadingActionPayload {
-    user_id: Uuid,
-    action_id: Uuid,
     id: Uuid,
     shade: Option<Shade>,
     geometry: Option<Polygon<Point>>,
@@ -450,10 +432,8 @@ pub struct UpdateShadingActionPayload {
 
 impl UpdateShadingActionPayload {
     #[must_use]
-    pub fn new(payload: ShadingDto, user_id: Uuid, action_id: Uuid) -> Self {
+    pub fn new(payload: ShadingDto) -> Self {
         Self {
-            user_id,
-            action_id,
             id: payload.id,
             shade: Some(payload.shade),
             geometry: Some(payload.geometry),
@@ -466,20 +446,7 @@ impl UpdateShadingActionPayload {
 /// The payload of the [`Action::DeleteShading`].
 #[serde(rename_all = "camelCase")]
 pub struct DeleteShadingActionPayload {
-    user_id: Uuid,
-    action_id: Uuid,
     id: Uuid,
-}
-
-impl DeleteShadingActionPayload {
-    #[must_use]
-    pub fn new(id: Uuid, user_id: Uuid, action_id: Uuid) -> Self {
-        Self {
-            user_id,
-            action_id,
-            id,
-        }
-    }
 }
 
 #[typeshare]
@@ -487,18 +454,14 @@ impl DeleteShadingActionPayload {
 /// The payload of the [`Action::UpdateShadingAddDate`].
 #[serde(rename_all = "camelCase")]
 pub struct UpdateShadingAddDateActionPayload {
-    user_id: Uuid,
-    action_id: Uuid,
     id: Uuid,
     add_date: Option<NaiveDate>,
 }
 
 impl UpdateShadingAddDateActionPayload {
     #[must_use]
-    pub fn new(payload: &ShadingDto, user_id: Uuid, action_id: Uuid) -> Self {
+    pub fn new(payload: &ShadingDto) -> Self {
         Self {
-            user_id,
-            action_id,
             id: payload.id,
             add_date: payload.add_date,
         }
@@ -510,18 +473,14 @@ impl UpdateShadingAddDateActionPayload {
 /// The payload of the [`Action::UpdateShadingRemoveDate`].
 #[serde(rename_all = "camelCase")]
 pub struct UpdateShadingRemoveDateActionPayload {
-    user_id: Uuid,
-    action_id: Uuid,
     id: Uuid,
     remove_date: Option<NaiveDate>,
 }
 
 impl UpdateShadingRemoveDateActionPayload {
     #[must_use]
-    pub fn new(payload: &ShadingDto, user_id: Uuid, action_id: Uuid) -> Self {
+    pub fn new(payload: &ShadingDto) -> Self {
         Self {
-            user_id,
-            action_id,
             id: payload.id,
             remove_date: payload.remove_date,
         }
