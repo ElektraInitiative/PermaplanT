@@ -73,16 +73,16 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                                                 .service(plantings::update)
                                                 .service(plantings::delete),
                                         ),
+                                )
+                                .service(
+                                    web::scope("/shade").service(
+                                        web::scope("/shadings")
+                                            .service(shadings::find)
+                                            .service(shadings::create)
+                                            .service(shadings::update)
+                                            .service(shadings::delete),
+                                    ),
                                 ),
-                        )
-                        .service(
-                            web::scope("/shade").service(
-                                web::scope("/shadings")
-                                    .service(shadings::find)
-                                    .service(shadings::create)
-                                    .service(shadings::update)
-                                    .service(shadings::delete),
-                            ),
                         )
                         .service(
                             web::scope("/drawings")

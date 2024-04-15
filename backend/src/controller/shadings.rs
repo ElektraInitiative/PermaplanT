@@ -100,7 +100,7 @@ pub async fn create(
         ("oauth2" = [])
     )
 )]
-#[patch("/{shading_id}")]
+#[patch("")]
 pub async fn update(
     path: Path<i32>,
     update_shading: Json<ActionDtoWrapper<UpdateShadingDto>>,
@@ -147,7 +147,7 @@ pub async fn update(
         ("oauth2" = [])
     )
 )]
-#[delete("/{shading_id}")]
+#[delete("")]
 pub async fn delete(
     path: Path<i32>,
     delete_shadings: Json<ActionDtoWrapper<Vec<DeleteShadingDto>>>,

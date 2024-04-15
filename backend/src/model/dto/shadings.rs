@@ -52,8 +52,6 @@ pub struct NewShadingDto {
     /// The date the shading was added to the map.
     /// If None, the shading always existed.
     pub add_date: Option<NaiveDate>,
-    /// Id of the action (for identifying the action in the frontend).
-    pub action_id: Uuid,
 }
 
 /// Used to differentiate between different update operations on shadings.
@@ -85,8 +83,6 @@ pub struct UpdateValuesShadingDto {
     /// E.g. `{"rings": [[{"x": 0.0,"y": 0.0},{"x": 1000.0,"y": 0.0},{"x": 1000.0,"y": 1000.0},{"x": 0.0,"y": 1000.0},{"x": 0.0,"y": 0.0}]],"srid": 4326}`
     #[schema(value_type = Option<Object>)]
     pub geometry: Option<Polygon<Point>>,
-    /// Id of the action (for identifying the action in the frontend).
-    pub action_id: Uuid,
 }
 
 /// Used to change the `add_date` of a shading.
@@ -99,8 +95,6 @@ pub struct UpdateAddDateShadingDto {
     /// The date the shading was added to the map.
     /// If None, the shading always existed.
     pub add_date: Option<NaiveDate>,
-    /// Id of the action (for identifying the action in the frontend).
-    pub action_id: Uuid,
 }
 
 /// Used to change the `remove_date` of a shading.
@@ -113,8 +107,6 @@ pub struct UpdateRemoveDateShadingDto {
     /// The date the shading was removed from the map.
     /// If None, the shading is still on the map.
     pub remove_date: Option<NaiveDate>,
-    /// Id of the action (for identifying the action in the frontend).
-    pub action_id: Uuid,
 }
 
 /// Used to delete a shading.
@@ -125,8 +117,6 @@ pub struct UpdateRemoveDateShadingDto {
 pub struct DeleteShadingDto {
     /// The id of the shading.
     pub id: Uuid,
-    /// Id of the action (for identifying the action in the frontend).
-    pub action_id: Uuid,
 }
 
 /// Query parameters for searching shadings.
