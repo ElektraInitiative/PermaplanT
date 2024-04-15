@@ -12,8 +12,8 @@ import useMapStore from '@/features/map_planning/store/MapStore';
 describe('Shade layer actions', () => {
   it('adds shading objects to the shade layer on CreateShadingAction', () => {
     const { executeAction } = useMapStore.getState();
-    const createAction1 = new CreateShadingAction(createShadingTestObject(1));
-    const createAction2 = new CreateShadingAction(createShadingTestObject(2));
+    const createAction1 = new CreateShadingAction([createShadingTestObject(1)]);
+    const createAction2 = new CreateShadingAction([createShadingTestObject(2)]);
 
     executeAction(createAction1);
     executeAction(createAction2);
@@ -47,8 +47,8 @@ describe('Shade layer actions', () => {
 
   it('removes shading objects from the shade layer on DeleteShadingAction', () => {
     const { executeAction } = useMapStore.getState();
-    const createAction = new CreateShadingAction(createShadingTestObject(1));
-    const deleteAction = new DeleteShadingAction(createShadingTestObject(1));
+    const createAction = new CreateShadingAction([createShadingTestObject(1)]);
+    const deleteAction = new DeleteShadingAction([createShadingTestObject(1)]);
 
     executeAction(createAction);
     executeAction(deleteAction);
@@ -60,12 +60,12 @@ describe('Shade layer actions', () => {
 
   it('changes shading objects on the shade layer on UpdateShadingAction', () => {
     const { executeAction } = useMapStore.getState();
-    const createAction = new CreateShadingAction(createShadingTestObject(1));
+    const createAction = new CreateShadingAction([createShadingTestObject(1)]);
     executeAction(createAction);
 
     const testObj = createShadingTestObject(1);
     testObj.shade = Shade.PermanentDeepShade;
-    const updateAction = new UpdateShadingAction(testObj);
+    const updateAction = new UpdateShadingAction([testObj]);
     executeAction(updateAction);
 
     const { trackedState: newState } = useMapStore.getState();
@@ -86,12 +86,12 @@ describe('Shade layer actions', () => {
 
   it('changes shading objects on the shade layer on UpdateShadingAddDateAction', () => {
     const { executeAction } = useMapStore.getState();
-    const createAction = new CreateShadingAction(createShadingTestObject(1));
+    const createAction = new CreateShadingAction([createShadingTestObject(1)]);
     executeAction(createAction);
 
     const testObj = createShadingTestObject(1);
     testObj.addDate = '2020-01-01';
-    const updateAction = new UpdateShadingAddDateAction(testObj);
+    const updateAction = new UpdateShadingAddDateAction([testObj]);
     executeAction(updateAction);
 
     const { trackedState: newState } = useMapStore.getState();
@@ -112,12 +112,12 @@ describe('Shade layer actions', () => {
 
   it('changes shading objects on the shade layer on UpdateShadingRemoveDateAction', () => {
     const { executeAction } = useMapStore.getState();
-    const createAction = new CreateShadingAction(createShadingTestObject(1));
+    const createAction = new CreateShadingAction([createShadingTestObject(1)]);
     executeAction(createAction);
 
     const testObj = createShadingTestObject(1);
     testObj.removeDate = '9999-01-01';
-    const updateAction = new UpdateShadingRemoveDateAction(testObj);
+    const updateAction = new UpdateShadingRemoveDateAction([testObj]);
     executeAction(updateAction);
 
     const { trackedState: newState } = useMapStore.getState();
@@ -140,7 +140,7 @@ describe('Shade layer actions', () => {
     const { executeAction } = useMapStore.getState();
     const testObj = createShadingTestObject(1);
     testObj.removeDate = '1970-01-02';
-    const createAction = new CreateShadingAction(testObj);
+    const createAction = new CreateShadingAction([testObj]);
     executeAction(createAction);
 
     const { trackedState: newState } = useMapStore.getState();
@@ -163,7 +163,7 @@ describe('Shade layer actions', () => {
     const { executeAction } = useMapStore.getState();
     const testObj = createShadingTestObject(1);
     testObj.addDate = '9999-01-01';
-    const createAction = new CreateShadingAction(testObj);
+    const createAction = new CreateShadingAction([testObj]);
     executeAction(createAction);
 
     const { trackedState: newState } = useMapStore.getState();

@@ -3,7 +3,6 @@ import {
   DeleteShadingAction,
   UpdateShadingAction,
   UpdateShadingAddDateAction,
-  UpdateShadingRemoveDateAction,
 } from '@/features/map_planning/layers/shade/actions';
 import {
   MultipleShadingAttributeEditFrom,
@@ -25,45 +24,38 @@ export function ShadeLayerLeftToolbar() {
   const nothingSelected = !selectedShadings?.length;
 
   const onShadeChange = ({ shade }: ShadingCoreDataAttribute) => {
-    if (!selectedShadings?.length || isReadOnlyMode) return;
+    if (!selectedShadings?.length || isReadOnlyMode || !shade) return;
 
-    selectedShadings.forEach((selectedShading) => {
-      // This prevents an infinite loop because the corresponding select menu triggers an
-      // update after its received its initial value.
-      if (selectedShading.shade === shade || shade === undefined) return;
-
-      executeAction(
-        new UpdateShadingAction({
-          id: selectedShading.id,
-          shade: shade,
-          geometry: selectedShading.geometry,
-        }),
-      );
-    });
+    executeAction(
+      new UpdateShadingAction(
+        selectedShadings
+          // Prevent infinite loops caused by select menus being updated after this action is executed.
+          .filter((s) => s.shade !== shade)
+          .map((s) => {
+            return { ...s, shade };
+          }),
+      ),
+    );
   };
 
   const onAddDateChange = ({ addDate }: ShadingCoreDataAttribute) => {
     if (!selectedShadings?.length || isReadOnlyMode) return;
 
-    selectedShadings.forEach((selectedShading) =>
-      executeAction(new UpdateShadingAddDateAction({ id: selectedShading.id, addDate })),
-    );
+    executeAction(new UpdateShadingAddDateAction(selectedShadings.map((s) => ({ ...s, addDate }))));
   };
 
   const onRemoveDateChange = ({ removeDate }: ShadingCoreDataAttribute) => {
     if (!selectedShadings?.length || isReadOnlyMode) return;
 
-    selectedShadings.forEach((selectedShading) =>
-      executeAction(new UpdateShadingRemoveDateAction({ id: selectedShading.id, removeDate })),
+    executeAction(
+      new UpdateShadingAddDateAction(selectedShadings.map((s) => ({ ...s, removeDate }))),
     );
   };
 
   const onDeleteClick = () => {
     if (!selectedShadings?.length || isReadOnlyMode) return;
 
-    selectedShadings.forEach((selectedShading) =>
-      executeAction(new DeleteShadingAction({ id: selectedShading.id })),
-    );
+    executeAction(new DeleteShadingAction(selectedShadings));
   };
 
   if (nothingSelected) {

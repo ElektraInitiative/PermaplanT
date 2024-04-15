@@ -118,13 +118,15 @@ export function ShadeLayer(props: ShadeLayerProps) {
 
       function placeNewShading(point: Vector2d) {
         executeAction(
-          new CreateShadingAction({
-            id: uuid.v4(),
-            layerId: shadeLayerId,
-            addDate: timelineDate,
-            shade: selectedShadeForNewShading ?? Shade.NoShade,
-            geometry: ringGeometryAroundPoint({ ...point, srid: DEFAULT_SRID }, 8, 200),
-          }),
+          new CreateShadingAction([
+            {
+              id: uuid.v4(),
+              layerId: shadeLayerId,
+              addDate: timelineDate,
+              shade: selectedShadeForNewShading ?? Shade.NoShade,
+              geometry: ringGeometryAroundPoint({ ...point, srid: DEFAULT_SRID }, 8, 200),
+            },
+          ]),
         );
       }
     },

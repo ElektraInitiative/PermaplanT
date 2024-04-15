@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import IconButton from '@/components/Button/IconButton';
 import { StatusPanelContentWrapper } from '@/features/map_planning/components/statuspanel/StatusPanelContentWrapper';
 import useMapStore from '@/features/map_planning/store/MapStore';
+import { useTransformerStore } from '@/features/map_planning/store/transformer/TransformerStore';
 import EraserIcon from '@/svg/icons/eraser.svg?react';
 import PencilPlusIcon from '@/svg/icons/pencil-plus.svg?react';
 import PointerIcon from '@/svg/icons/pointer.svg?react';
@@ -15,11 +16,16 @@ export function ShadingGeometryToolForm() {
     (store) => store.shadeLayerDeactivatePolygonManipulation,
   );
   const setStatusPanelContent = useMapStore((store) => store.setStatusPanelContent);
-  const setInhibitTransformer = useMapStore((store) => store.setInhibitTransformer);
+  const blockTransformerActions = useTransformerStore(
+    (store) => store.actions.blockTransformerActions,
+  );
+  const unblockTransformerActions = useTransformerStore(
+    (store) => store.actions.unblockTransformerActions,
+  );
 
   const onStatusPanelClose = () => {
     deactivatePolygonManipulation();
-    setInhibitTransformer(false);
+    unblockTransformerActions();
   };
 
   return (
@@ -31,7 +37,7 @@ export function ShadingGeometryToolForm() {
           title={t('geometry_tool_form.move_points')}
           onClick={() => {
             movePolygonPoints();
-            setInhibitTransformer(true);
+            blockTransformerActions();
             setStatusPanelContent(
               <StatusPanelContentWrapper
                 content={t('edit_polygon.move')}
@@ -47,7 +53,7 @@ export function ShadingGeometryToolForm() {
           title={t('geometry_tool_form.add_points')}
           onClick={() => {
             addPolygonPoints();
-            setInhibitTransformer(true);
+            blockTransformerActions();
             setStatusPanelContent(
               <StatusPanelContentWrapper
                 content={t('edit_polygon.add')}
@@ -63,7 +69,7 @@ export function ShadingGeometryToolForm() {
           title={t('geometry_tool_form.delete_points')}
           onClick={() => {
             removePolygonPoints();
-            setInhibitTransformer(true);
+            blockTransformerActions();
             setStatusPanelContent(
               <StatusPanelContentWrapper
                 content={t('edit_polygon.remove')}

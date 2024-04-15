@@ -13,6 +13,7 @@ import {
   UpdateAddDateActionPayload,
   UpdateRemoveDateActionPayload,
 } from '@/api_types/definitions';
+import { filterByIds } from '@/features/map_planning/utils/layer-utils';
 import updateAddDatePlanting, {
   createPlanting,
   deletePlanting,
@@ -517,15 +518,4 @@ export class UpdatePlantingAdditionalName implements Action<null, null> {
     //eslint-disable-next-line @typescript-eslint/no-empty-function
     return new Promise<null>(() => {});
   }
-}
-
-/**
- * Filters an array of objects by their IDs.
- *
- * @param array - The array of objects to filter.
- * @param ids - The array of IDs to filter by.
- * @returns An array of objects that have IDs matching the provided IDs.
- */
-function filterByIds<T extends { id: unknown }>(array: T[], ids: unknown[]): T[] {
-  return array.filter((e) => ids.includes(e.id));
 }

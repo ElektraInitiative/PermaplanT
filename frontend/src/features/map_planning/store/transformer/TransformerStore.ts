@@ -62,42 +62,79 @@ export interface TransformerStore {
 
     /** Removes an event listener from the transformer */
     removeEventListener: (evtStr?: string | undefined, callback?: () => void | undefined) => void;
+
+    /** Prevents all transformer actions from being executed */
+    blockTransformerActions: () => void;
+
+    /** Resume accepting transformer actions again */
+    unblockTransformerActions: () => void;
   };
 }
 
 export const useTransformerStore = create<TransformerStore>()(() => {
   let __transformerRef = React.createRef<Konva.Transformer>();
+  let blocked: boolean;
 
   return {
     actions: {
       initialize(transformerRef) {
         __transformerRef = transformerRef;
+        blocked = false;
       },
-      enableAllAnchors: () => enableAllAnchors(__transformerRef.current),
+      enableAllAnchors: () => {
+        if (blocked) return;
+        enableAllAnchors(__transformerRef.current);
+      },
       enableDefaultAnchors: () => {
+        if (blocked) return;
         __transformerRef.current?.enabledAnchors(DEFAULT_ENABLED_ANCHORS);
       },
       enableRotation(enabled) {
+        if (blocked) return;
         __transformerRef.current?.rotateEnabled(enabled);
       },
       enableResizing(enabled) {
+        if (blocked) return;
         __transformerRef.current?.resizeEnabled(enabled);
       },
-      clearSelection: () => clearSelection(__transformerRef.current),
+      clearSelection: () => {
+        if (blocked) return;
+        clearSelection(__transformerRef.current);
+      },
       hasSelection: () => hasSelection(__transformerRef.current),
       isNodeSelected: (node) => isNodeSelected(__transformerRef.current, node),
       isTransforming: () => isTransforming(__transformerRef.current),
       getSelection: () => __transformerRef.current?.nodes() ?? [],
-      select: (node) => select(__transformerRef.current, node),
+      select: (node) => {
+        if (blocked) return;
+        select(__transformerRef.current, node);
+      },
       addEventListener(event, fn) {
+        if (blocked) return;
         __transformerRef.current?.on(event, fn);
       },
-      removeEventListener: (event, fn) => removeEventListener(__transformerRef.current, event, fn),
-      addNodeToSelection: (node) => addNodeToSelection(__transformerRef.current, node),
-      removeNodeFromSelection: (node) => removeNodeFromSelection(__transformerRef.current, node),
-      removeAllNodesFromSelection: () => setSelectedNodes(__transformerRef.current, []),
-      replaceNodesInSelectionSelection: (nodes) =>
-        setSelectedNodes(__transformerRef.current, nodes),
+      removeEventListener: (event, fn) => {
+        if (blocked) return;
+        removeEventListener(__transformerRef.current, event, fn);
+      },
+      addNodeToSelection: (node) => {
+        if (blocked) return;
+        addNodeToSelection(__transformerRef.current, node);
+      },
+      removeNodeFromSelection: (node) => {
+        if (blocked) return;
+        removeNodeFromSelection(__transformerRef.current, node);
+      },
+      removeAllNodesFromSelection: () => {
+        if (blocked) return;
+        setSelectedNodes(__transformerRef.current, []);
+      },
+      replaceNodesInSelectionSelection: (nodes) => {
+        if (blocked) return;
+        setSelectedNodes(__transformerRef.current, nodes);
+      },
+      blockTransformerActions: () => (blocked = true),
+      unblockTransformerActions: () => (blocked = false),
     },
   } satisfies TransformerStore;
 });

@@ -6,44 +6,39 @@ import {
   UpdateShadingAddDateActionPayload,
   UpdateShadingRemoveDateActionPayload,
 } from '@/api_types/definitions';
-import { createShading } from '@/features/map_planning/layers/shade/api/createShading';
-import { deleteShading } from '@/features/map_planning/layers/shade/api/deleteShading';
-import { updateShading } from '@/features/map_planning/layers/shade/api/updateShading';
+import {
+  createShading,
+  deleteShading,
+  updateShadingAddDate,
+  updateShadingContent,
+  updateShadingRemoveDate,
+} from '@/features/map_planning/api/shadingApi';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { Action, TrackedMapState } from '@/features/map_planning/store/MapStoreTypes';
 import { filterVisibleObjects } from '@/features/map_planning/utils/filterVisibleObjects';
+import { filterByIds } from '@/features/map_planning/utils/layer-utils';
 
 export class CreateShadingAction
   implements Action<Awaited<ReturnType<typeof createShading>>, boolean>
 {
-  private readonly _id: string;
+  private readonly _ids: string[];
 
   get entityIds() {
-    return [this._id];
+    return this._ids;
   }
 
-  constructor(
-    private readonly _data: Omit<CreateShadingActionPayload, 'userId' | 'actionId'>,
-    public actionId = v4(),
-  ) {
-    this._id = _data.id;
+  constructor(private readonly _data: CreateShadingActionPayload[], public actionId = v4()) {
+    this._ids = _data.map(({ id }) => id);
   }
 
   reverse() {
     return new DeleteShadingAction(
-      {
-        id: this._id,
-      },
+      this._ids.map((id) => ({ id })),
       this.actionId,
     );
   }
 
   apply(state: TrackedMapState): TrackedMapState {
-    const newShading = {
-      ...this._data,
-      id: this._id,
-    };
-
     const timelineDate = useMapStore.getState().untrackedState.timelineDate;
 
     return {
@@ -53,50 +48,45 @@ export class CreateShadingAction
         shade: {
           ...state.layers.shade,
           objects: filterVisibleObjects(
-            [...state.layers.shade.objects, { ...newShading }],
+            [...state.layers.shade.objects, ...this._data],
             timelineDate,
           ),
-          loadedObjects: [...state.layers.shade.loadedObjects, { ...newShading }],
+          loadedObjects: [...state.layers.shade.loadedObjects, ...this._data],
         },
       },
     };
   }
 
-  async execute(mapId: number): Promise<Awaited<ReturnType<typeof createShading>>> {
-    return createShading(mapId, {
-      ...this._data,
-      id: this._id,
-      actionId: this.actionId,
-    });
+  async execute(mapId: number) {
+    return createShading(mapId, this.actionId, this._data);
   }
 }
 
 export class DeleteShadingAction
   implements Action<boolean, Awaited<ReturnType<typeof createShading>>>
 {
-  constructor(
-    private readonly _data: Omit<DeleteShadingActionPayload, 'userId' | 'actionId'>,
-    public actionId = v4(),
-  ) {}
+  private readonly _ids: string[];
+
+  constructor(private readonly _data: DeleteShadingActionPayload[], public actionId = v4()) {
+    this._ids = this._data.map(({ id }) => id);
+  }
 
   get entityIds() {
-    return [this._data.id];
+    return this._ids;
   }
 
   async execute(mapId: number): Promise<boolean> {
-    return deleteShading(mapId, this._data.id, {
-      actionId: this.actionId,
-    });
+    return deleteShading(mapId, this.actionId, this._data);
   }
 
   reverse(state: TrackedMapState) {
-    const shading = state.layers.shade.loadedObjects.find((obj) => obj.id === this._data.id);
+    const shadings = filterByIds(state.layers.shade.loadedObjects, this._ids);
 
-    if (!shading) {
+    if (!shadings.length) {
       return null;
     }
 
-    return new CreateShadingAction(shading, this.actionId);
+    return new CreateShadingAction(shadings, this.actionId);
   }
 
   apply(state: TrackedMapState): TrackedMapState {
@@ -106,8 +96,8 @@ export class DeleteShadingAction
         ...state.layers,
         shade: {
           ...state.layers.shade,
-          objects: state.layers.shade.objects.filter((p) => p.id !== this._data.id),
-          loadedObjects: state.layers.shade.loadedObjects.filter((p) => p.id !== this._data.id),
+          objects: state.layers.shade.objects.filter((p) => !this._ids.includes(p.id)),
+          loadedObjects: state.layers.shade.loadedObjects.filter((p) => !this._ids.includes(p.id)),
         },
       },
     };
@@ -116,36 +106,40 @@ export class DeleteShadingAction
 
 export class UpdateShadingAction
   implements
-    Action<Awaited<ReturnType<typeof updateShading>>, Awaited<ReturnType<typeof updateShading>>>
+    Action<
+      Awaited<ReturnType<typeof updateShadingContent>>,
+      Awaited<ReturnType<typeof updateShadingContent>>
+    >
 {
+  private readonly _ids: string[];
+
   get entityIds() {
-    return [this._data.id];
+    return this._ids;
   }
 
-  constructor(
-    private readonly _data: Omit<UpdateShadingActionPayload, 'userId' | 'actionId'>,
-    public actionId = v4(),
-  ) {}
+  constructor(private readonly _data: UpdateShadingActionPayload[], public actionId = v4()) {
+    this._ids = _data.map((d) => d.id);
+  }
 
   reverse(state: TrackedMapState) {
-    const shading = state.layers.shade.loadedObjects.find((obj) => obj.id === this._data.id);
+    const shadings = filterByIds(state.layers.shade.loadedObjects, this._ids);
 
-    if (!shading) {
+    if (!shadings) {
       return null;
     }
 
-    return new UpdateShadingAction(shading, this.actionId);
+    return new UpdateShadingAction(shadings, this.actionId);
   }
 
   apply(state: TrackedMapState): TrackedMapState {
     const updatedShadings = useMapStore
       .getState()
-      .trackedState.layers.shade.loadedObjects.map((shading) => {
-        if (shading.id === this._data.id) {
+      .trackedState.layers.shade.loadedObjects.map((shading, idx) => {
+        if (this._ids.find((id) => id == shading.id)) {
           return {
             ...shading,
-            shade: this._data.shade ?? shading.shade,
-            geometry: this._data.geometry ?? shading.geometry,
+            shade: this._data[idx].shade ?? shading.shade,
+            geometry: this._data[idx].geometry ?? shading.geometry,
           };
         }
 
@@ -167,48 +161,52 @@ export class UpdateShadingAction
     };
   }
 
-  async execute(mapId: number): Promise<Awaited<ReturnType<typeof updateShading>>> {
-    return updateShading(mapId, this._data.id, {
-      type: 'Update',
-      content: {
-        ...this._data,
-        action_id: this.actionId,
-      },
-    });
+  async execute(mapId: number) {
+    return updateShadingContent(mapId, this.actionId, this._data);
   }
 }
 
 export class UpdateShadingAddDateAction
   implements
-    Action<Awaited<ReturnType<typeof updateShading>>, Awaited<ReturnType<typeof updateShading>>>
+    Action<
+      Awaited<ReturnType<typeof updateShadingContent>>,
+      Awaited<ReturnType<typeof updateShadingContent>>
+    >
 {
+  private readonly _ids: string[];
+
   get entityIds() {
-    return [this._data.id];
+    return this._ids;
   }
 
-  constructor(
-    private readonly _data: Omit<UpdateShadingAddDateActionPayload, 'userId' | 'actionId'>,
-    public actionId = v4(),
-  ) {}
+  constructor(private readonly _data: UpdateShadingAddDateActionPayload[], public actionId = v4()) {
+    this._ids = this._data.map(({ id }) => id);
+  }
 
   reverse(state: TrackedMapState) {
-    const shading = state.layers.shade.loadedObjects.find((obj) => obj.id === this._data.id);
+    const shadings = filterByIds(state.layers.shade.loadedObjects, this._ids);
 
-    if (!shading) {
+    if (!shadings) {
       return null;
     }
 
-    return new UpdateShadingAddDateAction(shading, this.actionId);
+    return new UpdateShadingAddDateAction(
+      shadings.map((s) => ({
+        id: s.id,
+        addDate: s.addDate,
+      })),
+      this.actionId,
+    );
   }
 
   apply(state: TrackedMapState): TrackedMapState {
     const updatedShadings = useMapStore
       .getState()
-      .trackedState.layers.shade.loadedObjects.map((shading) => {
-        if (shading.id === this._data.id) {
+      .trackedState.layers.shade.loadedObjects.map((shading, idx) => {
+        if (this._ids.includes(shading.id)) {
           return {
             ...shading,
-            addDate: this._data.addDate,
+            addDate: this._data[idx].addDate,
           };
         }
 
@@ -230,48 +228,55 @@ export class UpdateShadingAddDateAction
     };
   }
 
-  async execute(mapId: number): Promise<Awaited<ReturnType<typeof updateShading>>> {
-    return updateShading(mapId, this._data.id, {
-      type: 'UpdateAddDate',
-      content: {
-        ...this._data,
-        actionId: this.actionId,
-      },
-    });
+  async execute(mapId: number): Promise<Awaited<ReturnType<typeof updateShadingContent>>> {
+    return updateShadingAddDate(mapId, this.actionId, this._data);
   }
 }
 
 export class UpdateShadingRemoveDateAction
   implements
-    Action<Awaited<ReturnType<typeof updateShading>>, Awaited<ReturnType<typeof updateShading>>>
+    Action<
+      Awaited<ReturnType<typeof updateShadingRemoveDate>>,
+      Awaited<ReturnType<typeof updateShadingRemoveDate>>
+    >
 {
+  private readonly _ids: string[];
+
   get entityIds() {
-    return [this._data.id];
+    return this._ids;
   }
 
   constructor(
-    private readonly _data: Omit<UpdateShadingRemoveDateActionPayload, 'userId' | 'actionId'>,
+    private readonly _data: UpdateShadingRemoveDateActionPayload[],
     public actionId = v4(),
-  ) {}
+  ) {
+    this._ids = this._data.map(({ id }) => id);
+  }
 
   reverse(state: TrackedMapState) {
-    const shading = state.layers.shade.loadedObjects.find((obj) => obj.id === this._data.id);
+    const shadings = filterByIds(state.layers.shade.loadedObjects, this._ids);
 
-    if (!shading) {
+    if (!shadings) {
       return null;
     }
 
-    return new UpdateShadingRemoveDateAction(shading, this.actionId);
+    return new UpdateShadingAddDateAction(
+      shadings.map((s) => ({
+        id: s.id,
+        addDate: s.addDate,
+      })),
+      this.actionId,
+    );
   }
 
   apply(state: TrackedMapState): TrackedMapState {
     const updatedShadings = useMapStore
       .getState()
-      .trackedState.layers.shade.loadedObjects.map((shading) => {
-        if (shading.id === this._data.id) {
+      .trackedState.layers.shade.loadedObjects.map((shading, idx) => {
+        if (this._ids.includes(shading.id)) {
           return {
             ...shading,
-            removeDate: this._data.removeDate,
+            removeDate: this._data[idx].removeDate,
           };
         }
 
@@ -293,13 +298,7 @@ export class UpdateShadingRemoveDateAction
     };
   }
 
-  async execute(mapId: number): Promise<Awaited<ReturnType<typeof updateShading>>> {
-    return updateShading(mapId, this._data.id, {
-      type: 'UpdateRemoveDate',
-      content: {
-        ...this._data,
-        actionId: this.actionId,
-      },
-    });
+  async execute(mapId: number): Promise<Awaited<ReturnType<typeof updateShadingContent>>> {
+    return updateShadingAddDate(mapId, this.actionId, this._data);
   }
 }

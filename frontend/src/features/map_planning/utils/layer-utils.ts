@@ -27,3 +27,14 @@ export function useIsDrawingLayerActive(): boolean {
   const selectedLayerType = useSelectedLayerType();
   return selectedLayerType === LayerType.Drawing;
 }
+
+/**
+ * Filters an array of objects by their IDs.
+ *
+ * @param array - The array of objects to filter.
+ * @param ids - The array of IDs to filter by.
+ * @returns An array of objects that have IDs matching the provided IDs.
+ */
+export function filterByIds<T extends { id: unknown }>(array: T[], ids: unknown[]): T[] {
+  return array.filter((e) => ids.includes(e.id));
+}

@@ -71,15 +71,16 @@ export const createUntrackedMapSlice: StateCreator<
     useTransformerStore.getState().actions.removeAllNodesFromSelection();
     // Clear the transformer's nodes.
     useTransformerStore.getState().actions.clearSelection();
+    useTransformerStore.getState().actions.unblockTransformerActions();
     get().baseLayerDeactivatePolygonManipulation();
     get().shadeLayerDeactivatePolygonManipulation();
     get().clearStatusPanelContent();
 
     if (typeOfLayer(selectedLayer) === LayerType.Shade) {
-      useTransformerStore.getState().actions.enableRotation(false);
+      useTransformerStore.getState().actions.enableResizing(false);
       useTransformerStore.getState().actions.enableRotation(false);
     } else {
-      useTransformerStore.getState().actions.enableRotation(true);
+      useTransformerStore.getState().actions.enableResizing(true);
       useTransformerStore.getState().actions.enableRotation(true);
     }
 
@@ -463,7 +464,7 @@ export const createUntrackedMapSlice: StateCreator<
   shadeLayerSelectShadings(shadings: ShadingDto[] | null) {
     if (shadings === null) {
       useTransformerStore.getState().actions.removeAllNodesFromSelection();
-      //useTransformerStore.getState().actions.setInhibitTransformer(false);
+      useTransformerStore.getState().actions.unblockTransformerActions();
       get().shadeLayerDeactivatePolygonManipulation();
       get().clearStatusPanelContent();
     }
@@ -531,6 +532,7 @@ export const createUntrackedMapSlice: StateCreator<
     }));
   },
   shadeLayerDeactivatePolygonManipulation() {
+    useTransformerStore.getState().actions.unblockTransformerActions();
     set((state) => ({
       ...state,
       untrackedState: {
