@@ -8,13 +8,18 @@ import { Circle, Line } from 'react-konva';
 import { DrawingDto } from '@/api_types/definitions';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { DrawingLayerEditMode } from '@/features/map_planning/store/MapStoreTypes';
+import { PolygonPoint } from '@/features/map_planning/types/PolygonTypes';
+import {
+  flattenRing,
+  insertPointIntoLineSegmentWithLeastDistance,
+} from '@/features/map_planning/utils/PolygonUtils';
 
 export type BezierPolygonProps = {
   transformerRef?: React.MutableRefObject<Konva.Transformer | null>;
   id: string;
   editMode?: DrawingLayerEditMode;
-  initialPoints: number[][];
-  onPointsChanged: (points: number[][]) => void;
+  initialPoints: PolygonPoint[];
+  onPointsChanged: (points: PolygonPoint[]) => void;
   onFinishLine?: () => void;
   onLineClick?: (evt: Konva.KonvaEventObject<MouseEvent>) => void;
   onDragStart?: (evt: Konva.KonvaEventObject<MouseEvent>) => void;
@@ -29,16 +34,14 @@ export type BezierPolygonProps = {
   fillEnabled?: boolean;
 };
 
-type Point = number[];
+function getBetweenPoint(p1: PolygonPoint, p2: PolygonPoint, p: number) {
+  const x = p1.x + (p2.x - p1.x) * p;
+  const y = p1.y + (p2.y - p1.y) * p;
 
-function getBetweenPoint(p1: Point, p2: Point, p: number) {
-  const x = p1[0] + (p2[0] - p1[0]) * p;
-  const y = p1[1] + (p2[1] - p1[1]) * p;
-
-  return [x, y];
+  return { x, y } as PolygonPoint;
 }
 
-function getMidPoints(p1: Point, p2: Point) {
+function getMidPoints(p1: PolygonPoint, p2: PolygonPoint) {
   return [getBetweenPoint(p1, p2, 0.3333), getBetweenPoint(p1, p2, 0.6666)];
 }
 
@@ -60,20 +63,22 @@ function BezierPolygon({
   rotation,
   fillEnabled,
 }: BezierPolygonProps) {
-  const [points, setPoints] = useState<Point[]>(initialPoints);
+  const [points, setPoints] = useState<PolygonPoint[]>(initialPoints);
   const [, setActivePoint] = useState(-1);
   const [activeSegments, setActiveSegments] = useState<number[]>([]);
-  const [, setSegPos] = useState<Point>([]);
+  const [, setSegPos] = useState<PolygonPoint>();
 
   const mapScale = useMapStore.getState().stageRef.current?.scale();
 
   const editModeActive = editMode != undefined;
   const drawingModeActive = editMode === 'draw';
   const removeModeActive = editMode === 'remove';
+  const addModeActive = editMode === 'add';
 
   const lineRef = useRef<Konva.Line | null>(null);
 
   useEffect(() => {
+    console.log('initialPoints', initialPoints);
     setPoints(initialPoints);
   }, [initialPoints]);
 
@@ -93,7 +98,11 @@ function BezierPolygon({
       const pos = stage.getRelativePointerPosition();
       if (pos == null) return [];
 
-      const newPoint = [pos.x - x, pos.y - y];
+      const newPoint = {
+        x: pos.x - x,
+        y: pos.y - y,
+      };
+
       if (!points.length) {
         onPointsChanged([newPoint]);
         return;
@@ -118,17 +127,54 @@ function BezierPolygon({
     [onFinishLine],
   );
 
+  const addPointBetween = useCallback(
+    (e: Konva.KonvaEventObject<MouseEvent>) => {
+      const stage = e.target.getStage();
+      if (stage == null) return [];
+
+      const pos = stage.getRelativePointerPosition();
+      if (pos == null) return [];
+
+      const polygonPointsWithoutControlPoints = points.filter((_, i) => i % 3 === 0);
+      const { geometry, insertedAfterIndex } = insertPointIntoLineSegmentWithLeastDistance(
+        { rings: [polygonPointsWithoutControlPoints] },
+        { x: pos.x - x, y: pos.y - y },
+        0,
+        0,
+        false,
+      );
+      const newPoint = geometry.rings[0][insertedAfterIndex + 1];
+
+      //get indexes of bounding points in the original points array
+      const indexOfFirstPoint = insertedAfterIndex * 3;
+      const indexOfSecondPoint = insertedAfterIndex * 3 + 3;
+
+      const newPoints = [
+        ...points.slice(0, indexOfFirstPoint + 1),
+        ...getMidPoints(polygonPointsWithoutControlPoints[insertedAfterIndex], newPoint),
+        newPoint,
+        ...getMidPoints(newPoint, polygonPointsWithoutControlPoints[insertedAfterIndex + 1]),
+        ...points.slice(indexOfSecondPoint),
+      ];
+
+      onPointsChanged(newPoints);
+    },
+    [onPointsChanged, points, x, y],
+  );
+
   const handleClick = useCallback(
     (e: Konva.KonvaEventObject<MouseEvent>) => {
-      if (!drawingModeActive) return;
-
-      if (e.evt.button == 2) {
-        handleRightClick(e);
-      } else if (e.evt.button === 0) {
-        handleAddPoint(e);
+      if (addModeActive) {
+        addPointBetween(e);
+      } else if (drawingModeActive) {
+        if (e.evt.button == 2) {
+          handleRightClick(e);
+        } else if (e.evt.button === 0) {
+          handleAddPoint(e);
+        }
       }
     },
-    [drawingModeActive, handleAddPoint, handleRightClick],
+    [addModeActive, addPointBetween, drawingModeActive, handleAddPoint, handleRightClick],
   );
 
   const handleDoubleClick = useCallback(
@@ -172,12 +218,17 @@ function BezierPolygon({
   const handlePointMove = (pointIndex: number, target: Stage | Shape<ShapeConfig>) => {
     setPoints((points) => {
       const newPoints = [...points];
-      newPoints[pointIndex] = [(target.attrs.x - x) / scaleX, (target.attrs.y - y) / scaleY];
+      newPoints[pointIndex] = {
+        x: (target.attrs.x - x) / scaleX,
+        y: (target.attrs.y - y) / scaleY,
+      };
       return newPoints;
     });
   };
 
-  const handlePointMouseUp = () => {
+  const handlePointMouseUp = (e: Konva.KonvaEventObject<MouseEvent>) => {
+    //if click was double click then do not add point
+    if (e.evt.detail === 2) return;
     onPointsChanged(points);
   };
 
@@ -192,7 +243,7 @@ function BezierPolygon({
     const pos = stage.getRelativePointerPosition();
     if (pos == null) return;
 
-    setSegPos([pos.x, pos.y]);
+    setSegPos({ x: pos.x, y: pos.y });
   };
 
   const handleLineClick = (e: Konva.KonvaEventObject<MouseEvent>, pointIndex: number) => {
@@ -209,7 +260,7 @@ function BezierPolygon({
       const pos = stage.getRelativePointerPosition();
       if (pos == null) return [];
 
-      const newPoint = [pos.x - x, pos.y - y];
+      const newPoint = { x: pos.x - x, y: pos.y - y };
 
       const spliceIndex = pointIndex * 3 + 2;
       newPoints.splice(
@@ -226,7 +277,7 @@ function BezierPolygon({
 
   const handleLineMouseLeave = () => {
     setActiveSegments([]);
-    setSegPos([]);
+    setSegPos(undefined);
   };
 
   const removePoint = (i: number) => {
@@ -240,7 +291,9 @@ function BezierPolygon({
       return newPoints;
     });
 
-    flattenLine(i - 1);
+    if (i != points.length - 1) {
+      flattenLine(i - 1);
+    }
   };
 
   const flattenLine = (i: number) => {
@@ -253,13 +306,13 @@ function BezierPolygon({
       i = newIndex;
 
       newPoints.splice(i, 0, ...getMidPoints(newPoints[i - 1], newPoints[i]));
-
+      onPointsChanged(newPoints);
       return newPoints;
     });
   };
 
   useEffect(() => {
-    if (!drawingModeActive) {
+    if (!drawingModeActive && !addModeActive) {
       return;
     }
 
@@ -272,7 +325,7 @@ function BezierPolygon({
       useMapStore.getState().stageRef.current?.off('click.addPoint');
       useMapStore.getState().stageRef.current?.off('contextmenu');
     };
-  }, [drawingModeActive, handleClick, handleDoubleClick, handleRightClick]);
+  }, [addModeActive, drawingModeActive, handleClick, handleDoubleClick, handleRightClick]);
 
   return (
     <>
@@ -281,7 +334,7 @@ function BezierPolygon({
         <Line
           id={id}
           onClick={onLineClick}
-          points={points.flat()}
+          points={points.length > 0 ? flattenRing(points) : []}
           stroke={color}
           strokeWidth={strokeWidth}
           hitStrokeWidth={(strokeWidth ? 1 : 0) + 100}
@@ -294,6 +347,7 @@ function BezierPolygon({
           scaleX={scaleX}
           scaleY={scaleY}
           rotation={rotation}
+          fillPatternRepeat="repeat"
           draggable
           fill={color}
           fillEnabled={fillEnabled}
@@ -306,7 +360,7 @@ function BezierPolygon({
         segments.map((segment, i) => {
           const isActive = activeSegments.some((segI) => i === segI);
 
-          const flatSegmentPoints = segment.flat();
+          const flatSegmentPoints = flattenRing(segment);
 
           return (
             <React.Fragment key={i}>
@@ -355,8 +409,8 @@ function BezierPolygon({
           return (
             <Circle
               key={i}
-              x={x + p[0] * scaleX}
-              y={y + p[1] * scaleY}
+              x={x + p.x * scaleX}
+              y={y + p.y * scaleY}
               radius={5}
               scaleX={1 / (mapScale?.x || 1)}
               scaleY={1 / (mapScale?.y || 1)}
@@ -366,8 +420,8 @@ function BezierPolygon({
               perfectDrawEnabled={false}
               active={true}
               draggable
-              onMouseUp={() => {
-                handlePointMouseUp();
+              onMouseUp={(e) => {
+                handlePointMouseUp(e);
               }}
               onDragMove={({ target }) => {
                 handlePointMove(i, target);
@@ -388,7 +442,7 @@ function BezierPolygon({
               {...(i % 3
                 ? {
                     stroke: '#ccc',
-                    visible: drawingModeActive,
+                    visible: drawingModeActive || addModeActive,
                   }
                 : {
                     fill: i == points.length - 1 && drawingModeActive ? '#0000ff' : '#ee90aa',
