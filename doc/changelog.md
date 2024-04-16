@@ -8,7 +8,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 ## UNRELEASED
 
-- _()_
+- CI: added pipeline for master.permplant.net and other name changes for pages _(Filip Markovic)_
 - _()_
 - _()_
 - _()_
