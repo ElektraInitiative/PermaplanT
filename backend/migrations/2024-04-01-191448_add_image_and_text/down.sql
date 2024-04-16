@@ -13,16 +13,16 @@ DROP TYPE drawing_shape_type_old;
 
 ALTER TABLE drawings
 ADD COLUMN color varchar,
-ADD COLUMN fill_pattern varchar,
+ADD COLUMN fill_enabled boolean,
 ADD COLUMN stroke_width real;
 
 UPDATE drawings
 SET
     color = '',
-    fill_pattern = false,
+    fill_enabled = false,
     stroke_width = 1.0;
 
 
 ALTER TABLE drawings ALTER COLUMN color SET NOT NULL;
-ALTER TABLE drawings ALTER COLUMN fill_pattern SET NOT NULL;
+ALTER TABLE drawings ALTER COLUMN fill_enabled SET NOT NULL;
 ALTER TABLE drawings ALTER COLUMN stroke_width SET NOT NULL;
