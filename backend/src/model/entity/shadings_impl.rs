@@ -134,7 +134,7 @@ impl Shading {
         dtos: Vec<DeleteShadingDto>,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<usize> {
-        let ids: Vec<Uuid> = dtos.iter().map(|&DeleteShadingDto { id, .. }| id).collect();
+        let ids: Vec<Uuid> = dtos.iter().map(|&DeleteShadingDto { id }| id).collect();
 
         let query = diesel::delete(shadings::table.filter(shadings::id.eq_any(ids)));
         debug!("{}", debug_query::<Pg, _>(&query));
