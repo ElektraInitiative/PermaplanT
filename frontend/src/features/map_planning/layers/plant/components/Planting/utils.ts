@@ -18,13 +18,14 @@ export function isUsingModifierKey(e: KonvaEventObject<MouseEvent>): boolean {
 export function placeTooltip(
   plant: PlantsSummaryDto | undefined,
   additionalName: string | undefined,
+  language: string,
 ) {
   if (!plant) return;
 
   setTooltipPositionToMouseCursor();
   if (!additionalName) {
-    showTooltipWithContent(getNameFromPlant(plant));
+    showTooltipWithContent(getNameFromPlant(plant, language));
   } else {
-    showTooltipWithContent(getPlantNameFromAdditionalNameAndPlant(additionalName, plant));
+    showTooltipWithContent(getPlantNameFromAdditionalNameAndPlant(additionalName, plant, language));
   }
 }

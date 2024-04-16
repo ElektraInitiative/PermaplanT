@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { useDarkModeStore } from '@/features/dark_mode';
 import { PublicNextcloudImage } from '@/features/nextcloud_integration/components/PublicNextcloudImage';
+import plantSvg from '@/svg/plant.svg';
 import 'leaflet/dist/leaflet.css';
 
 const locations: Array<LatLngExpression> = [
@@ -21,7 +22,7 @@ export const GeoMap = () => {
   const darkMode = useDarkModeStore((state) => state.darkMode);
   const { t } = useTranslation(['geomap']);
   const myIcon = new Icon({
-    iconUrl: '/plant.svg',
+    iconUrl: plantSvg,
     iconSize: [40, 40],
     iconAnchor: [20, 40],
     popupAnchor: [0, 0],

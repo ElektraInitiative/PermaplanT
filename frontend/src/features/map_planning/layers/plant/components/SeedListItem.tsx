@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { PlantsSummaryDto, SeedDto } from '@/api_types/definitions';
 import { useFindPlantById } from '@/features/map_planning/layers/plant/hooks/plantHookApi';
 import { PublicNextcloudImage } from '@/features/nextcloud_integration/components/PublicNextcloudImage';
@@ -29,6 +30,8 @@ export function SeedListItem({
     enabled: seed.plant_id !== undefined,
   });
 
+  const { i18n } = useTranslation();
+
   const highlightedClass = isHighlighted
     ? 'text-primary-400 stroke-primary-400 ring-4 ring-primary-300 '
     : '';
@@ -53,7 +56,7 @@ export function SeedListItem({
           showErrorMessage={false}
         />
         <div className="text-left">
-          <PlantNameFromSeedAndPlant seed={seed} plant={plant} />
+          <PlantNameFromSeedAndPlant seed={seed} plant={plant} language={i18n.language} />
         </div>
       </button>
     </li>

@@ -239,6 +239,8 @@ function BezierPolygon({
       onPointsChanged(newPoints);
       return newPoints;
     });
+
+    flattenLine(i - 1);
   };
 
   const flattenLine = (i: number) => {
