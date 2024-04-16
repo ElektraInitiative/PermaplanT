@@ -25,9 +25,7 @@ export function DrawingLayerIconCreationForm() {
     const path = '/Photos/' + item.basename;
     drawingLayerActivateDrawingMode(DrawingShapeType.Image);
     drawingLayerSetSelectedIconPath(path);
-    setStatusPanelContent(
-      <DrawingLayerStatusPanelContent text={t('drawings:draw_free_line_hint')} />,
-    );
+    setStatusPanelContent(<DrawingLayerStatusPanelContent text={t('drawings:place_image_hint')} />);
     setShowFileSelector(false);
   };
 
