@@ -369,7 +369,7 @@ lock("${env.NODE_NAME}-exclusive") {
 }
 
 // Deploying to Dev only happens on branch "master" and "dev"
-if (env.BRANCH_NAME == 'master | dev') {
+if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'dev') {    
     try {
         // `Deploy Dev` stage similar to `Deploy PR` and `Jenkinsfile.release.Deploy Prod`
         stage("Deploy ${env.BRANCH_NAME}") {
