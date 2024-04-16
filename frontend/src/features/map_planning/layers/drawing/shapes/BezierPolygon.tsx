@@ -68,6 +68,8 @@ function BezierPolygon({
   const [activeSegments, setActiveSegments] = useState<number[]>([]);
   const [, setSegPos] = useState<PolygonPoint>();
 
+  console.log('points', points);
+
   const mapScale = useMapStore.getState().stageRef.current?.scale();
 
   const editModeActive = editMode != undefined;
@@ -97,9 +99,9 @@ function BezierPolygon({
       const pos = stage.getRelativePointerPosition();
       if (pos == null) return [];
 
-      const newPoint = {
-        x: (pos.x - x) / scaleX,
-        y: (pos.y - y) / scaleY,
+      const newPoint = lineRef.current?.getTransform().invert().point({ x: pos.x, y: pos.y }) || {
+        x: pos.x - x,
+        y: pos.y - y,
       };
 
       if (!points.length) {
@@ -112,7 +114,7 @@ function BezierPolygon({
 
       onPointsChanged(newPoints);
     },
-    [onPointsChanged, points, scaleX, scaleY, x, y],
+    [onPointsChanged, points, x, y],
   );
 
   const handleRightClick = useCallback(
@@ -136,24 +138,22 @@ function BezierPolygon({
 
       const polygonPointsWithoutControlPoints = points.filter((_, i) => i % 3 === 0);
 
-      const scaledPolygon = polygonPointsWithoutControlPoints.map((point) => ({
-        x: point.x * scaleX,
-        y: point.y * scaleY,
-      }));
+      const transform = lineRef.current?.getTransform().copy();
+      const scaledPolygon = polygonPointsWithoutControlPoints.map(
+        (point) => transform?.point(point) || point,
+      );
 
       const { geometry, insertedAfterIndex } = insertPointIntoLineSegmentWithLeastDistance(
         { rings: [scaledPolygon] },
-        { x: pos.x - x, y: pos.y - y },
+        { x: pos.x, y: pos.y },
         0,
         0,
         false,
       );
 
-      const newPoint = geometry.rings[0][insertedAfterIndex + 1];
-
-      //scale back to original coordinates
-      newPoint.x /= scaleX;
-      newPoint.y /= scaleY;
+      //scale newPoint to original coordinates
+      let newPoint = geometry.rings[0][insertedAfterIndex + 1];
+      newPoint = transform?.copy().invert().point(newPoint) || newPoint;
 
       //get indexes of bounding points in the original points array
       const indexOfFirstPoint = insertedAfterIndex * 3;
@@ -169,7 +169,7 @@ function BezierPolygon({
 
       onPointsChanged(newPoints);
     },
-    [onPointsChanged, points, scaleX, scaleY, x, y],
+    [onPointsChanged, points],
   );
 
   const handleClick = useCallback(
@@ -228,10 +228,16 @@ function BezierPolygon({
   const handlePointMove = (pointIndex: number, target: Stage | Shape<ShapeConfig>) => {
     setPoints((points) => {
       const newPoints = [...points];
-      newPoints[pointIndex] = {
-        x: (target.attrs.x - x) / scaleX,
-        y: (target.attrs.y - y) / scaleY,
+
+      newPoints[pointIndex] = lineRef.current?.getTransform().copy().invert().point({
+        x: target.x(),
+        y: target.y(),
+      }) || {
+        x: target.x(),
+        y: target.y(),
       };
+
+      console.log('newPoints', newPoints);
       return newPoints;
     });
   };
@@ -239,6 +245,7 @@ function BezierPolygon({
   const handlePointMouseUp = (e: Konva.KonvaEventObject<MouseEvent>) => {
     //if click was double click then do not add point
     if (e.evt.detail === 2) return;
+
     onPointsChanged(points);
   };
 
@@ -388,6 +395,7 @@ function BezierPolygon({
                 scaleY={scaleY}
                 x={x}
                 y={y}
+                rotation={rotation}
                 active={editModeActive}
                 onMouseMove={(e) => handleLineMouserOver(e, i)}
                 onMouseLeave={handleLineMouseLeave}
@@ -404,6 +412,7 @@ function BezierPolygon({
                   y={y}
                   scaleX={scaleX}
                   scaleY={scaleY}
+                  rotation={rotation}
                   points={flatSegmentPoints}
                   stroke={'#bbb'}
                   strokeWidth={2}
@@ -417,11 +426,13 @@ function BezierPolygon({
 
       {editModeActive &&
         points.map((p, i) => {
+          const transformedPoint =
+            lineRef.current?.getTransform().copy().point({ x: p.x, y: p.y }) || p;
           return (
             <Circle
               key={i}
-              x={x + p.x * scaleX}
-              y={y + p.y * scaleY}
+              x={transformedPoint.x}
+              y={transformedPoint.y}
               radius={5}
               scaleX={1 / (mapScale?.x || 1)}
               scaleY={1 / (mapScale?.y || 1)}
