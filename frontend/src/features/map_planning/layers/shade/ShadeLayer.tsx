@@ -225,9 +225,7 @@ export function ShadeLayer(props: ShadeLayerProps) {
         .map((ref) => ref.ref);
 
       useTransformerStore.getState().actions.removeAllNodesFromSelection();
-      useTransformerStore
-        .getState()
-        .actions.replaceNodesInSelectionSelection(filteredShadingRefs ?? []);
+      useTransformerStore.getState().actions.replaceNodesInSelection(filteredShadingRefs ?? []);
     },
     // For some reason using only shadingRefs is not enough to detect changes made to shadingRefs.current
     [shadingRefs.current], // eslint-disable-line react-hooks/exhaustive-deps

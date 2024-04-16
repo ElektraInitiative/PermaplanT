@@ -52,7 +52,7 @@ export interface TransformerStore {
     removeNodeFromSelection: (node: Konva.Node) => void;
 
     /** Replaces the selected nodes with the provided array */
-    replaceNodesInSelectionSelection: (nodes: Konva.Node[]) => void;
+    replaceNodesInSelection: (nodes: Konva.Node[]) => void;
 
     /** Removes all currently selected nodes from the transformer */
     removeAllNodesFromSelection: () => void;
@@ -129,7 +129,7 @@ export const useTransformerStore = create<TransformerStore>()(() => {
         if (blocked) return;
         setSelectedNodes(__transformerRef.current, []);
       },
-      replaceNodesInSelectionSelection: (nodes) => {
+      replaceNodesInSelection: (nodes) => {
         if (blocked) return;
         setSelectedNodes(__transformerRef.current, nodes);
       },

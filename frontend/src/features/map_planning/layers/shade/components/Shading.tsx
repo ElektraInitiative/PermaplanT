@@ -6,6 +6,7 @@ import { Circle, Group, Line } from 'react-konva';
 import { Shade, ShadingDto } from '@/api_types/definitions';
 import { UpdateShadingAction } from '@/features/map_planning/layers/shade/actions';
 import useMapStore from '@/features/map_planning/store/MapStore';
+import { useTransformerStore } from '@/features/map_planning/store/transformer/TransformerStore';
 import { DEFAULT_SRID, PolygonGeometry } from '@/features/map_planning/types/PolygonTypes';
 import {
   flattenRing,
@@ -34,10 +35,21 @@ export const Shading = forwardRef<Konva.Line, ShadingProps>(function Shading(
     (store) => store.untrackedState.layers.shade.selectedShadingEditMode,
   );
   const selectShadings = useMapStore((store) => store.shadeLayerSelectShadings);
-  const setSingleNodeInTransformer = useMapStore((store) => store.setSingleNodeInTransformer);
-  const addNodeToTransformer = useMapStore((store) => store.addNodeToTransformer);
-  const removeNodeFromTransformer = useMapStore((store) => store.removeNodeFromTransformer);
   const executeAction = useMapStore((store) => store.executeAction);
+
+  const replaceNodesInSelection = useTransformerStore(
+    (store) => store.actions.replaceNodesInSelection,
+  );
+  const addNodeToSelection = useTransformerStore((store) => store.actions.addNodeToSelection);
+  const removeNodeFromSelection = useTransformerStore(
+    (store) => store.actions.removeNodeFromSelection,
+  );
+  const unblockTransformerActions = useTransformerStore(
+    (store) => store.actions.unblockTransformerActions,
+  );
+  const blockTransformerActions = useTransformerStore(
+    (store) => store.actions.blockTransformerActions,
+  );
 
   const geometry = shading.geometry as PolygonGeometry;
 
@@ -48,20 +60,19 @@ export const Shading = forwardRef<Konva.Line, ShadingProps>(function Shading(
     };
 
     const getUpdatedShadingSelection = () => {
-      const transformer = useMapStore.getState().transformer.current;
-      return transformer?.nodes().reduce(selectedShadings, []) ?? [];
+      return useTransformerStore.getState().actions.getSelection().reduce(selectedShadings, []);
     };
 
-    removeNodeFromTransformer(e.currentTarget);
-    selectShadings(getUpdatedShadingSelection());
+    removeNodeFromSelection(e.currentTarget);
+    selectShadings(getUpdatedShadingSelection(), useTransformerStore.getState());
   };
 
   const addShadingToSelection = (e: KonvaEventObject<MouseEvent>) => {
-    addNodeToTransformer(e.currentTarget);
+    addNodeToSelection(e.currentTarget);
 
     const currentShadingSelection =
       useMapStore.getState().untrackedState.layers.shade.selectedShadings ?? [];
-    selectShadings([...currentShadingSelection, shading]);
+    selectShadings([...currentShadingSelection, shading], useTransformerStore.getState());
   };
 
   const handleMultiSelect = (e: KonvaEventObject<MouseEvent>, shading: ShadingDto) => {
@@ -69,8 +80,8 @@ export const Shading = forwardRef<Konva.Line, ShadingProps>(function Shading(
   };
 
   const handleSingleSelect = (e: KonvaEventObject<MouseEvent>, shading: ShadingDto) => {
-    setSingleNodeInTransformer(e.currentTarget);
-    selectShadings([shading]);
+    replaceNodesInSelection([e.currentTarget]);
+    selectShadings([shading], useTransformerStore.getState());
   };
 
   const handleClickOnShading = (e: KonvaEventObject<MouseEvent>) => {
@@ -106,11 +117,13 @@ export const Shading = forwardRef<Konva.Line, ShadingProps>(function Shading(
       );
 
       executeAction(
-        new UpdateShadingAction({
-          id: shadingDto.id,
-          shade: shadingDto.shade,
-          geometry: newGeometry as object,
-        }),
+        new UpdateShadingAction([
+          {
+            id: shadingDto.id,
+            shade: shadingDto.shade,
+            geometry: newGeometry as object,
+          },
+        ]),
       );
     },
     [shading, shadingManipulationState, editorLongestSide, executeAction],
@@ -127,7 +140,9 @@ export const Shading = forwardRef<Konva.Line, ShadingProps>(function Shading(
 
   const handlePointSelect = (e: KonvaEventObject<MouseEvent>) => {
     if (shadingManipulationState === 'move') {
-      setSingleNodeInTransformer(e.currentTarget, true);
+      unblockTransformerActions();
+      replaceNodesInSelection([e.currentTarget]);
+      blockTransformerActions();
       return;
     }
 
@@ -141,11 +156,13 @@ export const Shading = forwardRef<Konva.Line, ShadingProps>(function Shading(
     const index = e.currentTarget.index - 1;
 
     executeAction(
-      new UpdateShadingAction({
-        id: shading.id,
-        shade: shading.shade,
-        geometry: removePointAtIndex(geometry, index) as object,
-      }),
+      new UpdateShadingAction([
+        {
+          id: shading.id,
+          shade: shading.shade,
+          geometry: removePointAtIndex(geometry, index) as object,
+        },
+      ]),
     );
   };
 
@@ -162,11 +179,13 @@ export const Shading = forwardRef<Konva.Line, ShadingProps>(function Shading(
     };
 
     executeAction(
-      new UpdateShadingAction({
-        id: shading.id,
-        shade: shading.shade,
-        geometry: setPointAtIndex(geometry, newPoint, index) as object,
-      }),
+      new UpdateShadingAction([
+        {
+          id: shading.id,
+          shade: shading.shade,
+          geometry: setPointAtIndex(geometry, newPoint, index) as object,
+        },
+      ]),
     );
   };
 
