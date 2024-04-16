@@ -78,7 +78,6 @@ function BezierPolygon({
   const lineRef = useRef<Konva.Line | null>(null);
 
   useEffect(() => {
-    console.log('initialPoints', initialPoints);
     setPoints(initialPoints);
   }, [initialPoints]);
 
@@ -99,8 +98,8 @@ function BezierPolygon({
       if (pos == null) return [];
 
       const newPoint = {
-        x: pos.x - x,
-        y: pos.y - y,
+        x: (pos.x - x) / scaleX,
+        y: (pos.y - y) / scaleY,
       };
 
       if (!points.length) {
@@ -113,7 +112,7 @@ function BezierPolygon({
 
       onPointsChanged(newPoints);
     },
-    [onPointsChanged, points, x, y],
+    [onPointsChanged, points, scaleX, scaleY, x, y],
   );
 
   const handleRightClick = useCallback(
