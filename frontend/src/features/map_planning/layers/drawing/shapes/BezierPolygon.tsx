@@ -68,8 +68,6 @@ function BezierPolygon({
   const [activeSegments, setActiveSegments] = useState<number[]>([]);
   const [, setSegPos] = useState<PolygonPoint>();
 
-  console.log('points', points);
-
   const mapScale = useMapStore.getState().stageRef.current?.scale();
 
   const editModeActive = editMode != undefined;
@@ -237,7 +235,6 @@ function BezierPolygon({
         y: target.y(),
       };
 
-      console.log('newPoints', newPoints);
       return newPoints;
     });
   };
