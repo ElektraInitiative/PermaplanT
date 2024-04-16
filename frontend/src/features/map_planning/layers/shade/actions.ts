@@ -134,12 +134,15 @@ export class UpdateShadingAction
   apply(state: TrackedMapState): TrackedMapState {
     const updatedShadings = useMapStore
       .getState()
-      .trackedState.layers.shade.loadedObjects.map((shading, idx) => {
+      .trackedState.layers.shade.loadedObjects.map((shading) => {
         if (this._ids.find((id) => id == shading.id)) {
+          const newShade = this._data.find((s) => s.id == shading.id)?.shade;
+          const newGeometry = this._data.find((s) => s.id == shading.id)?.geometry;
+
           return {
             ...shading,
-            shade: this._data[idx].shade ?? shading.shade,
-            geometry: this._data[idx].geometry ?? shading.geometry,
+            shade: newShade ?? shading.shade,
+            geometry: newGeometry ?? shading.geometry,
           };
         }
 
@@ -202,11 +205,13 @@ export class UpdateShadingAddDateAction
   apply(state: TrackedMapState): TrackedMapState {
     const updatedShadings = useMapStore
       .getState()
-      .trackedState.layers.shade.loadedObjects.map((shading, idx) => {
+      .trackedState.layers.shade.loadedObjects.map((shading) => {
         if (this._ids.includes(shading.id)) {
+          const newAddDate = this._data.find((s) => s.id == shading.id)?.addDate;
+
           return {
             ...shading,
-            addDate: this._data[idx].addDate,
+            addDate: newAddDate ?? shading.addDate,
           };
         }
 
@@ -260,10 +265,10 @@ export class UpdateShadingRemoveDateAction
       return null;
     }
 
-    return new UpdateShadingAddDateAction(
+    return new UpdateShadingRemoveDateAction(
       shadings.map((s) => ({
         id: s.id,
-        addDate: s.addDate,
+        addDate: s.removeDate,
       })),
       this.actionId,
     );
@@ -272,11 +277,13 @@ export class UpdateShadingRemoveDateAction
   apply(state: TrackedMapState): TrackedMapState {
     const updatedShadings = useMapStore
       .getState()
-      .trackedState.layers.shade.loadedObjects.map((shading, idx) => {
+      .trackedState.layers.shade.loadedObjects.map((shading) => {
         if (this._ids.includes(shading.id)) {
+          const newRemoveDate = this._data.find((s) => s.id == shading.id)?.removeDate;
+
           return {
             ...shading,
-            removeDate: this._data[idx].removeDate,
+            removeDate: newRemoveDate ?? shading.removeDate,
           };
         }
 
@@ -298,7 +305,7 @@ export class UpdateShadingRemoveDateAction
     };
   }
 
-  async execute(mapId: number): Promise<Awaited<ReturnType<typeof updateShadingContent>>> {
-    return updateShadingAddDate(mapId, this.actionId, this._data);
+  async execute(mapId: number) {
+    return updateShadingRemoveDate(mapId, this.actionId, this._data);
   }
 }
