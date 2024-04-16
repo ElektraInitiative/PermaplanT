@@ -10,7 +10,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 - _()_
 - _()_
-- _()_
+- Add points in middle of bezier polygon _(Daniel Steinkogler)_
 - _()_
 - _()_
 - _()_
