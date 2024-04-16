@@ -135,14 +135,25 @@ function BezierPolygon({
       if (pos == null) return [];
 
       const polygonPointsWithoutControlPoints = points.filter((_, i) => i % 3 === 0);
+
+      const scaledPolygon = polygonPointsWithoutControlPoints.map((point) => ({
+        x: point.x * scaleX,
+        y: point.y * scaleY,
+      }));
+
       const { geometry, insertedAfterIndex } = insertPointIntoLineSegmentWithLeastDistance(
-        { rings: [polygonPointsWithoutControlPoints] },
+        { rings: [scaledPolygon] },
         { x: pos.x - x, y: pos.y - y },
         0,
         0,
         false,
       );
+
       const newPoint = geometry.rings[0][insertedAfterIndex + 1];
+
+      //scale back to original coordinates
+      newPoint.x /= scaleX;
+      newPoint.y /= scaleY;
 
       //get indexes of bounding points in the original points array
       const indexOfFirstPoint = insertedAfterIndex * 3;
@@ -158,7 +169,7 @@ function BezierPolygon({
 
       onPointsChanged(newPoints);
     },
-    [onPointsChanged, points, x, y],
+    [onPointsChanged, points, scaleX, scaleY, x, y],
   );
 
   const handleClick = useCallback(
@@ -354,6 +365,7 @@ function BezierPolygon({
           onDragStart={onDragStart}
         />
       )}
+
       {/* Segmented dashed control line AND segmented curve */}
       {editModeActive &&
         segments.map((segment, i) => {
