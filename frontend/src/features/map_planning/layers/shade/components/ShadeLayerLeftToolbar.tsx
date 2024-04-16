@@ -3,6 +3,7 @@ import {
   DeleteShadingAction,
   UpdateShadingAction,
   UpdateShadingAddDateAction,
+  UpdateShadingRemoveDateAction,
 } from '@/features/map_planning/layers/shade/actions';
 import {
   MultipleShadingAttributeEditFrom,
@@ -39,16 +40,28 @@ export function ShadeLayerLeftToolbar() {
   };
 
   const onAddDateChange = ({ addDate }: ShadingCoreDataAttribute) => {
-    if (!selectedShadings?.length || isReadOnlyMode) return;
+    if (!selectedShadings?.length) return;
 
-    executeAction(new UpdateShadingAddDateAction(selectedShadings.map((s) => ({ ...s, addDate }))));
+    const hasChanged = selectedShadings.some(
+      (selectedShadings) => selectedShadings.addDate !== addDate,
+    );
+    if (!hasChanged) return;
+
+    executeAction(
+      new UpdateShadingAddDateAction(selectedShadings.map((s) => ({ id: s.id, addDate }))),
+    );
   };
 
   const onRemoveDateChange = ({ removeDate }: ShadingCoreDataAttribute) => {
-    if (!selectedShadings?.length || isReadOnlyMode) return;
+    if (!selectedShadings?.length) return;
+
+    const hasChanged = selectedShadings.some(
+      (selectedShadings) => selectedShadings.removeDate !== removeDate,
+    );
+    if (!hasChanged) return;
 
     executeAction(
-      new UpdateShadingAddDateAction(selectedShadings.map((s) => ({ ...s, removeDate }))),
+      new UpdateShadingRemoveDateAction(selectedShadings.map((s) => ({ id: s.id, removeDate }))),
     );
   };
 
