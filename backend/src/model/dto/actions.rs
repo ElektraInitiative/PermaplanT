@@ -422,7 +422,7 @@ impl CreateShadingActionPayload {
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-/// The payload of the [`Action::UpdateShading`].
+/// The payload of the [`ActionType::UpdateShading`].
 #[serde(rename_all = "camelCase")]
 pub struct UpdateShadingActionPayload {
     id: Uuid,
@@ -443,7 +443,7 @@ impl UpdateShadingActionPayload {
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-/// The payload of the [`Action::DeleteShading`].
+/// The payload of the [`ActionType::DeleteShading`].
 #[serde(rename_all = "camelCase")]
 pub struct DeleteShadingActionPayload {
     id: Uuid,
@@ -451,7 +451,7 @@ pub struct DeleteShadingActionPayload {
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-/// The payload of the [`Action::UpdateShadingAddDate`].
+/// The payload of the [`ActionType::UpdateShadingAddDate`].
 #[serde(rename_all = "camelCase")]
 pub struct UpdateShadingAddDateActionPayload {
     id: Uuid,
@@ -470,7 +470,7 @@ impl UpdateShadingAddDateActionPayload {
 
 #[typeshare]
 #[derive(Debug, Serialize, Clone)]
-/// The payload of the [`Action::UpdateShadingRemoveDate`].
+/// The payload of the [`ActionType::UpdateShadingRemoveDate`].
 #[serde(rename_all = "camelCase")]
 pub struct UpdateShadingRemoveDateActionPayload {
     id: Uuid,
