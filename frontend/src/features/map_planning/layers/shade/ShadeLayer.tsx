@@ -214,6 +214,8 @@ export function ShadeLayer(props: ShadeLayerProps) {
   */
   useEffect(
     () => {
+      if (!props.listening) return;
+
       const selectedShadings = useMapStore.getState().untrackedState.layers.shade.selectedShadings;
 
       const isSelected = (id: string) => {
