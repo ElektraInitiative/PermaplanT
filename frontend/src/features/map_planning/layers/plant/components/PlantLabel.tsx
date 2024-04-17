@@ -1,10 +1,11 @@
 import Konva from 'konva';
 import React, { useLayoutEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Label } from 'react-konva';
 import { PlantingDto } from '@/api_types/definitions';
 import { useFindPlantById } from '@/features/map_planning/layers/plant/hooks/plantHookApi';
 import { MapLabel } from '@/features/map_planning/utils/MapLabel';
-import { commonName } from '@/utils/plant-naming';
+import { getCommonOrUniqueName } from '@/utils/plant-naming';
 
 export interface PlantLabelProps {
   /** Contains plant name that will be displayed on the label. */
@@ -15,6 +16,7 @@ export const PlantLabel = React.memo(function PlantLabel({ planting }: PlantLabe
   const labelRef = useRef<Konva.Label>(null);
   const [labelWidth, setLabelWidth] = useState(0);
   const { data: plant } = useFindPlantById({ plantId: planting.plantId });
+  const { i18n } = useTranslation();
 
   useLayoutEffect(() => {
     if (labelRef.current !== null) {
@@ -38,7 +40,7 @@ export const PlantLabel = React.memo(function PlantLabel({ planting }: PlantLabe
       ref={labelRef}
       x={planting.x + (planting.isArea ? labelOffsetXArea : labelOffsetX)}
       y={planting.y + (planting.isArea ? labelOffsetYArea : labelOffsetY)}
-      content={commonName(plant)}
+      content={getCommonOrUniqueName(plant, i18n.language)}
     />
   );
 });

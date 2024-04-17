@@ -86,26 +86,6 @@ export const mapEditorSteps: ShepherdOptionsWithType[] = [
     },
   },
   {
-    id: 'baseLayerIntro',
-    title: `${t('guidedTour:mapEditor.base_layer_title')} (1/2)`,
-    text: t('guidedTour:mapEditor.base_layer_intro'),
-    buttons: standardButtons,
-    attachTo: {
-      element: '[data-tourid="bottom_right_toolbar"]',
-      on: 'left',
-    },
-  },
-  {
-    id: 'baseLayerToolbar',
-    title: `${t('guidedTour:mapEditor.base_layer_title')} (2/2)`,
-    text: t('guidedTour:mapEditor.base_layer_toolbar'),
-    buttons: standardButtons,
-    attachTo: {
-      element: '[data-tourid="bottom_right_toolbar"]',
-      on: 'left',
-    },
-  },
-  {
     id: 'plantsLayerSelect',
     title: `${t('guidedTour:mapEditor.plants_layer_title')} (1/16)`,
     text: actionText(

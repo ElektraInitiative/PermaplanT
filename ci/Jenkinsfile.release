@@ -1,7 +1,11 @@
+// Pipeline for releases, which is manually triggered on the jenkins webapp
+
+// Function duplicated in `Jenkinsfile`
 def node_info() {
     echo "Running stage on ${env.NODE_NAME}"
 }
 
+// Function duplicated in `Jenkinsfile` the command parameter
 def wait_for_db() {
     retry(6) {
         sleep(time: 5, unit: 'SECONDS')
@@ -9,7 +13,41 @@ def wait_for_db() {
     }
 }
 
+// /**
+//  * Copy the documentation to doc.permaplant.net server
+//  */
+def copyDocumentation() {
+    echo 'Copying Documentation ...'
+    sshPublisher(
+        publishers: [
+        sshPublisherDesc(
+            verbose: true,
+            configName: 'doc.permaplant.net',
+            transfers: [
+            sshTransfer(
+                sourceFiles: 'backend/target/doc/**/*',
+                removePrefix: 'backend/target/doc/',
+                remoteDirectory: "www/cargodoc"
+            ),
+            sshTransfer(
+                sourceFiles: 'book/html/**/*',
+                removePrefix: 'book/html/',
+                remoteDirectory: "www/mdbook"
+            ),
+            sshTransfer(
+                sourceFiles: 'frontend/storybook-static/**/*',
+                removePrefix: 'frontend/storybook-static/',
+                remoteDirectory: "www/storybook"
+            )
+            ]
+        )
+        ]
+    )
+
+}
+
 stage('Build Schema') {
+    // duplicated in `Build in Docker` stage
     node('docker') {
         node_info()
 
@@ -35,6 +73,7 @@ stage('Build in Docker') {
     def parallelBuild = [:]
 
     parallelBuild['build-backend'] = {
+        // duplicated in `Build Schema` stage
         node('docker') {
             node_info()
 
@@ -51,12 +90,16 @@ stage('Build in Docker') {
                     sh 'cd backend && cargo build --release'
 
                     stash includes: 'backend/target/release/backend', name: 'backend'
+
+                    sh 'cd backend && cargo doc --document-private-items'
+                    stash includes: 'backend/target/doc/**/*', name: 'cargodoc'
                 }
             }
         }
     }
 
     parallelBuild['build-frontend'] = {
+        // duplicated in `Jenkinsfile.testAndBuildFrontend()`
         node('docker') {
             node_info()
 
@@ -85,6 +128,7 @@ stage('Build in Docker') {
         }
     }
 
+    // duplicated in `Jenkinsfile.release.testAndBuildMdbook()`
     parallelBuild['build-mdbook'] = {
         node('docker') {
             node_info()
@@ -102,6 +146,7 @@ stage('Build in Docker') {
     parallel(parallelBuild)
 }
 
+// similar to `Deploy PR/Dev` stage in `Jenkinsfile`
 stage('Deploy Prod') {
     node('permaplant && prod') {
         checkout scm
@@ -113,8 +158,11 @@ stage('Deploy Prod') {
         unstash 'storybook'
         unstash 'typedoc'
         unstash 'mdbook'
+        unstash 'cargodoc'
 
         echo 'Deploying to Prod ...'
         sh "sudo /usr/local/bin/permaplant-deploy.sh prod ${WORKSPACE}"
+
+        copyDocumentation()
     }
 }

@@ -79,11 +79,11 @@ doc-storybook: install-frontend ## Storybook doc
 	@cd frontend && npm run build-storybook
 
 .PHONY: doc-backend
-doc-backend: install-backend ## Backend src doc
-	@echo "Not implemented yet."
+doc-backend: install-types install-backend ## Backend src doc
+	@cd backend && cargo doc --document-private-items
 
 .PHONY: doc-frontend
-doc-frontend: install-frontend ## Frontend src doc
+doc-frontend: install-types install-frontend ## Frontend src doc
 	@cd frontend && npm run doc
 
 

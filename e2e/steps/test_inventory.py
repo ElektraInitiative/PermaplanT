@@ -20,7 +20,7 @@ def provide_seed_details(page: Page):
 def create_seed_success(page: Page):
     smp = SeedManagementPage(page)
     smp.expect_alert_is_visible()
-    smp.expect_first_row_cell_exists("Indian abelia - SUT create (Abelia triflora)")
+    smp.expect_first_row_cell_exists("Indian Abelia - SUT create (Abelia triflora)")
     smp.expect_first_row_cell_exists("Enough")
     smp.expect_first_row_cell_exists("Origin SUT")
 
@@ -41,7 +41,7 @@ def create_seed_for_editing(page: Page):
 def editing_seed(page: Page):
     smp = SeedManagementPage(page)
     sep = smp.to_seed_edit_page(
-        "Indian abelia - SUT editing (Abelia triflora) Enough Organic 2022 Origin SUT Edit seed Archive seed"
+        "Indian Abelia - SUT editing (Abelia triflora) Enough Organic 2022 Origin SUT Edit seed Archive seed"
     )
     sep.set_additional_name("SUT edited")
     sep.set_amount("Not enough")
@@ -53,7 +53,7 @@ def editing_seed(page: Page):
 @then("the edited seed is saved and shown on the overview page")
 def edited_seed_success(page: Page):
     smp = SeedManagementPage(page)
-    smp.expect_first_row_cell_exists("Indian abelia - SUT edited (Abelia triflora)")
+    smp.expect_first_row_cell_exists("Indian Abelia - SUT edited (Abelia triflora)")
     smp.expect_first_row_cell_exists("Not enough")
     smp.expect_first_row_cell_exists("Not organic")
     smp.expect_first_row_cell_exists("New origin SUT")
@@ -75,7 +75,7 @@ def search_seed(page: Page):
 @then("I can see the seed in the overview page")
 def searched_seed_exists(page: Page):
     smp = SeedManagementPage(page)
-    smp.expect_first_row_cell_exists("Indian abelia - SUT search (Abelia triflora)")
+    smp.expect_first_row_cell_exists("Indian Abelia - SUT search (Abelia triflora)")
     smp.expect_first_row_cell_exists("Enough")
     smp.expect_first_row_cell_exists("Organic")
     smp.expect_first_row_cell_exists("Origin SUT")
@@ -109,7 +109,7 @@ def archive_seed(page: Page):
     scp = smp.to_seed_create_page()
     scp.create_a_seed(additional_name="SUT archive")
     smp.archive_seed(
-        "Indian abelia - SUT archive (Abelia triflora) Enough Organic 2022 Origin SUT Edit seed Archive seed"
+        "Indian Abelia - SUT archive (Abelia triflora) Enough Organic 2022 Origin SUT Edit seed Archive seed"
     )
 
 
