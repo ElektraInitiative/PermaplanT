@@ -76,6 +76,11 @@ function BezierPolygon({
   const addModeActive = editMode === 'add';
 
   const lineRef = useRef<Konva.Line | null>(null);
+  const lineTransform = useRef<Konva.Transform | null | undefined>(null);
+
+  if (lineRef.current) {
+    lineTransform.current = lineRef.current?.getTransform().copy();
+  }
 
   useEffect(() => {
     setPoints(initialPoints);
@@ -97,7 +102,7 @@ function BezierPolygon({
       const pos = stage.getRelativePointerPosition();
       if (pos == null) return [];
 
-      const newPoint = lineRef.current?.getTransform().invert().point({ x: pos.x, y: pos.y }) || {
+      const newPoint = lineTransform.current?.copy().invert().point({ x: pos.x, y: pos.y }) || {
         x: pos.x - x,
         y: pos.y - y,
       };
@@ -136,7 +141,7 @@ function BezierPolygon({
 
       const polygonPointsWithoutControlPoints = points.filter((_, i) => i % 3 === 0);
 
-      const transform = lineRef.current?.getTransform().copy();
+      const transform = lineTransform.current?.copy();
       const scaledPolygon = polygonPointsWithoutControlPoints.map(
         (point) => transform?.point(point) || point,
       );
@@ -227,7 +232,7 @@ function BezierPolygon({
     setPoints((points) => {
       const newPoints = [...points];
 
-      newPoints[pointIndex] = lineRef.current?.getTransform().copy().invert().point({
+      newPoints[pointIndex] = lineTransform.current?.copy().invert().point({
         x: target.x(),
         y: target.y(),
       }) || {
@@ -382,6 +387,7 @@ function BezierPolygon({
               {/* Curve */}
               <Line
                 ref={lineRef}
+                key={'edit-mode-curve'}
                 points={flatSegmentPoints}
                 stroke={color}
                 strokeWidth={isActive ? strokeWidth + 5 : strokeWidth}
@@ -423,8 +429,7 @@ function BezierPolygon({
 
       {editModeActive &&
         points.map((p, i) => {
-          const transformedPoint =
-            lineRef.current?.getTransform().copy().point({ x: p.x, y: p.y }) || p;
+          const transformedPoint = lineTransform.current?.point({ x: p.x, y: p.y }) || p;
           return (
             <Circle
               key={i}
