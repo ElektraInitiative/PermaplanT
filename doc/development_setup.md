@@ -12,7 +12,7 @@ When performing cargo build, we have experienced a usage of ~12GB.
 
 ## Ways to develop PermaplanT
 
-Right now we have three different ways to develop Permaplant:
+Right now we have three different ways to develop PermaplanT:
 
 ### Docker services + local development
 
@@ -76,4 +76,4 @@ PermaplanT supports Github codespaces. If you are interested in developing insid
 
 ## Frontend Setup
 
-[Readme in Frontend](https://blob.permaplant.net/master/frontend/README.md)
+[Readme in Frontend](../frontend/README.md)
