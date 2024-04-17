@@ -5,9 +5,9 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import { Shade, ShadingDto } from '@/api_types/definitions';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
+import { DebouncedSimpleFormInput } from '@/components/Form/DebouncedSimpleFormInput';
 import SelectMenu from '@/components/Form/SelectMenu';
 import { SelectOption } from '@/components/Form/SelectMenuTypes';
-import SimpleFormInput from '@/components/Form/SimpleFormInput';
 import { ShadingGeometryToolForm } from '@/features/map_planning/layers/shade/components/ShadingGeometryToolForm';
 import { useIsReadOnlyMode } from '@/features/map_planning/utils/ReadOnlyModeContext';
 import { useDebouncedSubmit } from '@/hooks/useDebouncedSubmit';
@@ -19,7 +19,7 @@ const ShadingAttributeEditFormSchema = z
   .object({
     addDate: z.nullable(z.string()).transform((value) => value || undefined),
     removeDate: z.nullable(z.string()).transform((value) => value || undefined),
-    shade: z.nullable(z.string()).transform((value) => value || undefined),
+    shade: z.optional(z.string()),
   })
   .refine((schema) => !schema.removeDate || !schema.addDate || schema.addDate < schema.removeDate, {
     path: ['dateRelation'],
@@ -155,22 +155,10 @@ function ShadingAttributeEditForm({
     onShadeChange,
   );
 
-  const addDateSubmitState = useDebouncedSubmit<ShadingCoreDataAttribute>(
-    formFunctions.watch('addDate'),
-    formFunctions.handleSubmit,
-    onAddDateChange,
-  );
-
-  const removeDateSubmitState = useDebouncedSubmit<ShadingCoreDataAttribute>(
-    formFunctions.watch('removeDate'),
-    formFunctions.handleSubmit,
-    onRemoveDateChange,
-  );
-
   return (
-    <div className="flex flex-col gap-2 p-2">
-      <div className="flex gap-2">
-        <FormProvider {...formFunctions}>
+    <FormProvider {...formFunctions}>
+      <div className="flex flex-col gap-2 p-2">
+        <div className="flex gap-2">
           <SelectMenu
             id="shade"
             labelText={t('left_toolbar.shading_amount_select_title')}
@@ -180,78 +168,60 @@ function ShadingAttributeEditForm({
             optionFromValue={(value) => shadeOptions.find((o) => o.value === value)}
             valueFromOption={(option) => option?.value}
           />
-        </FormProvider>
-        {shadeSubmitState === 'loading' && (
-          <CircleDottedIcon className="mb-3 mt-auto h-5 w-5 animate-spin text-secondary-400" />
-        )}
-        {shadeSubmitState === 'idle' && (
-          <CheckIcon
-            className="mb-3 mt-auto h-5 w-5 text-primary-400"
-            data-testid="planting-attribute-edit-form__add-date-idle"
-          />
-        )}
-      </div>
-
-      {showPolygonTools && <ShadingGeometryToolForm />}
-
-      {/**
-       * See https://github.com/orgs/react-hook-form/discussions/7111
-       * @ts-expect-error this error path was added by zod refine(). hook form is unaware, which is a shortcoming.*/}
-      {formFunctions.formState.errors.dateRelation && (
-        <div className="text-sm text-red-400">
-          {t('left_toolbar.error_remove_date_before_add_date')}
+          {shadeSubmitState === 'loading' && (
+            <CircleDottedIcon className="mb-3 mt-auto h-5 w-5 animate-spin text-secondary-400" />
+          )}
+          {shadeSubmitState === 'idle' && (
+            <CheckIcon
+              className="mb-3 mt-auto h-5 w-5 text-primary-400"
+              data-testid="planting-attribute-edit-form__add-date-idle"
+            />
+          )}
         </div>
-      )}
-      <div className="flex gap-2">
-        <SimpleFormInput
-          type="date"
-          id="addDate"
-          disabled={isReadOnlyMode}
-          labelContent={t('left_toolbar.add_date')}
-          register={formFunctions.register}
-          className="w-36"
-        />
-        {addDateSubmitState === 'loading' && (
-          <CircleDottedIcon className="mb-3 mt-auto h-5 w-5 animate-spin text-secondary-400" />
+
+        {showPolygonTools && <ShadingGeometryToolForm />}
+
+        {/**
+         * See https://github.com/orgs/react-hook-form/discussions/7111
+         * @ts-expect-error this error path was added by zod refine(). hook form is unaware, which is a shortcoming.*/}
+        {formFunctions.formState.errors.dateRelation && (
+          <div className="text-sm text-red-400">
+            {t('left_toolbar.error_remove_date_before_add_date')}
+          </div>
         )}
-        {addDateSubmitState === 'idle' && (
-          <CheckIcon
-            className="mb-3 mt-auto h-5 w-5 text-primary-400"
-            data-testid="planting-attribute-edit-form__add-date-idle"
+        <div className="flex gap-2">
+          <DebouncedSimpleFormInput
+            onValid={onAddDateChange}
+            type="date"
+            id="addDate"
+            disabled={isReadOnlyMode}
+            labelContent={t('left_toolbar.add_date')}
+            className="w-36"
           />
-        )}
-      </div>
+        </div>
 
-      <div className="flex gap-2">
-        <SimpleFormInput
-          type="date"
-          id="removeDate"
-          disabled={isReadOnlyMode}
-          labelContent={t('left_toolbar.remove_date')}
-          register={formFunctions.register}
-          className="w-36"
-        />
-        {removeDateSubmitState === 'loading' && (
-          <CircleDottedIcon className="mb-3 mt-auto h-5 w-5 animate-spin text-secondary-400" />
-        )}
-        {removeDateSubmitState === 'idle' && (
-          <CheckIcon
-            className="mb-3 mt-auto h-5 w-5 text-primary-400"
-            data-testid="planting-attribute-edit-form__add-date-idle"
+        <div className="flex gap-2">
+          <DebouncedSimpleFormInput
+            onValid={onRemoveDateChange}
+            type="date"
+            id="removeDate"
+            disabled={isReadOnlyMode}
+            labelContent={t('left_toolbar.remove_date')}
+            className="w-36"
           />
-        )}
+        </div>
+
+        <hr className="my-4 border-neutral-700" />
+
+        <SimpleButton
+          variant={ButtonVariant.dangerBase}
+          onClick={onDeleteShading}
+          disabled={isReadOnlyMode}
+          className="top-5 w-44"
+        >
+          {t('left_toolbar.delete_button')}
+        </SimpleButton>
       </div>
-
-      <hr className="my-4 border-neutral-700" />
-
-      <SimpleButton
-        variant={ButtonVariant.dangerBase}
-        onClick={onDeleteShading}
-        disabled={isReadOnlyMode}
-        className="top-5 w-44"
-      >
-        {t('left_toolbar.delete_button')}
-      </SimpleButton>
-    </div>
+    </FormProvider>
   );
 }
