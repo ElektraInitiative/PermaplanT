@@ -18,7 +18,7 @@
         "base_layer_title": "Base Layer",
         "plants_layer_title": "Plants Layer",
         "congratulations_title": "Congratulations",
-        "welcome_text": "Welcome to your first map, PermaplanTer. This is the Map Editor, where you will design and manage your map. PermaplanT rewards sustainable gardening with blossoms. With completion of this tour you will gain your first blossom.",
+        "welcome_text": "Welcome to your first map, PermaplanTer. This is the Map Editor, where you will design and manage your map.",
         "toolbox_intro_text": "The toolbox provides you with a variety of handy tools for your work on your map. Here you can undo and redo your actions. You can also toggle the grid from here.",
         "layers_intro_text": "The layers panel in the top right corner of the Map Editor lets you select your active layer, hide a specific layer or change its opacity with the blue slider.",
         "timeline_intro_text": "Use the timeline to change the current map date. It allows you to see the map at a certain date. Actions will refer to this date.",

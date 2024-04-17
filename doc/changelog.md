@@ -9,7 +9,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 ## UNRELEASED
 
 - _()_
-- _()_
+- Removed Blossoms from Frontend (Text from guided tour, awarding Blossoms at the end of the tour) _(Andrei Dinu)_
 - _()_
 - _()_
 - _()_
