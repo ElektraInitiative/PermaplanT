@@ -23,7 +23,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - Add points in middle of bezier polygon _(Daniel Steinkogler)_
 - _()_
-- _()_
+- Return 409 Conflict when creating a map with taken name _(Jannis Adamek)_
 - _()_
 - _()_
 - _()_

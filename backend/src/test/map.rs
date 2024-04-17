@@ -1,6 +1,7 @@
 //! Tests for [`crate::controller::map`].
 
 use crate::model::dto::UpdateMapGeometryDto;
+use crate::test::util::data;
 use crate::test::util::dummy_map_polygons::small_rectangle;
 use crate::{
     model::{
@@ -163,6 +164,52 @@ async fn test_can_create_map() {
         .await;
 
     assert_eq!(resp.status(), StatusCode::OK);
+}
+
+#[actix_rt::test]
+async fn test_conflict_on_create_map_with_taken_name() {
+    let taken_name = "taken name";
+    let pool = init_test_database(|conn| {
+        async {
+            diesel::insert_into(crate::schema::maps::table)
+                .values(data::TestInsertableMap {
+                    name: taken_name.to_owned(),
+                    ..Default::default()
+                })
+                .execute(conn)
+                .await?;
+            Ok(())
+        }
+        .scope_boxed()
+    })
+    .await;
+    let (token, app) = init_test_app(pool.clone()).await;
+
+    let map_update = NewMapDto {
+        name: taken_name.to_owned(),
+        creation_date: NaiveDate::from_ymd_opt(2023, 5, 8).expect("Could not parse date!"),
+        deletion_date: None,
+        last_visit: None,
+        is_inactive: false,
+        zoom_factor: 100,
+        honors: 0,
+        visits: 0,
+        harvested: 0,
+        privacy: PrivacyOption::Public,
+        description: None,
+        location: None,
+        geometry: tall_rectangle(),
+    };
+
+    let resp = test::TestRequest::post()
+        .uri("/api/maps")
+        .insert_header((header::AUTHORIZATION, token))
+        .set_json(map_update)
+        .send_request(&app)
+        .await;
+
+    // Expect conflict since the map name is already present in the database
+    assert_eq!(resp.status(), StatusCode::CONFLICT);
 }
 
 #[actix_rt::test]

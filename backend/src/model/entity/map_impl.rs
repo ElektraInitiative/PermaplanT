@@ -1,11 +1,11 @@
 //! Contains the implementation of [`Map`].
 
-use diesel::dsl::sql;
+use diesel::dsl::{exists, sql};
 use diesel::pg::Pg;
 use diesel::sql_types::Float;
 use diesel::{
-    debug_query, BoolExpressionMethods, ExpressionMethods, PgTextExpressionMethods, QueryDsl,
-    QueryResult,
+    debug_query, select, BoolExpressionMethods, ExpressionMethods, PgTextExpressionMethods,
+    QueryDsl, QueryResult,
 };
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
 use log::debug;
@@ -85,6 +85,16 @@ impl Map {
         let query = maps::table.find(id);
         debug!("{}", debug_query::<Pg, _>(&query));
         query.first::<Self>(conn).await.map(Into::into)
+    }
+
+    /// Checks if a map with this name already exists in the database.
+    ///
+    /// # Errors
+    /// * Unknown, diesel doesn't say why it might error.
+    pub async fn is_name_taken(map_name: &str, conn: &mut AsyncPgConnection) -> QueryResult<bool> {
+        let query = select(exists(maps::table.filter(name.eq(map_name))));
+        debug!("{}", debug_query::<Pg, _>(&query));
+        query.get_result(conn).await
     }
 
     /// Create a new map in the database.
