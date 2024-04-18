@@ -62,8 +62,8 @@ export const BaseStage = ({
   // Represents the state of the stage
   const [stage, setStage] = useState({
     scale: 1,
-    x: 0,
-    y: 0,
+    x: Math.floor((window.innerWidth - 600) / 2),
+    y: Math.floor((window.innerHeight - 64 - 135) / 2),
   });
 
   // Represents the state of the current selection rectangle
@@ -97,8 +97,8 @@ export const BaseStage = ({
   useEffect(() => {
     if (viewRect.width !== 0 || viewRect.height !== 0) return;
     updateViewRect({
-      x: 0,
-      y: 0,
+      x: Math.floor((window.innerWidth - 600) / 2),
+      y: Math.floor((window.innerHeight - 64 - 135) / 2),
       width: Math.floor(window.innerWidth / stage.scale),
       height: Math.floor(window.innerHeight / stage.scale),
     });
