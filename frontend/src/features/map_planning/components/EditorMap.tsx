@@ -69,7 +69,7 @@ export const EditorMap = ({ layers }: MapProps) => {
   const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
   const updateTimelineDate = useMapStore((state) => state.updateTimelineDate);
   const tour = useContext(ShepherdTourContext);
-  const { t } = useTranslation(['timeline', 'blossoms', 'common', 'guidedTour', 'toolboxTooltips']);
+  const { t } = useTranslation(['timeline', 'common', 'guidedTour', 'toolboxTooltips']);
   const isReadOnlyMode = useIsReadOnlyMode();
   const [show, setShow] = useState(false);
   const [timeLineState, setTimeLineState] = useState<'loading' | 'idle'>('idle');
