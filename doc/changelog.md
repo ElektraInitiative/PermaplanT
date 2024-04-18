@@ -15,7 +15,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Scraper: Error message of missing csv files now contains file name _(Christoph Schreiner)_
 - _()_
 - _()_
 - _()_
