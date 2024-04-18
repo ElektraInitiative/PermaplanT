@@ -62,8 +62,9 @@ export const BaseStage = ({
   // Represents the state of the stage
   const [stage, setStage] = useState({
     scale: 1,
-    x: Math.floor((window.innerWidth - 600) / 2),
-    y: Math.floor((window.innerHeight - 64 - 135) / 2),
+    // make 0,0 the center of the visible map
+    x: Math.floor((window.innerWidth - 300 - 300) / 2), // 300px is default width of each toolbar
+    y: Math.floor((window.innerHeight - 64 - 133) / 2), // 64px is height of navbar, 133px is height of timeline
   });
 
   // Represents the state of the current selection rectangle
@@ -97,8 +98,9 @@ export const BaseStage = ({
   useEffect(() => {
     if (viewRect.width !== 0 || viewRect.height !== 0) return;
     updateViewRect({
-      x: Math.floor((window.innerWidth - 600) / 2),
-      y: Math.floor((window.innerHeight - 64 - 135) / 2),
+      // make 0,0 the center of the visible map
+      x: Math.floor((window.innerWidth - 300 - 300) / 2), // 300px is default width of each toolbar
+      y: Math.floor((window.innerHeight - 64 - 133) / 2), // 64px is height of navbar, 133px is height of timeline
       width: Math.floor(window.innerWidth / stage.scale),
       height: Math.floor(window.innerHeight / stage.scale),
     });
