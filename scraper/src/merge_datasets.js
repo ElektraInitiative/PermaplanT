@@ -1,12 +1,12 @@
 import fs from "fs";
 import { parse as json2csv } from "json2csv";
-import csv from "csvtojson";
 import permapeopleColumnMapping from "./helpers/column_mapping_permapeople.js";
 import {
   sanitizeColumnNames,
   processMeasurement,
   getSoilPH,
   cleanUpJsonForCsv,
+  readCsv,
 } from "./helpers/helpers.js";
 
 /**
@@ -153,9 +153,9 @@ async function mergeDatasets() {
 
   let allPlants = [];
 
-  let practicalPlants = await csv().fromFile("data/detail.csv"); // Practical plants dataset
-  let permapeople = await csv().fromFile("data/permapeopleRawData.csv"); // Permapeople dataset
-  let reinsaat = await csv().fromFile("data/reinsaatRawData.csv"); // Reinsaat dataset
+  let practicalPlants = await readCsv("data/detail.csv"); // Practical plants dataset
+  let permapeople = await readCsv("data/permapeopleRawData.csv"); // Permapeople dataset
+  let reinsaat = await readCsv("data/reinsaatRawData.csv"); // Reinsaat dataset
 
   sanitizeColumnNames(practicalPlants, "practicalplants");
   sanitizeColumnNames(permapeople, "permapeople");

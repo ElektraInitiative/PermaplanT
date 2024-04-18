@@ -1,4 +1,4 @@
-import csv from "csvtojson";
+import { readCsv } from "./helpers.js";
 
 /**
  * Apply the given override file to the plants
@@ -11,7 +11,7 @@ import csv from "csvtojson";
 async function applyOverride(plants, file) {
   console.log(`[INFO] Applying override ${file}`);
 
-  const overridePlants = await csv().fromFile(file);
+  const overridePlants = await readCsv(file);
 
   overridePlants.forEach((overridePlant) => {
     // find the plant

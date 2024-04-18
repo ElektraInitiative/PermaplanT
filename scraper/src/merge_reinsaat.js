@@ -1,7 +1,7 @@
 import fs from "fs";
 import { parse as json2csv } from "json2csv";
-import csv from "csvtojson";
 import mapping from "./helpers/column_mapping_reinsaat.js";
+import { readCsv } from "./helpers/helpers.js";
 
 const renameColumns = (plants) => {
   return plants.map((plant) => {
@@ -98,8 +98,8 @@ const renameCategory = (plants, lang) => {
 async function mergeDatasets() {
   let allPlants = [];
 
-  let reinsaatRawDataEN = await csv().fromFile("data/reinsaatRawDataEN.csv");
-  let reinsaatRawDataDE = await csv().fromFile("data/reinsaatRawDataDE.csv");
+  let reinsaatRawDataEN = await readCsv("data/reinsaatRawDataEN.csv");
+  let reinsaatRawDataDE = await readCsv("data/reinsaatRawDataDE.csv");
 
   reinsaatRawDataEN = renameCategory(reinsaatRawDataEN, "EN");
   reinsaatRawDataDE = renameCategory(reinsaatRawDataDE, "DE");
