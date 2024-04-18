@@ -50,7 +50,6 @@ def runDockerPostgresSidecar(String command,  List<String> stashsrc = [], List<S
     return {
         node('docker') {
             node_info()
-            mkdir '/var/cache/rust/cargo-home'
             checkout scm
             def rustImage = docker.build('permaplant-rust:ci', './ci/container-images/permaplant-rust')
             docker.image('postgis/postgis:13-3.1').withRun("-e 'POSTGRES_USER=ci' -e 'POSTGRES_PASSWORD=ci' \
