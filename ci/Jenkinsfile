@@ -52,7 +52,10 @@ def runDockerPostgresSidecar(String command,  List<String> stashsrc = [], List<S
             node_info()
             checkout scm
             def rustImage = docker.build('permaplant-rust:ci', './ci/container-images/permaplant-rust')
-            docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
+            docker.image('postgis/postgis:13-3.1').withRun("-e 'POSTGRES_USER=ci' -e 'POSTGRES_PASSWORD=ci' \
+                -e 'CARGO_HOME=/var/cache/rust/cargo-home' \
+                -v '${PWD}:/var/cache/rust' \
+                -w '/var/cache/rust'") { c ->
                 rustImage.inside("--link ${c.id}:db \
                 -e 'DATABASE_URL=postgres://ci:ci@db/ci' \
                 -e 'BIND_ADDRESS_HOST=127.0.0.1' \
@@ -60,10 +63,7 @@ def runDockerPostgresSidecar(String command,  List<String> stashsrc = [], List<S
                 -e 'AUTH_DISCOVERY_URI=unused' \
                 -e 'AUTH_CLIENT_ID=unused' \
                 -e 'RUSTFLAGS=-D warnings' \
-                -e 'RUSTDOCFLAGS=-D warnings' \
-                -e 'CARGO_HOME=/var/cache/rust/cargo-home' \
-                -v '${PWD}:/var/cache/rust' \
-                -w '/var/cache/rust'"
+                -e 'RUSTDOCFLAGS=-D warnings'"
                 ) {
                     checkout scm
                     wait_for_db('/usr/bin/pg_isready --host=db --username=ci --dbname=ci --timeout=60')
