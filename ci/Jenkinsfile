@@ -60,7 +60,10 @@ def runDockerPostgresSidecar(String command,  List<String> stashsrc = [], List<S
                 -e 'AUTH_DISCOVERY_URI=unused' \
                 -e 'AUTH_CLIENT_ID=unused' \
                 -e 'RUSTFLAGS=-D warnings' \
-                -e 'RUSTDOCFLAGS=-D warnings'"
+                -e 'RUSTDOCFLAGS=-D warnings' \
+                -e 'CARGO_HOME=/var/cache/rust/cargo-home' \
+                -v '${PWD}:/var/cache/rust' \
+                -w '/var/cache/rust'"
                 ) {
                     checkout scm
                     wait_for_db('/usr/bin/pg_isready --host=db --username=ci --dbname=ci --timeout=60')
@@ -296,7 +299,7 @@ if (env.BRANCH_NAME.startsWith('PR')){
 lock("${env.NODE_NAME}-exclusive") {
     // `Deploy PR` stage similar to `Deploy Dev` and `Jenkinsfile.release.Deploy Prod`
     stage('Deploy PR') {
-        node('permaplant && pr') {
+        node('permaplant && master') {
             node_info()
 
             checkout scm
@@ -368,12 +371,12 @@ lock("${env.NODE_NAME}-exclusive") {
 }
 }
 
-// Deploying to Dev only happens on branch "master"
-if (env.BRANCH_NAME == 'master') {
+// Deploying to Dev only happens on branch "master" and "dev"
+if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'dev') {    
     try {
         // `Deploy Dev` stage similar to `Deploy PR` and `Jenkinsfile.release.Deploy Prod`
-        stage('Deploy Dev') {
-            node('permaplant && dev') {
+        stage("Deploy ${env.BRANCH_NAME}") {
+            node("permaplant && ${env.BRANCH_NAME}") {
                 node_info()
 
                 checkout scm
@@ -387,10 +390,10 @@ if (env.BRANCH_NAME == 'master') {
                 unstash 'mdbook'
                 unstash 'cargodoc'
 
-                echo 'Deploying to Dev ...'
-                sh "sudo /usr/local/bin/permaplant-deploy.sh dev ${WORKSPACE}"
+                echo "Deploying to ${env.BRANCH_NAME} ..."
+                sh "sudo /usr/local/bin/permaplant-deploy.sh ${env.BRANCH_NAME} ${WORKSPACE}"
 
-                copyDocumentation('dev')
+                copyDocumentation("${env.BRANCH_NAME}")
             }
         }
     } catch (Exception e) { // groovylint-disable-line
