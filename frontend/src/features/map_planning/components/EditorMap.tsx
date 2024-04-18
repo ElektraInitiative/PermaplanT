@@ -165,26 +165,12 @@ export const EditorMap = ({ layers }: MapProps) => {
   }
 
   useEffect(() => {
-    /* Blossoms are removed temporarily and will be added back later
-    const _tourCompletionBlossom = async () => {
-      const blossom: GainedBlossomsDto = {
-        blossom: 'graduation_day',
-        times_gained: 1,
-        gained_date: new Date().toISOString().split('T')[0],
-      };
-      await gainBlossom(blossom);
-      toast.success(`${t('blossoms:blossom_gained')} ${t('blossoms:types.graduation_day')}`, {
-        icon: '\u{1F338}',
-      });
-    };*/
-
     tour?.start();
     if (tour && tour.steps.length > 0) {
       tour?.on('cancel', () => {
         setShow(true);
       });
       tour?.on('complete', () => {
-        // _tourCompletionBlossom(); Blossoms are removed temporarily and will be added back later
         completeTour();
       });
     }
