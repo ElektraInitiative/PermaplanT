@@ -10,7 +10,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 - _()_
 - _()_
-- _()_
+- CI: avoid cargo index rebuild _(Filip Markovic)_
 - _()_
 - _()_
 - _()_
