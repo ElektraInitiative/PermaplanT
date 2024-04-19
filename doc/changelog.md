@@ -18,6 +18,9 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Scraper: Error message of missing csv files now contains file name _(Christoph Schreiner)_
 - _()_
 - _()_
+- Add tests for hooks in frontend/layers _(Lukas Anton Lakits)_
+- _()_
+- Add warn signs to sizes for multi-selected plant-areas _(Lukas Anton Lakits)_
 - _()_
 - _()_
 - _()_
