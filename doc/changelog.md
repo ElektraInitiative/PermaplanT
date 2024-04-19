@@ -15,9 +15,9 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- Add tests for hooks in frontend/layers _(Lukas Anton Lakits)_
 - _()_
-- _()_
-- _()_
+- Add warn signs to sizes for multi-selected plant-areas _(Lukas Anton Lakits)_
 - _()_
 - _()_
 - _()_
