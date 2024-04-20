@@ -8,7 +8,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 ## UNRELEASED
 
-- _()_
+- Update Dev-Setup Documentation & Add docker folder _(Jannis, Lukas)_
 - _()_
 - _()_
 - _()_

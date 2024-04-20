@@ -89,9 +89,8 @@ doc-frontend: install-types install-frontend ## Frontend src doc
 
 # Install
 
-
 .PHONY: install
-install: install-pre-commit install-backend install-mdbook install-frontend install-e2e install-types  ## Install ALL dependencies within the source repo
+install: install-pre-commit install-backend install-mdbook install-frontend install-e2e install-types ## Install ALL dependencies within the source repo
 	@echo "Installation completed."
 
 .PHONY: install-types
