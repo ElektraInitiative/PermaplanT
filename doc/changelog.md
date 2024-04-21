@@ -13,8 +13,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
-- _()_
+- Fixed warning text from left toolbar being cut by map elements. _(Andrei Dinu)_
+- Added paragraph about z-index usage to Frontend UI Usability Guideline in Docs _(Andrei Dinu)_
 - _()_
 - Add tests for hooks in frontend/layers _(Lukas Anton Lakits)_
 - _()_
