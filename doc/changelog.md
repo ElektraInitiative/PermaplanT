@@ -8,6 +8,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 ## UNRELEASED
 
+- Added Meeting Agenda&Notes for 15.04.2024 9:00 _(Markus Raab, Daniel)_
 - _()_
 - _()_
 - _()_
