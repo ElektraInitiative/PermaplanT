@@ -1,0 +1,2621 @@
+<html>
+  <head>
+    <title>Heatmap</title>
+
+    <script language="javascript">
+      // ----
+      // toggle_div()
+      //
+      //  JS function to toggle one of the functions to show/block.
+      // ----
+      function toggle_div(hs_id, div_id) {
+        var h_elem = document.getElementById(hs_id);
+        var d_elem = document.getElementById(div_id);
+        if (d_elem.style.display == "block") {
+          d_elem.style.display = "none";
+          h_elem.innerHTML = "show";
+        } else {
+          d_elem.style.display = "block";
+          h_elem.innerHTML = "hide";
+        }
+      }
+
+      // ----
+      // set_stat_bars()
+      // ----
+      function set_stat_bars() {
+        // Loop over all tables that are of linestats class.
+        var tbls = document.getElementsByClassName("linestats");
+        for (var i = 0; i < tbls.length; i++) {
+          tbl = tbls[i];
+          rws = tbl.rows;
+
+          // Get the function level totals of the counters from the
+          // second row (the pseudo line-0 row).
+          vals = rws[1].getElementsByTagName("td");
+          var exec_max = parseFloat(vals[1].innerHTML);
+          var total_max = parseFloat(vals[2].innerHTML);
+          var longest_max = parseFloat(vals[3].innerHTML);
+
+          // Guard against division by zero errors.
+          if (exec_max == 0) exec_max = 1;
+          if (total_max == 0) total_max = 1;
+          if (longest_max == 0) longest_max = 1;
+
+          // Now we can calculate and set the bars relative to those
+          // function level totals.
+          for (var j = 1; j < rws.length; j++) {
+            var vals = rws[j].getElementsByTagName("td");
+
+            var val = parseFloat(vals[1].innerHTML);
+            // var pct = val / exec_max * 100;
+            // vals[1].style.backgroundSize = pct + "% 100%";
+            // vals[1].style.backgroundSize = "0% 100%";
+            vals[1].innerHTML = "<code>" + val.toLocaleString() + "</code>";
+
+            val = parseFloat(vals[2].innerHTML);
+            pct = (val / total_max) * 100;
+            pct_str = "(" + pct.toFixed(2) + "%)";
+            var need_spc = 10 - pct_str.length;
+            for (var k = 0; k < need_spc; k++) {
+              pct_str = "&nbsp;" + pct_str;
+            }
+            vals[2].style.backgroundSize = pct + "% 100%";
+            vals[2].innerHTML =
+              "<code>" +
+              val.toLocaleString() +
+              "&nbsp;&micro;s" +
+              pct_str +
+              "</code>";
+
+            val = parseFloat(vals[3].innerHTML);
+            // pct = val / longest_max * 100;
+            // vals[3].style.backgroundSize = pct + "% 100%";
+            vals[3].innerHTML =
+              "<code>" + val.toLocaleString() + "&nbsp;&micro;s" + "</code>";
+          }
+        }
+      }
+    </script>
+
+    <style>
+      h1,
+      h2,
+      h3,
+      h4 {
+        color: #2222aa;
+      }
+
+      h1 {
+        font-family: Helvetica, Arial;
+        font-weight: 700;
+        font-size: 24pt;
+      }
+
+      h2 {
+        font-family: Helvetica, Arial;
+        font-weight: 700;
+        font-size: 18pt;
+      }
+
+      h3,
+      h4 {
+        font-family: Helvetica, Arial;
+        font-weight: 700;
+        font-size: 16pt;
+      }
+
+      p,
+      li,
+      dt,
+      dd {
+        font-family: Helvetica, Arial;
+        font-size: 14pt;
+      }
+
+      pre {
+        font-family: Courier, Fixed;
+        font-size: 14pt;
+      }
+
+      samp {
+        font-family: Courier, Fixed;
+        font-weight: 900;
+        font-size: 14pt;
+      }
+
+      big {
+        font-weight: 900;
+        font-size: 120%;
+      }
+
+      .bar {
+        background-color: white;
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AYEDho2r7uRnQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAFUlEQVQI12P8dlOcARtgYsABBqcEAH/aAfYx26o/AAAAAElFTkSuQmCC);
+        background-repeat: no-repeat;
+      }
+    </style>
+  </head>
+  <body bgcolor="#ffffff" onload="set_stat_bars()">
+    <h2>PL/pgSQL Call Graph</h2>
+    <center>
+      <?xml version="1.0" standalone="no"?>
+      <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+      <svg
+        version="1.1"
+        width="1200"
+        height="114"
+        onload="init(evt)"
+        viewBox="0 0 1200 114"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+      >
+        <defs>
+          <linearGradient id="background" y1="0" y2="1" x1="0" x2="0">
+            <stop stop-color="#eeeeee" offset="5%" />
+            <stop stop-color="#eeeeb0" offset="95%" />
+          </linearGradient>
+        </defs>
+        <style type="text/css">
+          .func_g:hover {
+            stroke: black;
+            stroke-width: 0.5;
+            cursor: pointer;
+          }
+        </style>
+        <script type="text/ecmascript">
+          <![CDATA[ var details, svg; function init(evt) { details =
+          document.getElementById("details").firstChild; svg =
+          document.getElementsByTagName("svg")[0]; } function s(info) {
+          details.nodeValue = "Function: " + info; } function c() {
+          details.nodeValue = ' '; } function find_child(parent, name, attr) {
+          var children = parent.childNodes; for (var i=0; i<children.length;i++)
+          { if (children[i].tagName == name) return (attr != undefined) ?
+          children[i].attributes[attr].value : children[i]; } return; } function
+          orig_save(e, attr, val) { if (e.attributes["_orig_"+attr] !=
+          undefined) return; if (e.attributes[attr] == undefined) return; if
+          (val == undefined) val = e.attributes[attr].value;
+          e.setAttribute("_orig_"+attr, val); } function orig_load(e, attr) { if
+          (e.attributes["_orig_"+attr] == undefined) return;
+          e.attributes[attr].value = e.attributes["_orig_"+attr].value;
+          e.removeAttribute("_orig_"+attr); } function update_text(e) { var r =
+          find_child(e, "rect"); var t = find_child(e, "text"); var w =
+          parseFloat(r.attributes["width"].value) -3; var txt = find_child(e,
+          "title").textContent.replace(/\([^(]*\)/,""); t.attributes["x"].value
+          = parseFloat(r.attributes["x"].value) +3; // Smaller than this size
+          won't fit anything if (w < 2*12*0.59) { t.textContent = ""; return; }
+          t.textContent = txt; // Fit in full text width if (/^ *$/.test(txt) ||
+          t.getSubStringLength(0, txt.length) < w) return; for (var
+          x=txt.length-2; x>0; x--) { if (t.getSubStringLength(0, x+2) <= w) {
+          t.textContent = txt.substring(0,x) + ".."; return; } } t.textContent =
+          ""; } function zoom_reset(e) { if (e.attributes != undefined) {
+          orig_load(e, "x"); orig_load(e, "width"); } if (e.childNodes ==
+          undefined) return; for(var i=0, c=e.childNodes; i<c.length; i++) {
+          zoom_reset(c[i]); } } function zoom_child(e, x, ratio) { if
+          (e.attributes != undefined) { if (e.attributes["x"] != undefined) {
+          orig_save(e, "x"); e.attributes["x"].value =
+          (parseFloat(e.attributes["x"].value) - x - 10) * ratio + 10;
+          if(e.tagName == "text") e.attributes["x"].value =
+          find_child(e.parentNode, "rect", "x") + 3; } if (e.attributes["width"]
+          != undefined) { orig_save(e, "width"); e.attributes["width"].value =
+          parseFloat(e.attributes["width"].value) * ratio; } } if (e.childNodes
+          == undefined) return; for(var i=0, c=e.childNodes; i<c.length; i++) {
+          zoom_child(c[i], x-10, ratio); } } function zoom_parent(e) { if
+          (e.attributes) { if (e.attributes["x"] != undefined) { orig_save(e,
+          "x"); e.attributes["x"].value = 10; } if (e.attributes["width"] !=
+          undefined) { orig_save(e, "width"); e.attributes["width"].value =
+          parseInt(svg.width.baseVal.value) - (10*2); } } if (e.childNodes ==
+          undefined) return; for(var i=0, c=e.childNodes; i<c.length; i++) {
+          zoom_parent(c[i]); } } function zoom(node) { var attr =
+          find_child(node, "rect").attributes; var width =
+          parseFloat(attr["width"].value); var xmin =
+          parseFloat(attr["x"].value); var xmax = parseFloat(xmin + width); var
+          ymin = parseFloat(attr["y"].value); var ratio =
+          (svg.width.baseVal.value - 2*10) / width; // XXX: Workaround for
+          JavaScript float issues (fix me) var fudge = 0.0001; var unzoombtn =
+          document.getElementById("unzoom"); unzoombtn.style["opacity"] = "1.0";
+          var el = document.getElementsByTagName("g"); for(var
+          i=0;i<el.length;i++){ var e = el[i]; var a = find_child(e,
+          "rect").attributes; var ex = parseFloat(a["x"].value); var ew =
+          parseFloat(a["width"].value); // Is it an ancestor if (0 == 0) { var
+          upstack = parseFloat(a["y"].value) > ymin; } else { var upstack =
+          parseFloat(a["y"].value) < ymin; } if (upstack) { // Direct ancestor
+          if (ex <= xmin && (ex+ew+fudge) >= xmax) { e.style["opacity"] = "0.5";
+          zoom_parent(e); e.onclick = function(e){unzoom(); zoom(this);};
+          update_text(e); } // not in current path else e.style["display"] =
+          "none"; } // Children maybe else { // no common path if (ex < xmin ||
+          ex + fudge >= xmax) { e.style["display"] = "none"; } else {
+          zoom_child(e, xmin, ratio); e.onclick = function(e){zoom(this);};
+          update_text(e); } } } } function unzoom() { var unzoombtn =
+          document.getElementById("unzoom"); unzoombtn.style["opacity"] = "0.0";
+          var el = document.getElementsByTagName("g"); for(i=0;i<el.length;i++)
+          { el[i].style["display"] = "block"; el[i].style["opacity"] = "1";
+          zoom_reset(el[i]); update_text(el[i]); } } ]]>
+        </script>
+        <rect
+          x="0.0"
+          y="0"
+          width="1200.0"
+          height="114.0"
+          fill="url(#background)"
+        />
+        <text
+          text-anchor="middle"
+          x="600.00"
+          y="24"
+          font-size="17"
+          font-family="Verdana"
+          fill="rgb(0,0,0)"
+        >
+          Heatmap
+        </text>
+        <text
+          text-anchor=""
+          x="10.00"
+          y="97"
+          font-size="12"
+          font-family="Verdana"
+          fill="rgb(0,0,0)"
+          id="details"
+        ></text>
+        <text
+          text-anchor=""
+          x="10.00"
+          y="24"
+          font-size="12"
+          font-family="Verdana"
+          fill="rgb(0,0,0)"
+          id="unzoom"
+          onclick="unzoom()"
+          style="opacity: 0; cursor: pointer"
+        >
+          Reset Zoom
+        </text>
+        <g
+          class="func_g"
+          onmouseover="s('all (717,115 samples, 100%)')"
+          onmouseout="c()"
+          onclick="zoom(this)"
+        >
+          <title>all (717,115 samples, 100%)</title>
+          <rect
+            x="10.0"
+            y="65"
+            width="1180.0"
+            height="15.0"
+            fill="rgb(224,63,29)"
+            rx="2"
+            ry="2"
+          />
+          <text
+            text-anchor=""
+            x="13.00"
+            y="75.5"
+            font-size="12"
+            font-family="Verdana"
+            fill="rgb(0,0,0)"
+          ></text>
+        </g>
+        <g
+          class="func_g"
+          onmouseover="s('public.calculate_heatmap() oid=20452 (717,115 samples, 100.00%)')"
+          onmouseout="c()"
+          onclick="zoom(this)"
+        >
+          <title>
+            public.calculate_heatmap() oid=20452 (717,115 samples, 100.00%)
+          </title>
+          <rect
+            x="10.0"
+            y="49"
+            width="1180.0"
+            height="15.0"
+            fill="rgb(249,53,34)"
+            rx="2"
+            ry="2"
+          />
+          <text
+            text-anchor=""
+            x="13.00"
+            y="59.5"
+            font-size="12"
+            font-family="Verdana"
+            fill="rgb(0,0,0)"
+          >
+            public.calculate_heatmap() oid=20452
+          </text>
+        </g>
+        <g
+          class="func_g"
+          onmouseover="s('public.get_plant_relations_array() oid=20454 (1,021 samples, 0.14%)')"
+          onmouseout="c()"
+          onclick="zoom(this)"
+        >
+          <title>
+            public.get_plant_relations_array() oid=20454 (1,021 samples, 0.14%)
+          </title>
+          <rect
+            x="1188.3"
+            y="33"
+            width="1.7"
+            height="15.0"
+            fill="rgb(218,70,31)"
+            rx="2"
+            ry="2"
+          />
+          <text
+            text-anchor=""
+            x="1191.32"
+            y="43.5"
+            font-size="12"
+            font-family="Verdana"
+            fill="rgb(0,0,0)"
+          ></text>
+        </g>
+      </svg>
+    </center>
+    <h2>List of functions detailed below</h2>
+    <ul>
+      <li><a href="#A20452">public.calculate_heatmap() oid=20452</a></li>
+      <li>
+        <a href="#A20454">public.get_plant_relations_array() oid=20454</a>
+      </li>
+    </ul>
+    <h2>All 2 functions (by self_time)</h2>
+    <a name="A20452" />
+    <h3>
+      Function public.calculate_heatmap() oid=20452 (<a
+        id="toggle_20452"
+        href="javascript:toggle_div('toggle_20452', 'div_20452')"
+        >show</a
+      >)
+    </h3>
+    <p>
+      self_time = 716,094 &micro;s<br />
+      total_time = 717,115 &micro;s
+    </p>
+    <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td valign="top">
+          <b><code>public.calculate_heatmap&nbsp;</code></b>
+        </td>
+        <td>
+          <b
+            ><code
+              >(p_map_id integer,<br />&nbsp;p_layer_ids integer[],<br />&nbsp;p_plant_id
+              integer,<br />&nbsp;date date,<br />&nbsp;granularity integer,<br />&nbsp;x_min
+              integer,<br />&nbsp;y_min integer,<br />&nbsp;x_max integer,<br />&nbsp;y_max
+              integer)</code
+            ></b
+          >
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <b
+            ><code
+              >&nbsp;&nbsp;&nbsp;&nbsp;RETURNS&nbsp;TABLE(preference&nbsp;real,&nbsp;relevance&nbsp;real,&nbsp;x&nbsp;integer,&nbsp;y&nbsp;integer)</code
+            ></b
+          >
+        </td>
+      </tr>
+    </table>
+    <div id="div_20452" style="display: none">
+      <center>
+        <table
+          class="linestats"
+          border="1"
+          cellpadding="0"
+          cellspacing="0"
+          width="80%"
+        >
+          <tr>
+            <th width="10%">Line</th>
+            <th width="10%">exec_count</th>
+            <th width="10%">total_time</th>
+            <th width="10%">longest_time</th>
+            <th width="60%">Source Code</th>
+          </tr>
+          <tr>
+            <td align="right"><code>0</code></td>
+            <td align="right">1</td>
+            <td class="bar" align="right">717115</td>
+            <td align="right">717115</td>
+            <td align="left">
+              <code><b>--&nbsp;Function&nbsp;Totals</b></code>
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>1</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>2</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code>DECLARE</code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>3</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;map_geometry&nbsp;GEOMETRY(POLYGON,&nbsp;4326);</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>4</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;point&nbsp;GEOMETRY;</code>
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>5</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;bbox&nbsp;GEOMETRY;</code>
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>6</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;num_cols&nbsp;INTEGER;</code>
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>7</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;num_rows&nbsp;INTEGER;</code>
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>8</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;x_pos&nbsp;INTEGER;</code>
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>9</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;y_pos&nbsp;INTEGER;</code>
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>10</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;plant_relation&nbsp;RECORD;</code>
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>11</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;plant_score&nbsp;SCORE;</code>
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>12</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;shading_score&nbsp;SCORE;</code>
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>13</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;combined_score&nbsp;SCORE;</code>
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>14</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;output_score&nbsp;SCORE;</code>
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>15</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;distance&nbsp;REAL;</code>
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>16</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;weight&nbsp;REAL;</code>
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>17</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;plant_shade&nbsp;SHADE;</code>
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>18</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;plant_light_requirement&nbsp;light_requirement&nbsp;[];</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>19</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;allowed_shades&nbsp;SHADE&nbsp;[]&nbsp;:=&nbsp;&#x27;{}&#x27;;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>20</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;shading_shade&nbsp;SHADE;</code>
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>21</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;all_values&nbsp;SHADE[];</code>
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>22</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;pos1&nbsp;INTEGER;</code>
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>23</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;pos2&nbsp;INTEGER;</code>
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>24</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;shading_score_found&nbsp;BOOLEAN;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>25</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;relations&nbsp;relations_summary[];</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>26</code></td>
+            <td align="right">1</td>
+            <td class="bar" align="right">717112</td>
+            <td align="right">717112</td>
+            <td align="left"><code>BEGIN</code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>27</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;Makes&nbsp;sure&nbsp;the&nbsp;layers&nbsp;exists&nbsp;and&nbsp;fits&nbsp;to&nbsp;the&nbsp;map</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>28</code></td>
+            <td align="right">1</td>
+            <td class="bar" align="right">285</td>
+            <td align="right">285</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;i&nbsp;IN&nbsp;1..array_length(p_layer_ids,&nbsp;1)&nbsp;LOOP</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>29</code></td>
+            <td align="right">2</td>
+            <td class="bar" align="right">253</td>
+            <td align="right">230</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;EXISTS&nbsp;(SELECT&nbsp;1&nbsp;FROM&nbsp;layers&nbsp;WHERE&nbsp;id&nbsp;=&nbsp;p_layer_ids[i]&nbsp;AND&nbsp;map_id&nbsp;=&nbsp;p_map_id)&nbsp;THEN</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>30</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RAISE&nbsp;EXCEPTION&nbsp;&#x27;Layer&nbsp;with&nbsp;id&nbsp;%&nbsp;not&nbsp;found&nbsp;on&nbsp;map&nbsp;with&nbsp;id&nbsp;%&#x27;,&nbsp;p_layer_ids[i],&nbsp;p_map_id;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>31</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;IF;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>32</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;LOOP;</code>
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>33</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;Makes&nbsp;sure&nbsp;the&nbsp;plant&nbsp;exists</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>34</code></td>
+            <td align="right">1</td>
+            <td class="bar" align="right">173</td>
+            <td align="right">173</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;EXISTS&nbsp;(SELECT&nbsp;1&nbsp;FROM&nbsp;plants&nbsp;WHERE&nbsp;id&nbsp;=&nbsp;p_plant_id)&nbsp;THEN</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>35</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RAISE&nbsp;EXCEPTION&nbsp;&#x27;Plant&nbsp;with&nbsp;id&nbsp;%&nbsp;not&nbsp;found&#x27;,&nbsp;p_plant_id;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>36</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;IF;</code>
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>37</code></td>
+            <td align="right">1</td>
+            <td class="bar" align="right">323</td>
+            <td align="right">323</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;EXISTS&nbsp;(SELECT&nbsp;1&nbsp;FROM&nbsp;layers&nbsp;WHERE&nbsp;id&nbsp;=&nbsp;p_layer_ids[2]&nbsp;AND&nbsp;type&nbsp;=&nbsp;&#x27;shade&#x27;)&nbsp;THEN</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>38</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RAISE&nbsp;EXCEPTION&nbsp;&#x27;Shade&nbsp;layer&nbsp;with&nbsp;id&nbsp;%&nbsp;not&nbsp;found&#x27;,&nbsp;p_layer_ids[2];</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>39</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;IF;</code>
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>40</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>41</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;INTO&nbsp;STRICT&nbsp;makes&nbsp;sure&nbsp;the&nbsp;map&nbsp;exists.&nbsp;Does&nbsp;have&nbsp;to&nbsp;be&nbsp;explicitly&nbsp;checked&nbsp;as&nbsp;bounding&nbsp;box&nbsp;calculation&nbsp;would&nbsp;error&nbsp;anyways.</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>42</code></td>
+            <td align="right">1</td>
+            <td class="bar" align="right">117</td>
+            <td align="right">117</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;geometry&nbsp;FROM&nbsp;maps&nbsp;WHERE&nbsp;id&nbsp;=&nbsp;p_map_id&nbsp;INTO&nbsp;STRICT&nbsp;map_geometry;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>43</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>44</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;Calculate&nbsp;the&nbsp;number&nbsp;of&nbsp;rows&nbsp;and&nbsp;columns&nbsp;based&nbsp;on&nbsp;the&nbsp;map&#x27;s&nbsp;size&nbsp;and&nbsp;granularity</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>45</code></td>
+            <td align="right">1</td>
+            <td class="bar" align="right">71</td>
+            <td align="right">71</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;num_cols&nbsp;:=&nbsp;FLOOR((x_max&nbsp;-&nbsp;x_min)&nbsp;/&nbsp;granularity);&nbsp;--&nbsp;Adjusted&nbsp;for&nbsp;granularity</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>46</code></td>
+            <td align="right">1</td>
+            <td class="bar" align="right">13</td>
+            <td align="right">13</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;num_rows&nbsp;:=&nbsp;FLOOR((y_max&nbsp;-&nbsp;y_min)&nbsp;/&nbsp;granularity);&nbsp;--&nbsp;Adjusted&nbsp;for&nbsp;granularity</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>47</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>48</code></td>
+            <td align="right">1</td>
+            <td class="bar" align="right">1070</td>
+            <td align="right">1070</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;relations&nbsp;:=&nbsp;get_plant_relations_array(p_layer_ids[1],&nbsp;p_plant_id,&nbsp;date);</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>49</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>50</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;Get&nbsp;all&nbsp;possible&nbsp;enum&nbsp;values</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>51</code></td>
+            <td align="right">1</td>
+            <td class="bar" align="right">58</td>
+            <td align="right">58</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;enum_range(NULL::SHADE)&nbsp;INTO&nbsp;all_values;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>52</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code>&nbsp;&nbsp;&nbsp;&nbsp;</code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>53</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;Calculate&nbsp;the&nbsp;score&nbsp;for&nbsp;each&nbsp;point&nbsp;on&nbsp;the&nbsp;heatmap</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>54</code></td>
+            <td align="right">1</td>
+            <td class="bar" align="right">714959</td>
+            <td align="right">714959</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;i&nbsp;IN&nbsp;0..num_cols-1&nbsp;LOOP</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>55</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;i&nbsp;and&nbsp;j&nbsp;do&nbsp;not&nbsp;represent&nbsp;coordinates.&nbsp;We&nbsp;need&nbsp;to&nbsp;adjust&nbsp;them&nbsp;to&nbsp;actual&nbsp;coordinates.</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>56</code></td>
+            <td align="right">100</td>
+            <td class="bar" align="right">46</td>
+            <td align="right">29</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x_pos&nbsp;:=&nbsp;x_min&nbsp;+&nbsp;(i&nbsp;*&nbsp;granularity)&nbsp;+&nbsp;(granularity&nbsp;/&nbsp;2);</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>57</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>58</code></td>
+            <td align="right">100</td>
+            <td class="bar" align="right">714817</td>
+            <td align="right">13922</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;j&nbsp;IN&nbsp;0..num_rows-1&nbsp;LOOP</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>59</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">61</td>
+            <td align="right">24</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y_pos&nbsp;:=&nbsp;y_min&nbsp;+&nbsp;(j&nbsp;*&nbsp;granularity)&nbsp;+&nbsp;(granularity&nbsp;/&nbsp;2);</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>60</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>61</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;Create&nbsp;a&nbsp;point&nbsp;from&nbsp;x_pos&nbsp;and&nbsp;y_pos</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>62</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">355</td>
+            <td align="right">47</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;point&nbsp;:=&nbsp;ST_SetSRID(ST_MakePoint(x_pos,&nbsp;y_pos),&nbsp;4326);</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>63</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>64</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;If&nbsp;the&nbsp;point&nbsp;is&nbsp;on&nbsp;the&nbsp;map&nbsp;calculate&nbsp;a&nbsp;score;&nbsp;otherwise&nbsp;set&nbsp;score&nbsp;to&nbsp;0.</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>65</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">696176</td>
+            <td align="right">1253</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ST_Intersects(point,&nbsp;map_geometry)&nbsp;THEN</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>66</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;----------------------------------------------------------------------------------</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>67</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;PLANT&nbsp;SCORE</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>68</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">67</td>
+            <td align="right">18</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;plant_score.preference&nbsp;:=&nbsp;0.0;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>69</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">29</td>
+            <td align="right">21</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;plant_score.relevance&nbsp;:=&nbsp;0.0;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>70</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>71</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">134369</td>
+            <td align="right">302</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOREACH&nbsp;plant_relation&nbsp;IN&nbsp;ARRAY&nbsp;relations&nbsp;LOOP</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>72</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;calculate&nbsp;euclidean&nbsp;distance</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>73</code></td>
+            <td align="right">150000</td>
+            <td class="bar" align="right">515</td>
+            <td align="right">57</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;distance&nbsp;:=&nbsp;sqrt((plant_relation.x&nbsp;-&nbsp;x_pos)^2&nbsp;+&nbsp;(plant_relation.y&nbsp;-&nbsp;y_pos)^2);</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>74</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>75</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;calculate&nbsp;weight&nbsp;based&nbsp;on&nbsp;distance</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>76</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;weight&nbsp;decreases&nbsp;between&nbsp;1&nbsp;and&nbsp;0&nbsp;based&nbsp;on&nbsp;distance</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>77</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;distance&nbsp;is&nbsp;squared&nbsp;so&nbsp;it&nbsp;decreases&nbsp;faster&nbsp;the&nbsp;further&nbsp;away</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>78</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;weight&nbsp;is&nbsp;halved&nbsp;at&nbsp;50&nbsp;cm&nbsp;away</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>79</code></td>
+            <td align="right">150000</td>
+            <td class="bar" align="right">408</td>
+            <td align="right">122</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;weight&nbsp;:=&nbsp;1&nbsp;/&nbsp;(1&nbsp;+&nbsp;(distance&nbsp;/&nbsp;50)^2);</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>80</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>81</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;update&nbsp;score&nbsp;based&nbsp;on&nbsp;relation</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>82</code></td>
+            <td align="right">150000</td>
+            <td class="bar" align="right">461</td>
+            <td align="right">91</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;plant_relation.relation&nbsp;=&nbsp;&#x27;companion&#x27;&nbsp;THEN</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>83</code></td>
+            <td align="right">150000</td>
+            <td class="bar" align="right">246</td>
+            <td align="right">63</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;plant_score.preference&nbsp;:=&nbsp;plant_score.preference&nbsp;+&nbsp;0.5&nbsp;*&nbsp;weight;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>84</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>85</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;plant_score.preference&nbsp;:=&nbsp;plant_score.preference&nbsp;-&nbsp;0.5&nbsp;*&nbsp;weight;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>86</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;IF;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>87</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>88</code></td>
+            <td align="right">150000</td>
+            <td class="bar" align="right">210</td>
+            <td align="right">27</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;plant_score.relevance&nbsp;:=&nbsp;plant_score.relevance&nbsp;+&nbsp;0.5&nbsp;*&nbsp;weight;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>89</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;LOOP;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>90</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>91</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>92</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;----------------------------------------------------------------------------------</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>93</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;SHADING&nbsp;SCORE</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>94</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">71</td>
+            <td align="right">30</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shading_score.preference&nbsp;:=&nbsp;0.0;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>95</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">6</td>
+            <td align="right">4</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shading_score.relevance&nbsp;:=&nbsp;0.0;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>96</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">33</td>
+            <td align="right">14</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shading_score_found&nbsp;:=&nbsp;false;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>97</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>98</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;Get&nbsp;the&nbsp;required&nbsp;light&nbsp;level&nbsp;and&nbsp;preferred&nbsp;shade&nbsp;level&nbsp;of&nbsp;the&nbsp;plant</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>99</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">46794</td>
+            <td align="right">94</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;light_requirement,&nbsp;shade&nbsp;INTO&nbsp;plant_light_requirement,&nbsp;plant_shade</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>100</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;plants</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>101</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;id&nbsp;=&nbsp;p_plant_id;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>102</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>103</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;Create&nbsp;a&nbsp;point&nbsp;from&nbsp;x_pos&nbsp;and&nbsp;y_pos</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>104</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">243</td>
+            <td align="right">26</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;point&nbsp;:=&nbsp;ST_SetSRID(ST_MakePoint(x_pos,&nbsp;y_pos),&nbsp;4326);</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>105</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;Select&nbsp;the&nbsp;shading&nbsp;with&nbsp;the&nbsp;darkest&nbsp;shade&nbsp;that&nbsp;intersects&nbsp;the&nbsp;point</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>106</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">75116</td>
+            <td align="right">234</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;shade&nbsp;INTO&nbsp;shading_shade</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>107</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;shadings</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>108</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;layer_id&nbsp;=&nbsp;p_layer_ids[2]</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>109</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;(add_date&nbsp;IS&nbsp;NULL&nbsp;OR&nbsp;add_date&nbsp;&lt;=&nbsp;date)</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>110</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;(remove_date&nbsp;IS&nbsp;NULL&nbsp;OR&nbsp;remove_date&nbsp;&gt;&nbsp;date)</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>111</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;ST_Intersects(geometry,&nbsp;point)</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>112</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ORDER&nbsp;BY&nbsp;shade&nbsp;DESC</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>113</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIMIT&nbsp;1;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>114</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>115</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;If&nbsp;there&#x27;s&nbsp;no&nbsp;shading,&nbsp;then&nbsp;there&nbsp;is&nbsp;sun.</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>116</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">128</td>
+            <td align="right">25</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;FOUND&nbsp;THEN</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>117</code></td>
+            <td align="right">9985</td>
+            <td class="bar" align="right">63</td>
+            <td align="right">25</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shading_shade&nbsp;:=&nbsp;&#x27;no&nbsp;shade&#x27;;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>118</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;IF;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>119</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>120</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;Check&nbsp;if&nbsp;the&nbsp;plant&nbsp;can&nbsp;survive&nbsp;at&nbsp;the&nbsp;position.</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>121</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;If&nbsp;the&nbsp;plant&nbsp;can&#x27;t&nbsp;survive&nbsp;set&nbsp;preference=-100&nbsp;and&nbsp;relevance=100.</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>122</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">329910</td>
+            <td align="right">213</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;plant_light_requirement&nbsp;IS&nbsp;NOT&nbsp;NULL</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>123</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;THEN</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>124</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">112977</td>
+            <td align="right">133</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&#x27;full&nbsp;sun&#x27;&nbsp;=&nbsp;ANY(plant_light_requirement)</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>125</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;THEN</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>126</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">110514</td>
+            <td align="right">85</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;allowed_shades&nbsp;:=&nbsp;allowed_shades&nbsp;||&nbsp;&#x27;{&quot;no&nbsp;shade&quot;,&nbsp;&quot;light&nbsp;shade&quot;}&#x27;;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>127</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;IF;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>128</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">187855</td>
+            <td align="right">129</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&#x27;partial&nbsp;sun/shade&#x27;&nbsp;=&nbsp;ANY(plant_light_requirement)</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>129</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;THEN</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>130</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">184327</td>
+            <td align="right">129</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;allowed_shades&nbsp;:=&nbsp;allowed_shades&nbsp;||&nbsp;&#x27;{&quot;light&nbsp;shade&quot;,&nbsp;&quot;partial&nbsp;shade&quot;,&nbsp;&quot;permanent&nbsp;shade&quot;}&#x27;;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>131</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;IF;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>132</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">166</td>
+            <td align="right">13</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&#x27;full&nbsp;shade&#x27;&nbsp;=&nbsp;ANY(plant_light_requirement)</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>133</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;THEN</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>134</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;allowed_shades&nbsp;:=&nbsp;allowed_shades&nbsp;||&nbsp;&#x27;{&quot;permanent&nbsp;shade&quot;,&nbsp;&quot;permanent&nbsp;deep&nbsp;shade&quot;}&#x27;;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>135</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;IF;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>136</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>137</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">14748</td>
+            <td align="right">33</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;(shading_shade&nbsp;=&nbsp;ANY(allowed_shades))</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>138</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;THEN</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>139</code></td>
+            <td align="right">4</td>
+            <td class="bar" align="right">14</td>
+            <td align="right">14</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shading_score.preference&nbsp;:=&nbsp;-100;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>140</code></td>
+            <td align="right">4</td>
+            <td class="bar" align="right">4</td>
+            <td align="right">4</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shading_score.relevance&nbsp;:=&nbsp;100;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>141</code></td>
+            <td align="right">4</td>
+            <td class="bar" align="right">6</td>
+            <td align="right">6</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shading_score_found&nbsp;:=&nbsp;true;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>142</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;IF;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>143</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;IF;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>144</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>145</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;If&nbsp;there&#x27;s&nbsp;no&nbsp;shading,&nbsp;return&nbsp;0.</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>146</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">23</td>
+            <td align="right">12</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;plant_shade&nbsp;IS&nbsp;NULL&nbsp;AND&nbsp;NOT&nbsp;shading_score_found&nbsp;THEN</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>147</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shading_score.preference&nbsp;:=&nbsp;0.0;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>148</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shading_score.relevance&nbsp;:=&nbsp;0.0;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>149</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shading_score_found&nbsp;:=&nbsp;true;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>150</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;IF;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>151</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>152</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">46497</td>
+            <td align="right">180</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;shading_score_found&nbsp;THEN</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>153</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>154</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;Get&nbsp;the&nbsp;position&nbsp;of&nbsp;each&nbsp;enum&nbsp;value&nbsp;in&nbsp;the&nbsp;array</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>155</code></td>
+            <td align="right">9996</td>
+            <td class="bar" align="right">17963</td>
+            <td align="right">43</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;array_position(all_values,&nbsp;plant_shade)&nbsp;INTO&nbsp;pos1;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>156</code></td>
+            <td align="right">9996</td>
+            <td class="bar" align="right">10379</td>
+            <td align="right">40</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;array_position(all_values,&nbsp;shading_shade)&nbsp;INTO&nbsp;pos2;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>157</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>158</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;Calculate&nbsp;the&nbsp;&#x27;distance&#x27;&nbsp;to&nbsp;the&nbsp;preferred&nbsp;shade&nbsp;as&nbsp;a&nbsp;values&nbsp;between&nbsp;-1&nbsp;and&nbsp;1</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>159</code></td>
+            <td align="right">9996</td>
+            <td class="bar" align="right">557</td>
+            <td align="right">129</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shading_score.preference&nbsp;:=&nbsp;(0.5&nbsp;-&nbsp;(abs(pos1&nbsp;-&nbsp;pos2)&nbsp;/&nbsp;(ARRAY_LENGTH(all_values,&nbsp;1)&nbsp;-&nbsp;1)::REAL)^0.5)&nbsp;*&nbsp;2.0;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>160</code></td>
+            <td align="right">9996</td>
+            <td class="bar" align="right">383</td>
+            <td align="right">37</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shading_score.relevance&nbsp;:=&nbsp;1.0;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>161</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;IF;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>162</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>163</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-----------------------------------------------------------------------------------------</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>164</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;COMBINED&nbsp;SCORE</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>165</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">60</td>
+            <td align="right">20</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;combined_score.preference&nbsp;:=&nbsp;plant_score.preference&nbsp;+&nbsp;shading_score.preference;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>166</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">21</td>
+            <td align="right">13</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;combined_score.relevance&nbsp;:=&nbsp;plant_score.relevance&nbsp;+&nbsp;shading_score.relevance;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>167</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>168</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;scale&nbsp;to&nbsp;be&nbsp;between&nbsp;0&nbsp;and&nbsp;1</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>169</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">89</td>
+            <td align="right">39</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output_score.preference&nbsp;:=&nbsp;1&nbsp;/&nbsp;(1&nbsp;+&nbsp;exp(-combined_score.preference));&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;standard&nbsp;sigmoid,&nbsp;so&nbsp;that&nbsp;f(0)=0.5</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>170</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">74</td>
+            <td align="right">43</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output_score.relevance&nbsp;:=&nbsp;(2&nbsp;/&nbsp;(1&nbsp;+&nbsp;exp(-combined_score.relevance)))&nbsp;-&nbsp;1;&nbsp;&nbsp;&nbsp;--&nbsp;modified&nbsp;sigmoid,&nbsp;so&nbsp;that&nbsp;f(0)=0</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>171</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>172</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">5</td>
+            <td align="right">5</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;preference&nbsp;:=&nbsp;output_score.preference;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>173</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">29</td>
+            <td align="right">13</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;relevance&nbsp;:=&nbsp;output_score.relevance;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>174</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>175</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;preference&nbsp;:=&nbsp;0.0;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>176</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;relevance&nbsp;:=&nbsp;0.0;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>177</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;IF;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>178</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>179</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">27</td>
+            <td align="right">19</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;:=&nbsp;i;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>180</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">30</td>
+            <td align="right">14</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y&nbsp;:=&nbsp;j;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>181</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>182</code></td>
+            <td align="right">10000</td>
+            <td class="bar" align="right">149</td>
+            <td align="right">25</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN&nbsp;NEXT;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>183</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;LOOP;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>184</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;LOOP;</code>
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>185</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code>END;</code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>186</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+        </table>
+      </center>
+    </div>
+    <a name="A20454" />
+    <h3>
+      Function public.get_plant_relations_array() oid=20454 (<a
+        id="toggle_20454"
+        href="javascript:toggle_div('toggle_20454', 'div_20454')"
+        >show</a
+      >)
+    </h3>
+    <p>
+      self_time = 1,021 &micro;s<br />
+      total_time = 1,021 &micro;s
+    </p>
+    <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td valign="top">
+          <b><code>public.get_plant_relations_array&nbsp;</code></b>
+        </td>
+        <td>
+          <b
+            ><code
+              >(p_layer_id integer,<br />&nbsp;p_plant_id integer,<br />&nbsp;date
+              date)</code
+            ></b
+          >
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <b
+            ><code
+              >&nbsp;&nbsp;&nbsp;&nbsp;RETURNS&nbsp;relations_summary[]</code
+            ></b
+          >
+        </td>
+      </tr>
+    </table>
+    <div id="div_20454" style="display: none">
+      <center>
+        <table
+          class="linestats"
+          border="1"
+          cellpadding="0"
+          cellspacing="0"
+          width="80%"
+        >
+          <tr>
+            <th width="10%">Line</th>
+            <th width="10%">exec_count</th>
+            <th width="10%">total_time</th>
+            <th width="10%">longest_time</th>
+            <th width="60%">Source Code</th>
+          </tr>
+          <tr>
+            <td align="right"><code>0</code></td>
+            <td align="right">1</td>
+            <td class="bar" align="right">1021</td>
+            <td align="right">1021</td>
+            <td align="left">
+              <code><b>--&nbsp;Function&nbsp;Totals</b></code>
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>1</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>2</code></td>
+            <td align="right">1</td>
+            <td class="bar" align="right">974</td>
+            <td align="right">974</td>
+            <td align="left"><code>BEGIN</code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>3</code></td>
+            <td align="right">1</td>
+            <td class="bar" align="right">974</td>
+            <td align="right">974</td>
+            <td align="left">
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;RETURN&nbsp;ARRAY(</code>
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>4</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;We&nbsp;only&nbsp;need&nbsp;x,y&nbsp;and&nbsp;type&nbsp;of&nbsp;relation&nbsp;to&nbsp;calculate&nbsp;a&nbsp;score.</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>5</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;ROW(plantings.x,&nbsp;plantings.y,&nbsp;relations.relation)</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>6</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;plantings</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>7</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;JOIN&nbsp;plants&nbsp;ON&nbsp;plantings.plant_id&nbsp;=&nbsp;plants.id</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>8</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;JOIN&nbsp;(</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>9</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;We&nbsp;need&nbsp;UNION&nbsp;as&nbsp;the&nbsp;relation&nbsp;is&nbsp;bidirectional.</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>10</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;plant1&nbsp;AS&nbsp;plant,&nbsp;r1.relation</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>11</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;relations&nbsp;r1</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>12</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;plant2&nbsp;=&nbsp;p_plant_id</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>13</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;r1.relation&nbsp;!=&nbsp;&#x27;neutral&#x27;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>14</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UNION</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>15</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;plant2&nbsp;AS&nbsp;plant,&nbsp;r2.relation</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>16</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;relations&nbsp;r2</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>17</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;plant1&nbsp;=&nbsp;p_plant_id</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>18</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;r2.relation&nbsp;!=&nbsp;&#x27;neutral&#x27;</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>19</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)&nbsp;relations&nbsp;ON&nbsp;plants.id&nbsp;=&nbsp;relations.plant</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>20</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;plantings.layer_id&nbsp;=&nbsp;p_layer_id</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>21</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;(plantings.add_date&nbsp;IS&nbsp;NULL&nbsp;OR&nbsp;plantings.add_date&nbsp;&lt;=&nbsp;date)</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>22</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;(plantings.remove_date&nbsp;IS&nbsp;NULL&nbsp;OR&nbsp;plantings.remove_date&nbsp;&gt;&nbsp;date)</code
+              >
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>23</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left">
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);</code>
+            </td>
+          </tr>
+          <tr>
+            <td align="right"><code>24</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code>END;</code></td>
+          </tr>
+          <tr>
+            <td align="right"><code>25</code></td>
+            <td align="right">0</td>
+            <td class="bar" align="right">0</td>
+            <td align="right">0</td>
+            <td align="left"><code></code></td>
+          </tr>
+        </table>
+      </center>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,56 @@
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+Patching heatmap algorithm (v1: fetch plant relations once)...
+DROP TABLE
+CREATE TABLE
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+
+Inserting a 10 shadings map
+DELETE 10
+INSERT 0 10
+Timing is on.
+ count
+-------
+ 10000
+(1 row)
+
+Time: 519.816 ms
+Timing is on.
+ count
+-------
+ 10000
+(1 row)
+
+Time: 387.510 ms
+Timing is on.
+ count
+-------
+ 10000
+(1 row)
+
+Time: 379.885 ms
+Timing is on.
+ count
+-------
+ 10000
+(1 row)
+
+Time: 380.938 ms
+Timing is on.
+ count
+-------
+ 10000
+(1 row)
+
+Time: 380.386 ms

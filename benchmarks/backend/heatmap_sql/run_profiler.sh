@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# make sure plprofiler is installed
+# sudo pip install git+https://github.com/bigsql/plprofiler/#subdirectory=python-plprofiler
+
 cd benchmarks/backend/heatmap_sql
 
 DATABASE_NAME="permaplant"
@@ -20,7 +23,7 @@ if [ "$1" == "--v2" ]; then
     PGPASSWORD=permaplant psql -h localhost -p 5432 -U $DATABASE_USER -d $DATABASE_NAME -f heatmap_v2_inlined.sql
 fi
 
-read -n 1 -p "Do you want to benchmark a 10, 100 or 1000 shadings map? (s/m/l) " opt;
+read -n 1 -p "Do you want to profile a 10, 100 or 1000 shadings map? (s/m/l) " opt;
 case $opt in
    s|S)
        printf "\nInserting a 10 shadings map\n"
@@ -36,25 +39,12 @@ case $opt in
       ;;
 esac
 
+PGPASSWORD=permaplant plprofiler run --command \
+       "select count(*) from calculate_heatmap(1, '{2,3}', 355, '2024-03-03', 100, 0, 0, 10000, 10000);" \
+       --name="Heatmap" --title="Heatmap" --desc=""  \
+       --output profile.html -h localhost -d $DATABASE_NAME -U $DATABASE_USER
 
-DATABASE_NAME="permaplant"
-DATABASE_USER="permaplant"
 
-PGPASSWORD=permaplant psql -h localhost -p 5432 -U $DATABASE_USER -d $DATABASE_NAME -c "\timing" -c "
-select count(*) from calculate_heatmap(1, '{2,3}', 355, '2024-03-03', 100, 0, 0, 10000, 10000);
-"
-PGPASSWORD=permaplant psql -h localhost -p 5432 -U $DATABASE_USER -d $DATABASE_NAME -c "\timing" -c "
-select count(*) from calculate_heatmap(1, '{2,3}', 2921, '2024-03-03', 100, 0, 0, 10000, 10000);
-"
-PGPASSWORD=permaplant psql -h localhost -p 5432 -U $DATABASE_USER -d $DATABASE_NAME -c "\timing" -c "
-select count(*) from calculate_heatmap(1, '{2,3}', 2921, '2024-03-03', 100, 0, 0, 10000, 10000);
-"
-PGPASSWORD=permaplant psql -h localhost -p 5432 -U $DATABASE_USER -d $DATABASE_NAME -c "\timing" -c "
-select count(*) from calculate_heatmap(1, '{2,3}', 2921, '2024-03-03', 100, 0, 0, 10000, 10000);
-"
-PGPASSWORD=permaplant psql -h localhost -p 5432 -U $DATABASE_USER -d $DATABASE_NAME -c "\timing" -c "
-select count(*) from calculate_heatmap(1, '{2,3}', 2921, '2024-03-03', 100, 0, 0, 10000, 10000);
-"
 # 23 2024-03-03 21:57:23.344 UTC [1277] DETAIL:  parameters: $1 = '1', $2 = '{2,3}', $3 = '2921', $4 = '2024-03-03', $5 = '100', $6 = '0', $7 = '0', $8 = '10000', $9 = '10000'
 # 2024-03-03 22:57:23 2024-03-03 21:57:23.344 UTC [1277] LOG:  execute s50: SELECT * FROM calculate_heatmap($1, $2, $3, $4, $5, $6, $7, $8, $9)
 #

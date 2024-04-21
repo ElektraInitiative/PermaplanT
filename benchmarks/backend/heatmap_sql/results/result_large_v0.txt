@@ -1,0 +1,46 @@
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+
+Inserting a 1000 shadings map
+DELETE 1000
+INSERT 0 1000
+Timing is on.
+ count
+-------
+ 10000
+(1 row)
+
+Time: 4641.479 ms (00:04.641)
+Timing is on.
+ count
+-------
+ 10000
+(1 row)
+
+Time: 4616.774 ms (00:04.617)
+Timing is on.
+ count
+-------
+ 10000
+(1 row)
+
+Time: 4577.090 ms (00:04.577)
+Timing is on.
+ count
+-------
+ 10000
+(1 row)
+
+Time: 4604.659 ms (00:04.605)
+Timing is on.
+ count
+-------
+ 10000
+(1 row)
+
+Time: 4587.410 ms (00:04.587)
