@@ -62,17 +62,8 @@ export const BaseStage = ({
   // Represents the state of the stage
   const [stage, setStage] = useState({
     scale: 1,
-    /**
-     * Make 0,0 the center of the visible map
-     * We need the coordinates of the top left corent of the map. For this, it is enough to calculate the actual width and height of the visible part of the map
-     * We use inner width/height as base for the calcilation, from which we need to subtract some values regarding the visible elements or widgets
-     * For width, we subtract twice the default width of the Toolbar element (currently hardcoded on init to 300px)
-     * For height, we subtract the height of the navbar (64px, coning from height h-16 equaling 4rems), and height of Timeline (harder to specify origin of value,
-     * as it is a result of multiple style rules, total is 133px).
-     * Values are right now hardcoded as we don't have a better way to get those, should be changed if Toolbars or other elements change!
-     * */
-    x: Math.floor((window.innerWidth - 300 - 300) / 2), // 300px is default width of each toolbar
-    y: Math.floor((window.innerHeight - 64 - 133) / 2), // 64px is height of navbar, 133px is height of timeline
+    x: 0,
+    y: 0,
   });
 
   // Represents the state of the current selection rectangle
@@ -105,13 +96,14 @@ export const BaseStage = ({
   const viewRect = useMapStore((store) => store.untrackedState.editorViewRect);
   useEffect(() => {
     if (viewRect.width !== 0 || viewRect.height !== 0) return;
+    // If we don't have a view or height set, set the initial stage and view rectangle to be centered on coordinates (0,0)
+
+    stage.x = Math.floor((containerRef.current?.offsetWidth ?? 0) / 2);
+    stage.y = Math.floor((containerRef.current?.offsetHeight ?? 0) / 2);
+
     updateViewRect({
-      /**
-       * We also need to set the original viewRect if not already defined.
-       * See rules from above (stage) for explanation of used values.
-       */
-      x: Math.floor((window.innerWidth - 300 - 300) / 2),
-      y: Math.floor((window.innerHeight - 64 - 133) / 2),
+      x: Math.floor((containerRef.current?.offsetWidth ?? 0) / 2),
+      y: Math.floor((containerRef.current?.offsetHeight ?? 0) / 2),
       width: Math.floor(window.innerWidth / stage.scale),
       height: Math.floor(window.innerHeight / stage.scale),
     });
