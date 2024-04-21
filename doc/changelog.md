@@ -11,7 +11,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Added Meeting Agenda&Notes for 15.04.2024 9:00 _(Markus Raab, Daniel)_
 - _()_
 - _()_
-- _()_
+- Adjusted size and positon of initial view of map, as well as default map polygon, to have entire map in view by default _(Andrei Dinu)_
 - _()_
 - _()_
 - _()_

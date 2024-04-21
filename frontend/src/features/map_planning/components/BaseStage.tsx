@@ -62,7 +62,15 @@ export const BaseStage = ({
   // Represents the state of the stage
   const [stage, setStage] = useState({
     scale: 1,
-    // make 0,0 the center of the visible map
+    /**
+     * Make 0,0 the center of the visible map
+     * We need the coordinates of the top left corent of the map. For this, it is enough to calculate the actual width and height of the visible part of the map
+     * We use inner width/height as base for the calcilation, from which we need to subtract some values regarding the visible elements or widgets
+     * For width, we subtract twice the default width of the Toolbar element (currently hardcoded on init to 300px)
+     * For height, we subtract the height of the navbar (64px, coning from height h-16 equaling 4rems), and height of Timeline (harder to specify origin of value,
+     * as it is a result of multiple style rules, total is 133px).
+     * Values are right now hardcoded as we don't have a better way to get those, should be changed if Toolbars or other elements change!
+     * */
     x: Math.floor((window.innerWidth - 300 - 300) / 2), // 300px is default width of each toolbar
     y: Math.floor((window.innerHeight - 64 - 133) / 2), // 64px is height of navbar, 133px is height of timeline
   });
@@ -98,9 +106,12 @@ export const BaseStage = ({
   useEffect(() => {
     if (viewRect.width !== 0 || viewRect.height !== 0) return;
     updateViewRect({
-      // make 0,0 the center of the visible map
-      x: Math.floor((window.innerWidth - 300 - 300) / 2), // 300px is default width of each toolbar
-      y: Math.floor((window.innerHeight - 64 - 133) / 2), // 64px is height of navbar, 133px is height of timeline
+      /**
+       * We also need to set the original viewRect if not already defined.
+       * See rules from above (stage) for explanation of used values.
+       */
+      x: Math.floor((window.innerWidth - 300 - 300) / 2),
+      y: Math.floor((window.innerHeight - 64 - 133) / 2),
       width: Math.floor(window.innerWidth / stage.scale),
       height: Math.floor(window.innerHeight / stage.scale),
     });
