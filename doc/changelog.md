@@ -8,6 +8,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 ## UNRELEASED
 
+- Added Meeting Agenda&Notes for 15.04.2024 9:00 _(Markus Raab, Daniel)_
 - _()_
 - Removed Blossoms from Frontend (Text from guided tour, awarding Blossoms at the end of the tour) _(Andrei Dinu)_
 - _()_
@@ -15,9 +16,9 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
+- Add tests for hooks in frontend/layers _(Lukas Anton Lakits)_
 - _()_
-- _()_
-- _()_
+- Add warn signs to sizes for multi-selected plant-areas _(Lukas Anton Lakits)_
 - _()_
 - _()_
 - _()_
