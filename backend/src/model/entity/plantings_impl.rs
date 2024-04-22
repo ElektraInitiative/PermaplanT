@@ -1,6 +1,6 @@
 //! Contains the implementation of [`Planting`].
 
-use chrono::NaiveDate;
+use chrono::{Duration, NaiveDate};
 use diesel::pg::Pg;
 use diesel::{
     debug_query, BoolExpressionMethods, ExpressionMethods, NullableExpressionMethods, QueryDsl,
@@ -15,7 +15,9 @@ use crate::model::dto::plantings::{
     DeletePlantingDto, NewPlantingDto, PlantingDto, UpdatePlantingDto,
 };
 use crate::model::entity::plantings::Planting;
+use crate::model::r#enum::life_cycle::LifeCycle;
 use crate::schema::plantings::{self, layer_id, plant_id};
+use crate::schema::plants;
 use crate::schema::seeds;
 
 use super::plantings::UpdatePlanting;
@@ -94,6 +96,41 @@ impl Planting {
             .collect())
     }
 
+    /// Helper that sets `end_date` according to the `life_cycle`.
+    async fn set_end_date_according_to_cycle_types(
+        conn: &mut AsyncPgConnection,
+        plantings: &mut Vec<Self>,
+    ) -> QueryResult<()> {
+        /// life cycles are currently persisted as an optional list of optional values.
+        type LifeCycleType = Option<Vec<Option<LifeCycle>>>;
+
+        let plant_ids: Vec<i32> = plantings.iter().map(|p| p.plant_id).collect();
+        let life_cycles_query = plants::table
+            .filter(plants::id.eq_any(&plant_ids))
+            .select((plants::id, plants::life_cycle.nullable()));
+
+        let life_cycle_lookup = life_cycles_query.load::<(i32, LifeCycleType)>(conn).await?;
+
+        for planting in plantings {
+            if let Some(add_date) = planting.add_date {
+                let current_plant_id = planting.plant_id;
+                let life_cycle_info_opt: Option<(i32, LifeCycleType)> = life_cycle_lookup
+                    .iter()
+                    .find_map(|x| (x.0 == current_plant_id).then(|| x.clone()));
+                if let Some((_, Some(life_cycles))) = life_cycle_info_opt {
+                    if life_cycles.contains(&Some(LifeCycle::Perennial)) {
+                        continue;
+                    } else if life_cycles.contains(&Some(LifeCycle::Biennial)) {
+                        planting.remove_date = Some(add_date + Duration::days(2 * 365));
+                    } else if life_cycles.contains(&Some(LifeCycle::Annual)) {
+                        planting.remove_date = Some(add_date + Duration::days(365));
+                    }
+                };
+            };
+        }
+        Ok(())
+    }
+
     /// Create a new planting in the database.
     ///
     /// # Errors
@@ -103,7 +140,10 @@ impl Planting {
         dto_vec: Vec<NewPlantingDto>,
         conn: &mut AsyncPgConnection,
     ) -> QueryResult<Vec<PlantingDto>> {
-        let planting_creations: Vec<Self> = dto_vec.into_iter().map(Into::into).collect();
+        let mut planting_creations: Vec<Self> = dto_vec.into_iter().map(Into::into).collect();
+
+        Self::set_end_date_according_to_cycle_types(conn, &mut planting_creations).await?;
+
         let query = diesel::insert_into(plantings::table).values(&planting_creations);
 
         debug!("{}", debug_query::<Pg, _>(&query));
