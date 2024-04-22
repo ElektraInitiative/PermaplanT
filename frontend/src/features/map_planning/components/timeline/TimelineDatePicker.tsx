@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import useMapStore from '../../store/MapStore';
 import {
   TimelineDailyEvent,
   TimelineMonthlyEvent,
   TimelineYearlyEvent,
-} from '../../store/MapStoreTypes';
+  useTimelineStore,
+} from '../../store/TimeLineStore';
 import { getShortMonthNameFromNumber } from '../../utils/date-utils';
 import ItemSliderPicker from './ItemSliderPicker';
 
@@ -33,9 +33,9 @@ type TimelineDatePickerProps = {
 const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDatePickerProps) => {
   const { i18n } = useTranslation();
 
-  const daySliderItems = useMapStore((state) => state.untrackedState.timeLineEvents.daily);
-  const monthSliderItems = useMapStore((state) => state.untrackedState.timeLineEvents.monthly);
-  const yearSliderItems = useMapStore((state) => state.untrackedState.timeLineEvents.yearly);
+  const daySliderItems = useTimelineStore((state) => state.timeLineEvents.daily);
+  const monthSliderItems = useTimelineStore((state) => state.timeLineEvents.monthly);
+  const yearSliderItems = useTimelineStore((state) => state.timeLineEvents.yearly);
 
   const defaulttDateObject = new Date(defaultDate);
   const defaultYear = defaulttDateObject.getFullYear();
@@ -257,14 +257,11 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
   };
 
   const updateTimeLineVisibleYears = (from: number, to: number) => {
-    useMapStore.setState((state) => ({
+    useTimelineStore.setState((state) => ({
       ...state,
-      untrackedState: {
-        ...state.untrackedState,
-        timeLineVisibleYears: {
-          from,
-          to,
-        },
+      timeLineVisibleYears: {
+        from,
+        to,
       },
     }));
   };
@@ -330,7 +327,7 @@ const TimelineDatePicker = ({ onSelectDate, onLoading, defaultDate }: TimelineDa
   }, [selectedDayItem]);
 
   const updateVisibleYears = useCallback(() => {
-    const timeLineVisibleYears = useMapStore.getState().untrackedState.timeLineVisibleYears;
+    const timeLineVisibleYears = useTimelineStore.getState().timeLineVisibleYears;
     if (yearLeftBoundReached.current) {
       updateTimeLineVisibleYears(timeLineVisibleYears.from - 100, timeLineVisibleYears.to - 100);
       yearLeftBoundReached.current = false;
