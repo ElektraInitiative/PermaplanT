@@ -1,16 +1,15 @@
-import { useCallback, useEffect, useState } from 'react';
+import Konva from 'konva';
+import { useCallback, useState } from 'react';
 import { Circle, Group, Layer, Line } from 'react-konva';
 import { NextcloudKonvaImage } from '@/features/map_planning/components/image/NextcloudKonvaImage';
 import { MapGeometryEditor } from '@/features/map_planning/layers/base/components/MapGeometryEditor';
 import useMapStore from '@/features/map_planning/store/MapStore';
-import { LayerConfigWithListenerRegister } from '@/features/map_planning/types/layer-config';
 import { colors } from '@/utils/colors';
 import { MAP_PIXELS_PER_METER } from '../../utils/Constants';
 
-type BaseLayerProps = LayerConfigWithListenerRegister;
+type BaseLayerProps = Konva.LayerConfig;
 
 const BaseLayer = (props: BaseLayerProps) => {
-  const { stageListenerRegister, ...layerProps } = props;
   const trackedState = useMapStore((map) => map.trackedState);
 
   /** Filepath to the background image in Nextcloud. */
@@ -21,7 +20,6 @@ const BaseLayer = (props: BaseLayerProps) => {
   const rotation = trackedState.layers.base.rotation;
 
   const untrackedBaseLayerState = useMapStore((map) => map.untrackedState.layers.base);
-  const baseLayerSetMeasurePoint = useMapStore((map) => map.baseLayerSetMeasurePoint);
 
   // Needed for scaling the auto-scale indicators.
   const editorLongestSide = useMapStore((map) =>
@@ -46,11 +44,9 @@ const BaseLayer = (props: BaseLayerProps) => {
     cleanImagePath = cleanImagePath.substring(1);
   }
 
-  useEffect(() => {
-    stageListenerRegister.registerStageClickListener('BaseLayer', (e) => {
-      baseLayerSetMeasurePoint(e.currentTarget.getRelativePointerPosition());
-    });
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useCallback((e: Konva.KonvaEventObject<MouseEvent>) => {
+    useMapStore.getState().baseLayerSetMeasurePoint(e.currentTarget.getRelativePointerPosition());
+  }, []);
 
   // Make sure that the image is centered on, and rotates around, the origin.
   const [imageOffset, setImageOffset] = useState({ x: 0, y: 0 });
@@ -62,7 +58,7 @@ const BaseLayer = (props: BaseLayerProps) => {
   const scale = MAP_PIXELS_PER_METER / pixelsPerMeter;
 
   return (
-    <Layer {...layerProps} draggable={true}>
+    <Layer {...props} draggable={true}>
       <Group listening={false}>
         {cleanImagePath && (
           <NextcloudKonvaImage
@@ -96,7 +92,7 @@ const BaseLayer = (props: BaseLayerProps) => {
           stroke={colors.highlight.DEFAULT}
         />
       </Group>
-      <MapGeometryEditor {...props} />
+      <MapGeometryEditor />
     </Layer>
   );
 };

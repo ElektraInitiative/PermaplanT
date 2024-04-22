@@ -7,7 +7,7 @@ use utoipa::ToSchema;
 
 #[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
 #[typeshare]
-#[derive(Serialize, Deserialize, DbEnum, Debug, ToSchema)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, DbEnum, ToSchema)]
 #[ExistingTypePath = "crate::schema::sql_types::Shade"]
 pub enum Shade {
     #[serde(rename = "no shade")]

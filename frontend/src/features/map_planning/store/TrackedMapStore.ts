@@ -1,5 +1,5 @@
 import type { StateCreator } from 'zustand';
-import { BaseLayerImageDto, DrawingDto, PlantingDto } from '@/api_types/definitions';
+import { BaseLayerImageDto, DrawingDto, PlantingDto, ShadingDto } from '@/api_types/definitions';
 import { filterVisibleObjects } from '../utils/filterVisibleObjects';
 import type { Action, GetFn, SetFn, TrackedMapSlice, UntrackedMapSlice } from './MapStoreTypes';
 import { UNTRACKED_DEFAULT_STATE, TRACKED_DEFAULT_STATE } from './MapStoreTypes';
@@ -74,6 +74,22 @@ export const createTrackedMapSlice: StateCreator<
         },
       }));
     },
+    initShadeLayer(shadings: ShadingDto[]) {
+      set((state) => ({
+        ...state,
+        trackedState: {
+          ...state.trackedState,
+          layers: {
+            ...state.trackedState.layers,
+            shade: {
+              ...state.trackedState.layers.shade,
+              objects: filterVisibleObjects(shadings, state.untrackedState.timelineDate),
+              loadedObjects: shadings,
+            },
+          },
+        },
+      }));
+    },
     initLayerId(layer, layerId) {
       set((state) => ({
         ...state,
@@ -133,6 +149,7 @@ function executeAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn)
 function applyAction(action: Action<unknown, unknown>, set: SetFn, get: GetFn): void {
   applyActionToStore(action, set, get);
   updateSelectedPlantings(set, get);
+  updateSelectedShadings(set, get);
   updateSelectedDrawings(set, get);
 
   clearInvalidSelection(get);
@@ -285,6 +302,32 @@ function updateSelectedPlantings(set: SetFn, get: GetFn) {
   }));
 }
 
+/**
+ * Replaces the selected shadings with fresh versions from the backend.
+ */
+function updateSelectedShadings(set: SetFn, get: GetFn) {
+  const selectedShadings = get().untrackedState.layers.shade.selectedShadings;
+  if (!selectedShadings?.length) {
+    return;
+  }
+
+  const updatedSelectedShadings = getUpdatesForSelectedShadings(get, selectedShadings);
+
+  set((state) => ({
+    ...state,
+    untrackedState: {
+      ...state.untrackedState,
+      layers: {
+        ...state.untrackedState.layers,
+        shade: {
+          ...state.untrackedState.layers.shade,
+          selectedShadings: updatedSelectedShadings,
+        },
+      },
+    },
+  }));
+}
+
 function getUpdatesForSelectedPlantings(get: GetFn, selectedPlantings: PlantingDto[]) {
   const loadUpdateForSelectedPlanting = (selectedPlanting: PlantingDto) => {
     return get().trackedState.layers.plants.loadedObjects.find(
@@ -299,6 +342,22 @@ function getUpdatesForSelectedPlantings(get: GetFn, selectedPlantings: PlantingD
   };
 
   return selectedPlantings.reduce(updatePlantings, []);
+}
+
+function getUpdatesForSelectedShadings(get: GetFn, selectedShadings: ShadingDto[]) {
+  const loadUpdateForSelectedShadings = (selectedPlanting: ShadingDto) => {
+    return get().trackedState.layers.shade.loadedObjects.find(
+      (loadedPlanting) => loadedPlanting.id === selectedPlanting.id,
+    );
+  };
+
+  const updateShadings = (updatedShadings: ShadingDto[], selectedPlanting: ShadingDto) => {
+    const updatedShading = loadUpdateForSelectedShadings(selectedPlanting);
+
+    return updatedShading ? [...updatedShadings, updatedShading] : updatedShadings;
+  };
+
+  return selectedShadings.reduce(updateShadings, []);
 }
 
 /**

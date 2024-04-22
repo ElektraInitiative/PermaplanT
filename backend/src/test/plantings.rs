@@ -34,8 +34,8 @@ async fn test_can_search_plantings() {
                 .await?;
             diesel::insert_into(crate::schema::layers::table)
                 .values(vec![
-                    data::TestInsertableLayer::default(),
-                    data::TestInsertableLayer {
+                    data::TestInsertablePlantLayer::default(),
+                    data::TestInsertablePlantLayer {
                         id: -2,
                         name: "Test Layer 2".to_owned(),
                         is_alternative: true,
@@ -105,7 +105,7 @@ async fn test_create_fails_with_invalid_layer() {
                 .execute(conn)
                 .await?;
             diesel::insert_into(crate::schema::layers::table)
-                .values(data::TestInsertableLayer {
+                .values(data::TestInsertablePlantLayer {
                     type_: LayerType::Base,
                     ..Default::default()
                 })
@@ -157,7 +157,7 @@ async fn test_can_create_plantings() {
                 .execute(conn)
                 .await?;
             diesel::insert_into(crate::schema::layers::table)
-                .values(data::TestInsertableLayer::default())
+                .values(data::TestInsertablePlantLayer::default())
                 .execute(conn)
                 .await?;
             diesel::insert_into(crate::schema::plants::table)
@@ -208,7 +208,7 @@ async fn test_can_update_plantings() {
                 .execute(conn)
                 .await?;
             diesel::insert_into(crate::schema::layers::table)
-                .values(data::TestInsertableLayer::default())
+                .values(data::TestInsertablePlantLayer::default())
                 .execute(conn)
                 .await?;
             diesel::insert_into(crate::schema::plants::table)
@@ -277,7 +277,7 @@ async fn test_can_delete_planting() {
                 .execute(conn)
                 .await?;
             diesel::insert_into(crate::schema::layers::table)
-                .values(data::TestInsertableLayer::default())
+                .values(data::TestInsertablePlantLayer::default())
                 .execute(conn)
                 .await?;
             diesel::insert_into(crate::schema::plants::table)
@@ -336,7 +336,7 @@ async fn test_removed_planting_outside_loading_offset_is_not_in_timeline() {
                 .execute(conn)
                 .await?;
             diesel::insert_into(crate::schema::layers::table)
-                .values(data::TestInsertableLayer::default())
+                .values(data::TestInsertablePlantLayer::default())
                 .execute(conn)
                 .await?;
             diesel::insert_into(crate::schema::plants::table)
@@ -386,7 +386,7 @@ async fn test_removed_planting_inside_loading_offset_is_in_timeline() {
                 .execute(conn)
                 .await?;
             diesel::insert_into(crate::schema::layers::table)
-                .values(data::TestInsertableLayer::default())
+                .values(data::TestInsertablePlantLayer::default())
                 .execute(conn)
                 .await?;
             diesel::insert_into(crate::schema::plants::table)
@@ -435,7 +435,7 @@ async fn test_added_planting_outside_loading_offset_is_not_in_timeline() {
                 .execute(conn)
                 .await?;
             diesel::insert_into(crate::schema::layers::table)
-                .values(data::TestInsertableLayer::default())
+                .values(data::TestInsertablePlantLayer::default())
                 .execute(conn)
                 .await?;
             diesel::insert_into(crate::schema::plants::table)

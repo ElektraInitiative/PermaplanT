@@ -14,6 +14,7 @@ import {
   useInvalidateMapQueries,
   useMap,
   usePlantLayer,
+  useShadeLayer,
 } from '../hooks/mapEditorHookApi';
 import { useTourStatus } from '../hooks/tourHookApi';
 import useGetTimeLineData from '../hooks/useGetTimelineData';
@@ -89,6 +90,7 @@ function useInitializeMap() {
   const plantLayer = getDefaultLayer(LayerType.Plants, layers);
   const baseLayer = getDefaultLayer(LayerType.Base, layers);
   const drawingLayer = getDefaultLayer(LayerType.Drawing, layers);
+  const shadeLayer = getDefaultLayer(LayerType.Shade, layers);
 
   // The casts are fine because we know that the queries only execute once they are enabled.
   usePlantLayer({
@@ -110,6 +112,14 @@ function useInitializeMap() {
   });
 
   // set the map id in the store
+  useShadeLayer({
+    mapId,
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
+    layerId: shadeLayer?.id!,
+    enabled: Boolean(shadeLayer),
+  });
+
+  // select plant layer per default
   useEffect(() => {
     useMapStore.setState((state) => ({
       ...state,

@@ -1,5 +1,4 @@
 import i18next from 'i18next';
-import Konva from 'konva';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ShepherdTourContext } from 'react-shepherd';
@@ -14,8 +13,14 @@ import {
 } from '@/config/keybindings';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { GridLayer } from '@/features/map_planning/layers/_frontend_only/grid/GridLayer';
+import DrawingLayer from '@/features/map_planning/layers/drawing/DrawingLayer';
+import { DrawingLayerLeftToolbar } from '@/features/map_planning/layers/drawing/DrawingLayerLeftToolbar';
+import DrawingLayerRightToolbar from '@/features/map_planning/layers/drawing/DrawingLayerRightToolbar';
+import { HeatMapLayer } from '@/features/map_planning/layers/heatmap/HeatMapLayer';
+import { ShadeLayer } from '@/features/map_planning/layers/shade/ShadeLayer';
+import { ShadeLayerLeftToolbar } from '@/features/map_planning/layers/shade/components/ShadeLayerLeftToolbar';
+import { ShadeLayerRightToolbar } from '@/features/map_planning/layers/shade/components/ShadeLayerRightToolbar';
 import { CombinedLayerType } from '@/features/map_planning/store/MapStoreTypes';
-import { StageListenerRegister } from '@/features/map_planning/types/layer-config';
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import CheckIcon from '@/svg/icons/check.svg?react';
 import CircleDottedIcon from '@/svg/icons/circle-dotted.svg?react';
@@ -27,9 +32,6 @@ import { gainBlossom } from '../api/gainBlossom';
 import { useCompleteTour, useReenableTour } from '../hooks/tourHookApi';
 import BaseLayer from '../layers/base/BaseLayer';
 import BaseLayerRightToolbar from '../layers/base/components/BaseLayerRightToolbar';
-import DrawingLayer from '../layers/drawing/DrawingLayer';
-import { DrawingLayerLeftToolbar } from '../layers/drawing/DrawingLayerLeftToolbar';
-import DrawingLayerRightToolbar from '../layers/drawing/DrawingLayerRightToolbar';
 import PlantsLayer from '../layers/plant/PlantsLayer';
 import { PlantLayerLeftToolbar } from '../layers/plant/components/PlantLayerLeftToolbar';
 import { PlantLayerRightToolbar } from '../layers/plant/components/PlantLayerRightToolbar';
@@ -40,8 +42,6 @@ import { BaseStage } from './BaseStage';
 import TimelineDatePicker from './timeline/TimelineDatePicker';
 import { LayerList } from './toolbar/LayerList';
 import { Toolbar } from './toolbar/Toolbar';
-
-import KonvaEventObject = Konva.KonvaEventObject;
 
 export const TEST_IDS = Object.freeze({
   UNDO_BUTTON: 'map__undo-button',
@@ -81,77 +81,6 @@ export const EditorMap = ({ layers }: MapProps) => {
   const isShapeSelectionEnabled = useMapStore(
     (state) => state.untrackedState.shapeSelectionEnabled,
   );
-
-  // Allow layers to listen for all events on the base stage.
-  //
-  // This enables us to build layers with custom input logic that does not
-  // rely on Konva's limited Canvas-Object controls.
-  const [stageDragStartListeners, setStageDragStartListeners] = useState<
-    Map<string, (e: KonvaEventObject<DragEvent>) => void>
-  >(new Map());
-  const [stageDragEndListeners, setStageDragEndListeners] = useState<
-    Map<string, (e: KonvaEventObject<DragEvent>) => void>
-  >(new Map());
-  const [stageMouseMoveListeners, setStageMouseMoveListeners] = useState<
-    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
-  >(new Map());
-  const [stageMouseWheelListeners, setStageMouseWheelListeners] = useState<
-    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
-  >(new Map());
-  const [stageMouseUpListeners, setStageMouseUpListeners] = useState<
-    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
-  >(new Map());
-  const [stageMouseDownListeners, setStageMouseDownListeners] = useState<
-    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
-  >(new Map());
-  const [stageClickListeners, setStageClickListeners] = useState<
-    Map<string, (e: KonvaEventObject<MouseEvent>) => void>
-  >(new Map());
-
-  const baseStageListenerRegister: StageListenerRegister = {
-    registerStageDragStartListener: (
-      key: string,
-      listener: (e: KonvaEventObject<DragEvent>) => void,
-    ) => {
-      setStageDragStartListeners((listeners) => listeners.set(key, listener));
-    },
-    registerStageDragEndListener: (
-      key: string,
-      listener: (e: KonvaEventObject<DragEvent>) => void,
-    ) => {
-      setStageDragEndListeners((listeners) => listeners.set(key, listener));
-    },
-    registerStageMouseMoveListener: (
-      key: string,
-      listener: (e: KonvaEventObject<MouseEvent>) => void,
-    ) => {
-      setStageMouseMoveListeners((listeners) => listeners.set(key, listener));
-    },
-    registerStageMouseWheelListener: (
-      key: string,
-      listener: (e: KonvaEventObject<MouseEvent>) => void,
-    ) => {
-      setStageMouseWheelListeners((listeners) => listeners.set(key, listener));
-    },
-    registerStageMouseDownListener: (
-      key: string,
-      listener: (e: KonvaEventObject<MouseEvent>) => void,
-    ) => {
-      setStageMouseDownListeners((listeners) => listeners.set(key, listener));
-    },
-    registerStageMouseUpListener: (
-      key: string,
-      listener: (e: KonvaEventObject<MouseEvent>) => void,
-    ) => {
-      setStageMouseUpListeners((listeners) => listeners.set(key, listener));
-    },
-    registerStageClickListener: (
-      key: string,
-      listener: (e: KonvaEventObject<MouseEvent>) => void,
-    ) => {
-      setStageClickListeners((listeners) => listeners.set(key, listener));
-    },
-  };
 
   const isGridLayerEnabled = () => {
     return layersState.grid.visible;
@@ -224,7 +153,7 @@ export const EditorMap = ({ layers }: MapProps) => {
       [LayerType.Label]: { left: <div></div>, right: <div></div> },
       [LayerType.Landscape]: { left: <div></div>, right: <div></div> },
       [LayerType.Paths]: { left: <div></div>, right: <div></div> },
-      [LayerType.Shade]: { left: <div></div>, right: <div></div> },
+      [LayerType.Shade]: { left: <ShadeLayerLeftToolbar />, right: <ShadeLayerRightToolbar /> },
       [LayerType.Soil]: { left: <div></div>, right: <div></div> },
       [LayerType.Terrain]: { left: <div></div>, right: <div></div> },
       [LayerType.Trees]: { left: <div></div>, right: <div></div> },
@@ -319,24 +248,18 @@ export const EditorMap = ({ layers }: MapProps) => {
           id="canvas"
           tabIndex={0} //so that map can be focused
         >
-          <BaseStage
-            listeners={{
-              stageDragStartListeners,
-              stageDragEndListeners,
-              stageMouseMoveListeners,
-              stageMouseUpListeners,
-              stageMouseDownListeners,
-              stageMouseWheelListeners,
-              stageClickListeners,
-            }}
-            selectable={isShapeSelectionEnabled}
-          >
+          <BaseStage selectable={isShapeSelectionEnabled}>
             <BaseLayer
-              stageListenerRegister={baseStageListenerRegister}
               opacity={layersState.base.opacity}
               visible={layersState.base.visible}
               listening={getSelectedLayerType() === LayerType.Base}
             />
+            <ShadeLayer
+              opacity={layersState.shade.opacity}
+              visible={layersState.shade.visible}
+              listening={getSelectedLayerType() === LayerType.Shade}
+            />
+            <HeatMapLayer />
             <DrawingLayer
               visible={layersState.drawing.visible}
               opacity={layersState.drawing.opacity}

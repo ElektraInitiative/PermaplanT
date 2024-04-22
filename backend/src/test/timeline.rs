@@ -19,10 +19,6 @@ async fn initial_db_values(conn: &mut AsyncPgConnection) -> Result<(), ServiceEr
         .values(data::TestInsertableMap::default())
         .execute(conn)
         .await?;
-    diesel::insert_into(crate::schema::layers::table)
-        .values(data::TestInsertableLayer::default())
-        .execute(conn)
-        .await?;
     diesel::insert_into(crate::schema::plants::table)
         .values(data::TestInsertablePlant::default())
         .execute(conn)

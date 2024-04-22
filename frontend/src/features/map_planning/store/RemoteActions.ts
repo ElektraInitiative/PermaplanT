@@ -1,4 +1,11 @@
 import { Action as RemoteAction } from '@/api_types/definitions';
+import {
+  CreateShadingAction,
+  DeleteShadingAction,
+  UpdateShadingAction,
+  UpdateShadingAddDateAction,
+  UpdateShadingRemoveDateAction,
+} from '@/features/map_planning/layers/shade/actions';
 import { UpdateBaseLayerAction, UpdateMapGeometry } from '../layers/base/actions';
 import {
   CreateDrawingAction,
@@ -86,6 +93,17 @@ function convertToAction(remoteAction: RemoteAction): Action<unknown, unknown> {
       );
     case 'UpdatePlatingNotes':
       return new UpdatePlantingNotesAction(remoteAction.action.payload, remoteAction.actionId);
+
+    case 'CreateShading':
+      return new CreateShadingAction(remoteAction.action.payload, remoteAction.actionId);
+    case 'DeleteShading':
+      return new DeleteShadingAction(remoteAction.action.payload, remoteAction.actionId);
+    case 'UpdateShading':
+      return new UpdateShadingAction(remoteAction.action.payload, remoteAction.actionId);
+    case 'UpdateShadingAddDate':
+      return new UpdateShadingAddDateAction(remoteAction.action.payload, remoteAction.actionId);
+    case 'UpdateShadingRemoveDate':
+      return new UpdateShadingRemoveDateAction(remoteAction.action.payload, remoteAction.actionId);
 
     case 'CreateDrawing':
       return new CreateDrawingAction(remoteAction.action.payload, remoteAction.actionId);

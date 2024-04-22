@@ -58,6 +58,24 @@ const highlight = {
   DEFAULT: '#ca3b3b',
 };
 
+const shadings = {
+  noShade: {
+    DEFAULT: 'rgba(219,215,18,0.6)',
+  },
+  lightShade: {
+    DEFAULT: 'rgba(146,213,255,0.6)',
+  },
+  partialShade: {
+    DEFAULT: 'rgba(51,76,255,0.6)',
+  },
+  permanentShade: {
+    DEFAULT: 'rgba(108,54,208,0.6)',
+  },
+  permanentDeepShade: {
+    DEFAULT: 'rgba(0,0,0,0.6)',
+  },
+};
+
 /*
  * Definitions for accent colors used by frontend themes.
  * Each color comes in 10 shades that can be addressed by their respective number.
@@ -147,6 +165,7 @@ export default {
         secondary: accentColors.sea_blue,
         neutral: gray,
         highlight: highlight,
+        shadings: shadings,
       },
     },
   },

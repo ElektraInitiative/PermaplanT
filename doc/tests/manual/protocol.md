@@ -31,7 +31,7 @@ DONT FILL OUT ACTUAL/TEST RESULT.
 - Test Result:
 - Notes:
 
-## Heatmap (NOT IMPLEMENTED)
+## Heatmap
 
 - Description: Test whether the heatmap endpoints generates the image correctly.
 - Given I am on a map page with the plant layer active
@@ -154,3 +154,111 @@ DONT FILL OUT ACTUAL/TEST RESULT.
 - Actual Result:
 - Test Result:
 - Notes: The additional name must also be visible when a different account views the same map.
+
+## Shade layer: add shading
+
+- Description: Add a new Shading to the map.
+- Given I am on the map page with the shade layer active
+- When I click on the 'Light' button
+- When I click on the map
+- Then I can see that a new shading was added
+- Actual Result:
+- Test Result:
+- Notes: Repeat this test for all Shading types
+
+## Shade layer: remove shading
+
+- Description: Remove a Shading from the map.
+- Given I am on the map page with the shade layer active and a Shading is selected
+- When I click on 'Delte' in the left toolbar
+- Then I can see that a new shading was deleted
+- Actual Result:
+- Test Result:
+
+## Shade layer: edit shade type
+
+- Description: Change the shade of a shading.
+- Given I am on the map page with the shade layer active and a Shading is selected
+- When I select different shade from the drop-down menu in the left toolbar
+- Then I can see that the shade is changed successfully
+- Actual Result:
+- Test Result:
+- Notes: select each shading type at least once
+
+## Shade layer: set creation date in the future
+
+- Description: Update the date from which the shading should be active
+- Given I am on the map page with the shade layer active and a Shading is selected
+- When I select the current date in the timeline
+- When I select a creation date in the future
+- Then I can see that the shading is no longer shown on the map
+- Actual Result:
+- Test Result:
+
+## Shade layer: set creation date in the past
+
+- Description: Update the date from which the shading should be active
+- Given I am on the map page with the shade layer active and a Shading is selected
+- When I select the current date in the timeline
+- When I select a creation date in the past
+- Then I can see that the shading is shown on the map
+- Actual Result:
+- Test Result:
+
+## Shade layer: set removal date in the future
+
+- Description: Update the date from which the shading should be active
+- Given I am on the map page with the shade layer active and a Shading is selected
+- When I select the current date in the timeline
+- When I select a creation date in the past
+- When I select a removal date in the future
+- Then I can see that the shading is shown on the map
+- Actual Result:
+- Test Result:
+
+## Shade layer: set removal date in the past
+
+- Description: Update the date until which the shading should be active
+- Given I am on the map page with the shade layer active and a Shading is selected
+- When I select the current date in the timeline
+- When I select a creation date in the past
+- When I select a removal date in the past after the creation date
+- Then I can see that the shading is no longer shown on the map
+- Actual Result:
+- Test Result:
+
+## Shade layer: add polygon point
+
+- Description: Edit the polygon of a shading
+- Given I am on the map page with the shade layer active and a Shading is selected
+- When I press the pencil button in the left toolbar
+- Then I can see that a message describing the selected action is shown in the status bar
+- Then I can see that a highlighted border is drawn around the polygon
+- When I click anywhere on the map
+- Then I can see that a point has been added to the nearest polygon edge
+- Actual Result:
+- Test Result:
+
+## Shade layer: remove polygon point
+
+- Description: Edit the polygon of a shading
+- Given I am on the map page with the shade layer active and a Shading is selected
+- When I press the eraser button in the left toolbar
+- Then I can see that a message describing the selected action is shown in the status bar
+- Then I can see that a highlighted border is drawn around the polygon
+- When I click on a polygon point
+- Then I can see that the point has been removed from the polygon
+- Actual Result:
+- Test Result:
+
+## Shade layer: move polygon point
+
+- Description: Edit the polygon of a shading
+- Given I am on the map page with the shade layer active and a Shading is selected
+- When I press the cursor button in the left toolbar
+- Then I can see that a message describing the selected action is shown in the status bar
+- Then I can see that a highlighted border is drawn around the polygon
+- When I drag and release a polygon point
+- Then I can see that the point is now at a new position
+- Actual Result:
+- Test Result:

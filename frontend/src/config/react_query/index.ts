@@ -6,6 +6,7 @@ import { errorToastGrouped } from '@/features/toasts/groupedToast';
  */
 export const QUERY_KEYS = {
   PLANTINGS: 'plantings',
+  SHADINGS: 'shadings',
   LAYERS: 'layers',
 };
 

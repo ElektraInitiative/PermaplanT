@@ -76,6 +76,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 ## 0.4.0 - 12.4.2024
 
+- Implement a heatmap that shows which locations are most suited for a specific plant _(Gabriel, Paul, Moritz)_
 - needs new migrations
 - needs new scraper data (integer for plant spread and height)
 - pin python package versions for e2e tests #1200 _(4ydan)_

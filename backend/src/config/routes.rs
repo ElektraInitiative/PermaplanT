@@ -6,7 +6,7 @@ use actix_web_httpauth::middleware::HttpAuthentication;
 
 use crate::controller::{
     base_layer_image, blossoms, config, drawings, guided_tours, layers, map, plant_layer,
-    plantings, plants, seed, sse, timeline, users,
+    plantings, plants, seed, shadings, sse, timeline, users,
 };
 
 use super::auth::middleware::validator;
@@ -73,6 +73,15 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                                                 .service(plantings::update)
                                                 .service(plantings::delete),
                                         ),
+                                )
+                                .service(
+                                    web::scope("/shade").service(
+                                        web::scope("/shadings")
+                                            .service(shadings::find)
+                                            .service(shadings::create)
+                                            .service(shadings::update)
+                                            .service(shadings::delete),
+                                    ),
                                 ),
                         )
                         .service(

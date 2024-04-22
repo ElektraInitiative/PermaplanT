@@ -1,3 +1,4 @@
+import { expect } from 'vitest';
 import {
   EdgeRing,
   PolygonGeometry,
@@ -8,6 +9,9 @@ import {
   insertPointIntoLineSegmentWithLeastDistance,
   removePointAtIndex,
   setPointAtIndex,
+  ringGeometryAroundPoint,
+  calculateGeometryStats,
+  isPointInGeometry,
 } from '@/features/map_planning/utils/PolygonUtils';
 
 describe('Flatten Polygon rings', () => {
@@ -21,6 +25,61 @@ describe('Flatten Polygon rings', () => {
     ];
 
     expect(flattenRing(ring)).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 0, 1]);
+  });
+});
+
+describe('Test if a point was already inserted into a geometry object', () => {
+  it('should return true for points that are the same object', () => {
+    const point = { x: 0, y: 1, srid: 0 };
+
+    const ring: EdgeRing = [
+      point,
+      { x: 2, y: 3, srid: 0 },
+      { x: 4, y: 5, srid: 0 },
+      { x: 6, y: 7, srid: 0 },
+      { x: 0, y: 1, srid: 0 },
+    ];
+
+    const polygon: PolygonGeometry = {
+      rings: [ring, ring],
+      srid: '',
+    };
+
+    expect(isPointInGeometry(polygon, point)).toBeTruthy();
+  });
+
+  it('should return true for points that are equal but not the same object', () => {
+    const ring: EdgeRing = [
+      { x: 0, y: 1, srid: 0 },
+      { x: 2, y: 3, srid: 0 },
+      { x: 4, y: 5, srid: 0 },
+      { x: 6, y: 7, srid: 0 },
+      { x: 0, y: 1, srid: 0 },
+    ];
+
+    const polygon: PolygonGeometry = {
+      rings: [ring, ring],
+      srid: '',
+    };
+
+    expect(isPointInGeometry(polygon, { x: 4, y: 5, srid: 0 })).toBeTruthy();
+  });
+
+  it('should return false for points that not in the polygon', () => {
+    const ring: EdgeRing = [
+      { x: 0, y: 1, srid: 0 },
+      { x: 2, y: 3, srid: 0 },
+      { x: 4, y: 5, srid: 0 },
+      { x: 6, y: 7, srid: 0 },
+      { x: 0, y: 1, srid: 0 },
+    ];
+
+    const polygon: PolygonGeometry = {
+      rings: [ring, ring],
+      srid: '',
+    };
+
+    expect(isPointInGeometry(polygon, { x: 99, y: 99, srid: 0 })).toBeFalsy();
   });
 });
 
@@ -237,5 +296,51 @@ describe('Add a point between the two nearest points', () => {
       ],
       srid: '',
     });
+  });
+});
+
+describe('Generate a new polygon', () => {
+  it('Should generate a square shaped polygon around a point', () => {
+    // @ts-expect-error toEqualApproximate is defined using expect.extend in src/vitest-setup.ts
+    expect(ringGeometryAroundPoint({ x: 0, y: 0, srid: 0 }, 4, 1)).toEqualApproximately({
+      rings: [
+        [
+          { x: 1, y: 0, srid: 0 },
+          { x: 0, y: 1, srid: 0 },
+          { x: -1, y: 0, srid: 0 },
+          { x: 0, y: -1, srid: 0 },
+          { x: 1, y: 0, srid: 0 },
+        ],
+      ],
+      srid: 0,
+    });
+  });
+});
+
+describe('Geometry stats', () => {
+  it('calculates stats from geometry', () => {
+    const geometry = {
+      srid: '1234',
+      rings: [
+        [
+          { x: 0, y: 0 },
+          { x: 1, y: 0 },
+          { x: 1, y: 1 },
+          { x: 0, y: 1 },
+        ],
+        [
+          { x: 7, y: 8 },
+          { x: 8, y: 10 },
+        ],
+      ],
+    };
+
+    const geometryStats = calculateGeometryStats(geometry as PolygonGeometry, 0);
+    expect(geometryStats.width).toEqual(1);
+    expect(geometryStats.height).toEqual(1);
+    expect(geometryStats.maxX).toEqual(1);
+    expect(geometryStats.maxY).toEqual(1);
+    expect(geometryStats.minX).toEqual(0);
+    expect(geometryStats.minY).toEqual(0);
   });
 });

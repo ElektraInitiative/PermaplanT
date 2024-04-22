@@ -5,10 +5,10 @@ import {
   createKeyBindingsAccordingToConfig,
   useGetFormattedKeybindingDescriptionForAction,
 } from '@/config/keybindings';
+import { StatusPanelContentWrapper } from '@/features/map_planning/components/statuspanel/StatusPanelContentWrapper';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { useIsBaseLayerActive } from '@/features/map_planning/utils/layer-utils';
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';
-import CloseIcon from '@/svg/icons/close.svg?react';
 import EraserIcon from '@/svg/icons/eraser.svg?react';
 import PencilPlusIcon from '@/svg/icons/pencil-plus.svg?react';
 import PointerIcon from '@/svg/icons/pointer.svg?react';
@@ -24,26 +24,44 @@ export function MapGeometryToolForm() {
     (state) => state.baseLayerActivateDeletePolygonPoints,
   );
   const setStatusPanelContent = useMapStore((state) => state.setStatusPanelContent);
+  const deactivatePolygonManipulation = useMapStore(
+    (state) => state.baseLayerDeactivatePolygonManipulation,
+  );
+  const clearStatusPanelContent = useMapStore((state) => state.clearStatusPanelContent);
   const isBaseLayerActive = useIsBaseLayerActive();
+
+  const onStatusPanelClose = () => {
+    deactivatePolygonManipulation();
+    clearStatusPanelContent();
+  };
 
   const activatePolygonMovePointsAction = () => {
     activatePolygonMovePoints();
     setStatusPanelContent(
-      <MapGeometryStatusPanelContent text={t('baseLayerForm:polygon_move_points_hint')} />,
+      <StatusPanelContentWrapper
+        content={t('baseLayerForm:polygon_move_points_hint')}
+        onClose={onStatusPanelClose}
+      />,
     );
   };
 
   const activatePolygonAddPointsAction = () => {
     activatePolygonAddPoints();
     setStatusPanelContent(
-      <MapGeometryStatusPanelContent text={t('baseLayerForm:polygon_add_points_hint')} />,
+      <StatusPanelContentWrapper
+        content={t('baseLayerForm:polygon_add_points_hint')}
+        onClose={onStatusPanelClose}
+      />,
     );
   };
 
   const activatePolygonDeletePointsAction = () => {
     activatePolygonDeletePoints();
     setStatusPanelContent(
-      <MapGeometryStatusPanelContent text={t('baseLayerForm:polygon_delete_points_hint')} />,
+      <StatusPanelContentWrapper
+        content={t('baseLayerForm:polygon_delete_points_hint')}
+        onClose={onStatusPanelClose}
+      />,
     );
   };
 
@@ -105,30 +123,5 @@ export function MapGeometryToolForm() {
         </IconButton>
       </div>
     </div>
-  );
-}
-
-function MapGeometryStatusPanelContent(props: { text: string }) {
-  const deactivatePolygonManipulation = useMapStore(
-    (state) => state.baseLayerDeactivatePolygonManipulation,
-  );
-  const clearStatusPanelContent = useMapStore((state) => state.clearStatusPanelContent);
-
-  return (
-    <>
-      <div className="flex flex-row items-center justify-center">{props.text}</div>
-      <div className="flex items-center justify-center">
-        <IconButton
-          className="m-2 h-8 w-8 border border-neutral-500 p-1"
-          onClick={() => {
-            deactivatePolygonManipulation();
-            clearStatusPanelContent();
-          }}
-          data-tourid="placement_cancel"
-        >
-          <CloseIcon></CloseIcon>
-        </IconButton>
-      </div>
-    </>
   );
 }

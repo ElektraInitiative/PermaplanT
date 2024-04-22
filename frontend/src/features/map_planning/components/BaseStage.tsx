@@ -3,11 +3,11 @@ import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React, { useEffect, useRef, useState } from 'react';
 import { Layer, Rect, Stage, Transformer } from 'react-konva';
+import { useTransformerStore } from '@/features/map_planning/store/transformer/TransformerStore';
 import { useDimensions } from '@/hooks/useDimensions';
 import { colors } from '@/utils/colors';
 import { useSelectedLayerVisibility } from '../hooks/useSelectedLayerVisibility';
 import useMapStore from '../store/MapStore';
-import { useTransformerStore } from '../store/transformer/TransformerStore';
 import { useIsReadOnlyMode } from '../utils/ReadOnlyModeContext';
 import {
   SELECTION_RECTANGLE_NAME,
@@ -104,6 +104,8 @@ export const BaseStage = ({
     });
   });
 
+  //const inhibitTransformer = useTransformerStore((store) => store.actions.getInhibitTransformer());
+
   const onStageWheel = (e: KonvaEventObject<WheelEvent>) => {
     e.evt.preventDefault();
     listeners?.stageMouseWheelListeners.forEach((listener) => listener(e));
@@ -173,7 +175,7 @@ export const BaseStage = ({
 
     updateSelectionRectangle(stage, setSelectionRectAttrs);
 
-    if (!isPlacementModeActive()) {
+    if (!isPlacementModeActive() /*&& !inhibitTransformer*/) {
       selectIntersectingShapes(stageRef, transformerRef);
     }
   };
@@ -229,7 +231,10 @@ export const BaseStage = ({
     listeners?.stageClickListeners.forEach((listener) => listener(e));
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
 
-    if (transformerActions.hasSelection() && isEventTriggeredFromStage(e)) {
+    if (
+      transformerActions.hasSelection() &&
+      isEventTriggeredFromStage(e) /*&& !inhibitTransformer*/
+    ) {
       transformerActions.clearSelection();
     }
   };

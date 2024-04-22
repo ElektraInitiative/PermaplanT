@@ -10,6 +10,8 @@ import {
   PlantingDto,
   PlantsSummaryDto,
   SeedDto,
+  Shade,
+  ShadingDto,
 } from '@/api_types/definitions';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { PolygonGeometry } from '@/features/map_planning/types/PolygonTypes';
@@ -130,6 +132,10 @@ export interface TrackedMapSlice {
    * Initializes the base layer.
    */
   initBaseLayer: (baseLayer: BaseLayerImageDto) => void;
+  /**
+   *  Initialize the shade layer.
+   */
+  initShadeLayer: (shadeLayer: ShadingDto[]) => void;
 
   /**
    * Initializes the drawing layer.
@@ -161,6 +167,7 @@ type SelectionRectAttributes = {
 /**
  * Part of store which is unaffected by the History
  */
+// REFACTOR this interface should be organized in some sort of hierarchy.
 export interface UntrackedMapSlice {
   untrackedState: UntrackedMapState;
   stageRef: React.RefObject<Konva.Stage>;
@@ -189,6 +196,16 @@ export interface UntrackedMapSlice {
   baseLayerActivateMovePolygonPoints: () => void;
   baseLayerActivateDeletePolygonPoints: () => void;
   baseLayerDeactivatePolygonManipulation: () => void;
+
+  shadeLayerSelectShadings: (
+    shadings: ShadingDto[] | null,
+    transformerStore: TransformerStore,
+  ) => void;
+  shadeLayerActivateAddPolygonPoints: () => void;
+  shadeLayerActivateMovePolygonPoints: () => void;
+  shadeLayerActivateDeletePolygonPoints: () => void;
+  shadeLayerDeactivatePolygonManipulation: () => void;
+  shadeLayerSelectShadeForNewShading: (shade: Shade | null) => void;
 
   drawingLayerActivateDrawingMode: (shape: DrawingShapeType) => void;
   drawingLayerClearSelectedShape: () => void;
@@ -249,6 +266,12 @@ export const TRACKED_DEFAULT_STATE: TrackedMapState = {
         layerId: 0,
         id: -1,
         index: LayerType.Drawing,
+        objects: [],
+        loadedObjects: [],
+      },
+      [LayerType.Shade]: {
+        id: -1,
+        index: LayerType.Shade,
         objects: [],
         loadedObjects: [],
       },
@@ -314,6 +337,12 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
           editMode: 'inactive',
         },
       } as UntrackedBaseLayerState,
+      [LayerType.Shade]: {
+        visible: true,
+        opacity: 1,
+        selectedShadingEditMode: 'inactive',
+        selectedShadeForNewShading: null,
+      } as UntrackedShadeLayerState,
     }),
     {} as UntrackedLayers,
   ),
@@ -353,6 +382,8 @@ export type TrackedLayerState = {
   /**
    * The state of the objects on the layer.
    */
+  // REFACTOR is this really needed?
+  // All layers that have to manage their own objects do so in their own way.
   objects: ObjectState[];
 };
 
@@ -371,11 +402,12 @@ export type UntrackedLayerState = {
 export type TrackedLayers = {
   [key in Exclude<
     LayerType,
-    LayerType.Plants | LayerType.Base | LayerType.Drawing
+    LayerType.Plants | LayerType.Base | LayerType.Shade | LayerType.Drawing
   >]: TrackedLayerState;
 } & {
   [LayerType.Plants]: TrackedPlantLayerState;
   [LayerType.Base]: TrackedBaseLayerState;
+  [LayerType.Shade]: TrackedShadeLayerState;
   [LayerType.Drawing]: TrackedDrawingLayerState;
 };
 
@@ -433,6 +465,20 @@ export type TrackedBaseLayerState = {
   nextcloudImagePath: string;
 };
 
+export type TrackedShadeLayerState = {
+  index: LayerType.Shade;
+  id: number;
+  /**
+   * The objects visible relative to the current selected date.
+   * This is a subset of `loadedObjects`.
+   */
+  objects: ShadingDto[];
+  /**
+   * The objects that have been loaded from the backend.
+   */
+  loadedObjects: ShadingDto[];
+};
+
 export type TrackedDrawingLayerState = {
   id: number;
   layerId: number;
@@ -452,6 +498,7 @@ export type UntrackedLayers = {
   [LayerType.Plants]: UntrackedPlantLayerState;
   [LayerType.Base]: UntrackedBaseLayerState;
   [LayerType.Drawing]: UntrackedDrawingLayerState;
+  [LayerType.Shade]: UntrackedShadeLayerState;
 };
 
 export type UntrackedPlantLayerState = UntrackedLayerState & {
@@ -477,9 +524,17 @@ export type UntrackedBaseLayerState = UntrackedLayerState & {
     measureStep: 'inactive' | 'none selected' | 'one selected' | 'both selected';
   };
   mapGeometry: {
-    editMode: 'inactive' | 'add' | 'remove' | 'move';
+    editMode: PolygonEditMode;
   };
 };
+
+export type UntrackedShadeLayerState = UntrackedLayerState & {
+  selectedShadings: ShadingDto[] | null;
+  selectedShadingEditMode: PolygonEditMode;
+  selectedShadeForNewShading: Shade | null;
+};
+
+export type PolygonEditMode = 'inactive' | 'add' | 'remove' | 'move';
 
 /**
  * Contains information necessary for creating a new planting on the map.

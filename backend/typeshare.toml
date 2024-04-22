@@ -2,3 +2,4 @@
 "NaiveDate" = "string"
 "Uuid" = "string"
 "Value" = "object"
+"Polygon" = "object"

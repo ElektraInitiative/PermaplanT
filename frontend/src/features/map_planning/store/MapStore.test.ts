@@ -17,6 +17,7 @@ describe('MapHistoryStore', () => {
     for (const layerName of Object.keys(trackedState.layers)) {
       if (layerName === LayerType.Base) continue;
       if (layerName === LayerType.Plants) continue;
+      if (layerName === LayerType.Shade) continue;
       if (layerName === LayerType.Drawing) continue;
 
       expect(trackedState.layers[layerName as keyof TrackedLayers]).toEqual({
@@ -40,6 +41,13 @@ describe('MapHistoryStore', () => {
       rotation: 0,
       scale: 100,
       nextcloudImagePath: '',
+    });
+
+    expect(trackedState.layers[LayerType.Shade]).toEqual({
+      id: -1,
+      index: 'shade',
+      objects: [],
+      loadedObjects: [],
     });
   });
 
@@ -77,6 +85,7 @@ describe('MapHistoryStore', () => {
     expect(trackedState.layers.plants.objects).toHaveLength(1);
   });
 
+  // REFACTOR: tests involving plants should go into their own files.
   it('adds plant objects to the plants layer on CreatePlantAction', () => {
     const { executeAction } = useMapStore.getState();
     const createAction1 = new CreatePlantAction([createPlantTestObject(1)]);

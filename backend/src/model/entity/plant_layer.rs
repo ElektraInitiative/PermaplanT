@@ -1,13 +1,16 @@
 //! Contains the database implementation of the plant layer.
 
+use std::cmp::max;
+
+use chrono::NaiveDate;
 use diesel::{
     debug_query,
     pg::Pg,
-    sql_types::{Float, Integer},
+    sql_types::{Array, Date, Float, Integer},
     CombineDsl, ExpressionMethods, QueryDsl, QueryResult, QueryableByName,
 };
 use diesel_async::{AsyncPgConnection, RunQueryDsl};
-use log::debug;
+use log::{debug, trace};
 
 use crate::{
     model::{
@@ -16,9 +19,6 @@ use crate::{
     },
     schema::relations,
 };
-
-/// The resolution of the generated heatmap in cm.
-pub const GRANULARITY: i32 = 10;
 
 /// A bounding box around the maps geometry.
 #[derive(Debug, Clone, QueryableByName)]
@@ -42,7 +42,10 @@ struct BoundingBox {
 struct HeatMapElement {
     /// The score on the heatmap.
     #[diesel(sql_type = Float)]
-    score: f32,
+    preference: f32,
+    /// The alpha on the heatmap.
+    #[diesel(sql_type = Float)]
+    relevance: f32,
     /// The x values of the score
     #[diesel(sql_type = Integer)]
     x: i32,
@@ -64,40 +67,71 @@ struct HeatMapElement {
 )]
 pub async fn heatmap(
     map_id: i32,
-    layer_id: i32,
+    plant_layer_id: i32,
+    shade_layer_id: i32,
     plant_id: i32,
+    date: NaiveDate,
     conn: &mut AsyncPgConnection,
-) -> QueryResult<Vec<Vec<f32>>> {
+) -> QueryResult<Vec<Vec<(f32, f32)>>> {
     // Fetch the bounding box x and y values of the maps coordinates
     let bounding_box_query =
         diesel::sql_query("SELECT * FROM calculate_bbox($1)").bind::<Integer, _>(map_id);
     debug!("{}", debug_query::<Pg, _>(&bounding_box_query));
     let bounding_box = bounding_box_query.get_result::<BoundingBox>(conn).await?;
 
+    let granularity = calculate_granularity(&bounding_box);
+
     // Fetch the heatmap
-    let query = diesel::sql_query("SELECT * FROM calculate_score($1, $2, $3, $4, $5, $6, $7, $8)")
-        .bind::<Integer, _>(map_id)
-        .bind::<Integer, _>(layer_id)
-        .bind::<Integer, _>(plant_id)
-        .bind::<Integer, _>(GRANULARITY)
-        .bind::<Integer, _>(bounding_box.x_min)
-        .bind::<Integer, _>(bounding_box.y_min)
-        .bind::<Integer, _>(bounding_box.x_max)
-        .bind::<Integer, _>(bounding_box.y_max);
+    let query =
+        diesel::sql_query("SELECT * FROM calculate_heatmap($1, $2, $3, $4, $5, $6, $7, $8, $9)")
+            .bind::<Integer, _>(map_id)
+            .bind::<Array<Integer>, _>(vec![plant_layer_id, shade_layer_id])
+            .bind::<Integer, _>(plant_id)
+            .bind::<Date, _>(date)
+            .bind::<Integer, _>(granularity)
+            .bind::<Integer, _>(bounding_box.x_min)
+            .bind::<Integer, _>(bounding_box.y_min)
+            .bind::<Integer, _>(bounding_box.x_max)
+            .bind::<Integer, _>(bounding_box.y_max);
     debug!("{}", debug_query::<Pg, _>(&query));
     let result = query.load::<HeatMapElement>(conn).await?;
 
     // Convert the result to a matrix.
     // Matrix will be from 0..0 to ((x_max - x_min) / granularity)..((y_max - y_min) / granularity).
     let num_cols =
-        (f64::from(bounding_box.x_max - bounding_box.x_min) / f64::from(GRANULARITY)).ceil();
+        (f64::from(bounding_box.x_max - bounding_box.x_min) / f64::from(granularity)).floor();
     let num_rows =
-        (f64::from(bounding_box.y_max - bounding_box.y_min) / f64::from(GRANULARITY)).ceil();
-    let mut heatmap = vec![vec![0.0; num_cols as usize]; num_rows as usize];
-    for HeatMapElement { score, x, y } in result {
-        heatmap[y as usize][x as usize] = score;
+        (f64::from(bounding_box.y_max - bounding_box.y_min) / f64::from(granularity)).floor();
+    let mut heatmap = vec![vec![(0.0, 0.0); num_cols as usize]; num_rows as usize];
+    for HeatMapElement {
+        preference,
+        relevance,
+        x,
+        y,
+    } in result
+    {
+        heatmap[y as usize][x as usize] = (preference, relevance);
     }
+
+    trace!("{heatmap:#?}");
     Ok(heatmap)
+}
+
+/// The number of values the resulting heatmap matrix should have.
+const NUMBER_OF_SQUARES: f64 = 10000.0;
+
+/// Calculate granularity so the number of scores calculated stays constant independent of map size.
+fn calculate_granularity(bounding_box: &BoundingBox) -> i32 {
+    let width = bounding_box.x_max - bounding_box.x_min;
+    let height = bounding_box.y_max - bounding_box.y_min;
+
+    // Mathematical reformulation:
+    // width * height = number_of_squares * granularity^2
+    // granularity = sqrt((width * height) / number_of_squares)
+    #[allow(clippy::cast_possible_truncation)] // ok, because we don't care about exact values
+    let granularity = (f64::from(width * height) / NUMBER_OF_SQUARES).sqrt() as i32;
+
+    max(1, granularity)
 }
 
 /// Get all relations of a certain plant.

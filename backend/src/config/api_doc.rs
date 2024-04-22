@@ -11,7 +11,7 @@ use super::auth::Config;
 use crate::{
     controller::{
         base_layer_image, blossoms, config, guided_tours, layers, map, plant_layer, plantings,
-        plants, seed, timeline, users,
+        plants, seed, shadings, timeline, users,
     },
     model::{
         dto::{
@@ -25,6 +25,10 @@ use crate::{
                 UpdateAddDatePlantingDto, UpdatePlantingDto, UpdatePlantingNoteDto,
                 UpdateRemoveDatePlantingDto,
             },
+            shadings::{
+                DeleteShadingDto, NewShadingDto, ShadingDto, UpdateAddDateShadingDto,
+                UpdateRemoveDateShadingDto, UpdateShadingDto, UpdateValuesShadingDto,
+            },
             timeline::{TimelineDto, TimelineEntryDto},
             BaseLayerImageDto, ConfigDto, Coordinates, GainedBlossomsDto, GuidedToursDto, LayerDto,
             MapDto, NewLayerDto, NewMapDto, NewSeedDto, PageLayerDto, PageMapDto,
@@ -33,7 +37,7 @@ use crate::{
         },
         r#enum::{
             privacy_option::PrivacyOption, quality::Quality, quantity::Quantity,
-            relation_type::RelationType,
+            relation_type::RelationType, shade::Shade,
         },
     },
 };
@@ -192,6 +196,32 @@ struct BaseLayerImagesApiDoc;
 )]
 struct PlantingsApiDoc;
 
+/// Struct used by [`utoipa`] to generate `OpenApi` documentation for all shadings endpoints.
+#[derive(OpenApi)]
+#[openapi(
+    paths(
+        shadings::find,
+        shadings::create,
+        shadings::update,
+        shadings::delete
+    ),
+    components(
+        schemas(
+            ShadingDto,
+            NewShadingDto,
+            UpdateShadingDto,
+            DeleteShadingDto,
+            UpdateValuesShadingDto,
+            UpdateAddDateShadingDto,
+            UpdateRemoveDateShadingDto,
+            Shade
+
+        )
+    ),
+    modifiers(&SecurityAddon)
+)]
+struct ShadingsApiDoc;
+
 /// Struct used by [`utoipa`] to generate `OpenApi` documentation for all user data endpoints.
 #[derive(OpenApi)]
 #[openapi(
@@ -266,6 +296,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
     openapi.merge(PlantLayerApiDoc::openapi());
     openapi.merge(BaseLayerImagesApiDoc::openapi());
     openapi.merge(PlantingsApiDoc::openapi());
+    openapi.merge(ShadingsApiDoc::openapi());
     openapi.merge(UsersApiDoc::openapi());
     openapi.merge(TimelineApiDoc::openapi());
 

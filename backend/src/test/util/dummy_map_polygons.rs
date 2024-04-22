@@ -132,3 +132,34 @@ pub fn rectangle_with_missing_bottom_left_corner() -> Polygon<Point> {
     });
     serde_json::from_value(polygon).unwrap()
 }
+
+pub fn small_square() -> Polygon<Point> {
+    let polygon = json!({
+        "rings": [
+            [
+                {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                {
+                    "x": 20.0,
+                    "y": 0.0
+                },
+                {
+                    "x": 20.0,
+                    "y": 20.0
+                },
+                {
+                    "x": 0.0,
+                    "y": 20.0
+                },
+                {
+                    "x": 0.0,
+                    "y": 0.0
+                }
+            ]
+        ],
+        "srid": 4326
+    });
+    serde_json::from_value(polygon).unwrap()
+}

@@ -32,8 +32,10 @@ pub mod plantings;
 pub mod plantings_impl;
 pub mod plants_impl;
 pub mod seed_impl;
+pub mod shadings;
+pub mod shadings_impl;
 pub mod timeline;
-mod update_map_geometry_impl;
+pub mod update_map_geometry_impl;
 pub mod update_map_impl;
 pub mod users_impl;
 
@@ -387,29 +389,6 @@ pub struct ConnectToMapQueryParams {
     pub user_id: String,
 }
 
-/// Search parameters for plant suggestions.
-#[typeshare]
-#[derive(Debug, Deserialize, IntoParams)]
-pub struct PlantSuggestionsSearchParameters {
-    /// The kind of suggestion returned by the endpoint.
-    #[param(inline)]
-    pub suggestion_type: SuggestionType,
-    /// Date representing the season to search for.
-    /// Only the month and day are used, nevertheless it must be an existing date.
-    pub relative_to_date: NaiveDate,
-}
-
-/// Kind of suggestion.
-#[typeshare]
-#[derive(Debug, Deserialize, ToSchema)]
-#[serde(rename_all = "lowercase")]
-pub enum SuggestionType {
-    /// Suggests plants that are available for planting.
-    Available,
-    /// Suggests plants based on diversity criteria.
-    Diversity,
-}
-
 /// Contains information about an image displayed on the base layer.
 #[typeshare]
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
@@ -459,9 +438,14 @@ pub struct DeleteBaseLayerImageDto {
 #[derive(Debug, Deserialize, IntoParams)]
 pub struct HeatMapQueryParams {
     /// The id of the plant layer the planting will be planted on.
-    pub layer_id: i32,
+    pub plant_layer_id: i32,
+    /// The id of the shade layer the planting will be planted on.
+    pub shade_layer_id: i32,
     /// The id of the plant you want to plant.
     pub plant_id: i32,
+    /// The date at which to generate the heatmap.
+    /// Will be set to the current date if `None`.
+    pub date: Option<NaiveDate>,
 }
 
 #[typeshare]

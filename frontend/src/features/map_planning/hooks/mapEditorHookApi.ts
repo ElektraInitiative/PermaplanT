@@ -1,6 +1,7 @@
 import { QueryFunctionContext, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { getShadings } from '@/features/map_planning/api/getShadings';
 import { getDrawings } from '../api/drawingApi';
 import { getLayers } from '../api/getLayers';
 import { getMap } from '../api/getMap';
@@ -16,6 +17,7 @@ const MAP_EDITOR_KEYS = {
     layers: () => [{ ...MAP_EDITOR_KEYS._helpers.all[0], scope: 'layers' }] as const,
     plant: () => [{ ...MAP_EDITOR_KEYS._helpers.all[0], scope: 'plant_layer' }] as const,
     base: () => [{ ...MAP_EDITOR_KEYS._helpers.all[0], scope: 'base_layer' }] as const,
+    shade: () => [{ ...MAP_EDITOR_KEYS._helpers.all[0], scope: 'shade_layer' }] as const,
     timeline: () => [{ ...MAP_EDITOR_KEYS._helpers.all[0], scope: 'timeline' }] as const,
     drawing: () => [{ ...MAP_EDITOR_KEYS._helpers.all[0], scope: 'drawing_layer' }] as const,
   },
@@ -25,6 +27,8 @@ const MAP_EDITOR_KEYS = {
     [{ ...MAP_EDITOR_KEYS._helpers.plant()[0], mapId, layerId, fetchDate }] as const,
   baseLayer: (mapId: number, layerId: number) =>
     [{ ...MAP_EDITOR_KEYS._helpers.base()[0], mapId, layerId }] as const,
+  shadeLayer: (mapId: number, layerId: number, fetchDate: string) =>
+    [{ ...MAP_EDITOR_KEYS._helpers.shade()[0], mapId, layerId, fetchDate }] as const,
   drawingLayer: (mapId: number, layerId: number, fetchDate: string) =>
     [{ ...MAP_EDITOR_KEYS._helpers.drawing()[0], mapId, layerId, fetchDate }] as const,
   timeline: (mapId: number, startDate: string, endDate: string) =>
@@ -212,6 +216,33 @@ export function useBaseLayer({ mapId, layerId, enabled }: UseLayerArgs) {
   }, [mapId, layerId, queryInfo?.data]);
 
   return queryInfo;
+}
+
+/**
+ * Hook that initializes the shade layer by fetching it and adding it to the store.
+ */
+export function useShadeLayer({ mapId, layerId, enabled }: UseLayerArgs) {
+  const fetchDate = useMapStore((state) => state.untrackedState.fetchDate);
+
+  const query = useQuery({
+    queryKey: MAP_EDITOR_KEYS.shadeLayer(mapId, layerId, fetchDate),
+    queryFn: () => getShadings(mapId, { layer_id: layerId, relative_to_date: fetchDate }),
+    // We want to refetch manually.
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
+    cacheTime: 0,
+    enabled,
+  });
+
+  const data = query.data;
+  useEffect(() => {
+    if (!data) return;
+
+    useMapStore.getState().setTimelineBounds(data.from, data.to);
+    useMapStore.getState().initShadeLayer(data.results);
+  }, [mapId, data]);
+
+  return query;
 }
 
 function baseLayerQueryFn({

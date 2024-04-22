@@ -5,9 +5,9 @@ use diesel::Insertable;
 use postgis_diesel::types::{Point, Polygon};
 use uuid::Uuid;
 
-use crate::model::r#enum::{layer_type::LayerType, privacy_option::PrivacyOption};
+use crate::model::r#enum::{layer_type::LayerType, privacy_option::PrivacyOption, shade::Shade};
 
-use super::dummy_map_polygons::tall_rectangle;
+use super::dummy_map_polygons::{small_rectangle, tall_rectangle};
 
 #[derive(Insertable)]
 #[diesel(table_name = crate::schema::maps)]
@@ -45,7 +45,7 @@ impl Default for TestInsertableMap {
 
 #[derive(Insertable)]
 #[diesel(table_name = crate::schema::layers)]
-pub struct TestInsertableLayer {
+pub struct TestInsertablePlantLayer {
     pub id: i32,
     pub map_id: i32,
     pub type_: LayerType,
@@ -53,12 +53,34 @@ pub struct TestInsertableLayer {
     pub is_alternative: bool,
 }
 
-impl Default for TestInsertableLayer {
+impl Default for TestInsertablePlantLayer {
     fn default() -> Self {
         Self {
             id: -1,
             map_id: -1,
             type_: LayerType::Plants,
+            name: "Test Layer 1".to_owned(),
+            is_alternative: false,
+        }
+    }
+}
+
+#[derive(Insertable)]
+#[diesel(table_name = crate::schema::layers)]
+pub struct TestInsertableShadeLayer {
+    pub id: i32,
+    pub map_id: i32,
+    pub type_: LayerType,
+    pub name: String,
+    pub is_alternative: bool,
+}
+
+impl Default for TestInsertableShadeLayer {
+    fn default() -> Self {
+        Self {
+            id: -1,
+            map_id: -1,
+            type_: LayerType::Shade,
             name: "Test Layer 1".to_owned(),
             is_alternative: false,
         }
@@ -111,6 +133,30 @@ impl Default for TestInsertablePlanting {
             size_x: 0,
             size_y: 0,
             rotation: 0.0,
+            add_date: None,
+            remove_date: None,
+        }
+    }
+}
+
+#[derive(Insertable)]
+#[diesel(table_name = crate::schema::shadings)]
+pub struct TestInsertableShading {
+    pub id: Uuid,
+    pub layer_id: i32,
+    pub shade: Shade,
+    pub geometry: Polygon<Point>,
+    pub add_date: Option<NaiveDate>,
+    pub remove_date: Option<NaiveDate>,
+}
+
+impl Default for TestInsertableShading {
+    fn default() -> Self {
+        Self {
+            id: Uuid::default(),
+            layer_id: -1,
+            shade: Shade::NoShade,
+            geometry: small_rectangle(),
             add_date: None,
             remove_date: None,
         }

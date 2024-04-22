@@ -367,6 +367,7 @@ function SelectedPlantInfo({ plant, seed }: { plant: PlantsSummaryDto; seed: See
     createKeyBindingsAccordingToConfig(KEYBINDINGS_SCOPE_PLANTS_LAYER, keyHandlerActions),
   );
 
+  // TODO: refactor using StatusPanelContentWrapper
   return (
     <>
       <div className="flex flex-row items-center justify-center">

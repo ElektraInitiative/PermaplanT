@@ -21,7 +21,12 @@ use crate::{
 };
 
 /// Defines which layers should be created when a new map is created.
-const LAYER_TYPES: [LayerType; 3] = [LayerType::Base, LayerType::Drawing, LayerType::Plants];
+const LAYER_TYPES: [LayerType; 4] = [
+    LayerType::Base,
+    LayerType::Drawing,
+    LayerType::Shade,
+    LayerType::Plants,
+];
 
 /// Search maps from the database.
 ///

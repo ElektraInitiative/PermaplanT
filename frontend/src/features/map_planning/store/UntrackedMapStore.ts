@@ -2,6 +2,7 @@ import Konva from 'konva';
 import { Vector2d } from 'konva/lib/types';
 import { createRef } from 'react';
 import { StateCreator } from 'zustand';
+import { LayerType, Shade, ShadingDto } from '@/api_types/definitions';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 import { convertToDate } from '../utils/date-utils';
@@ -14,7 +15,7 @@ import {
   UntrackedMapSlice,
 } from './MapStoreTypes';
 import { TransformerStore, useTransformerStore } from './transformer/TransformerStore';
-import { clearInvalidSelection } from './utils';
+import { clearInvalidSelection, typeOfLayer } from './utils';
 
 export const createUntrackedMapSlice: StateCreator<
   TrackedMapSlice & UntrackedMapSlice,
@@ -65,10 +66,23 @@ export const createUntrackedMapSlice: StateCreator<
   },
   lastActions: [],
   updateSelectedLayer(selectedLayer) {
+    // Disable all layer specific actions.
+    //useTransformerStore.getState().actions.setInhibitTransformer(false);
+    useTransformerStore.getState().actions.removeAllNodesFromSelection();
     // Clear the transformer's nodes.
     useTransformerStore.getState().actions.clearSelection();
+    useTransformerStore.getState().actions.unblockTransformerActions();
     get().baseLayerDeactivatePolygonManipulation();
+    get().shadeLayerDeactivatePolygonManipulation();
     get().clearStatusPanelContent();
+
+    if (typeOfLayer(selectedLayer) === LayerType.Shade) {
+      useTransformerStore.getState().actions.enableResizing(false);
+      useTransformerStore.getState().actions.enableRotation(false);
+    } else {
+      useTransformerStore.getState().actions.enableResizing(true);
+      useTransformerStore.getState().actions.enableRotation(true);
+    }
 
     set((state) => ({
       ...state,
@@ -93,6 +107,11 @@ export const createUntrackedMapSlice: StateCreator<
             selectedDrawings: null,
             selectedShape: null,
             editMode: undefined,
+          },
+          shade: {
+            ...state.untrackedState.layers.shade,
+            selectedShadeForNewShading: null,
+            selectedShadings: null,
           },
         },
       },
@@ -233,6 +252,11 @@ export const createUntrackedMapSlice: StateCreator<
       date,
     );
 
+    const shadingsVisibleRelativeToTimelineDate = filterVisibleObjects(
+      get().trackedState.layers.shade.loadedObjects,
+      date,
+    );
+
     set((state) => ({
       ...state,
       trackedState: {
@@ -242,6 +266,10 @@ export const createUntrackedMapSlice: StateCreator<
           plants: {
             ...state.trackedState.layers.plants,
             objects: plantsVisibleRelativeToTimelineDate,
+          },
+          shade: {
+            ...state.trackedState.layers.shade,
+            objects: shadingsVisibleRelativeToTimelineDate,
           },
           drawing: {
             ...state.trackedState.layers.drawing,
@@ -428,6 +456,111 @@ export const createUntrackedMapSlice: StateCreator<
               ...state.untrackedState.layers.base.mapGeometry,
               editMode: 'inactive',
             },
+          },
+        },
+      },
+    }));
+  },
+  shadeLayerSelectShadings(shadings: ShadingDto[] | null) {
+    if (shadings === null) {
+      useTransformerStore.getState().actions.removeAllNodesFromSelection();
+      useTransformerStore.getState().actions.unblockTransformerActions();
+      get().shadeLayerDeactivatePolygonManipulation();
+      get().clearStatusPanelContent();
+    }
+
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          shade: {
+            ...state.untrackedState.layers.shade,
+            selectedShadings: shadings,
+          },
+        },
+      },
+    }));
+  },
+  shadeLayerActivateAddPolygonPoints() {
+    get().shadeLayerSelectShadeForNewShading(null);
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          shade: {
+            ...state.untrackedState.layers.shade,
+            selectedShadingEditMode: 'add',
+          },
+        },
+      },
+    }));
+  },
+  shadeLayerActivateDeletePolygonPoints() {
+    get().shadeLayerSelectShadeForNewShading(null);
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          shade: {
+            ...state.untrackedState.layers.shade,
+            selectedShadingEditMode: 'remove',
+          },
+        },
+      },
+    }));
+  },
+  shadeLayerActivateMovePolygonPoints() {
+    get().shadeLayerSelectShadeForNewShading(null);
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          shade: {
+            ...state.untrackedState.layers.shade,
+            selectedShadingEditMode: 'move',
+          },
+        },
+      },
+    }));
+  },
+  shadeLayerDeactivatePolygonManipulation() {
+    useTransformerStore.getState().actions.unblockTransformerActions();
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          shade: {
+            ...state.untrackedState.layers.shade,
+            selectedShadingEditMode: 'inactive',
+          },
+        },
+      },
+    }));
+  },
+  shadeLayerSelectShadeForNewShading(shade: Shade | null) {
+    if (shade !== null) {
+      get().shadeLayerDeactivatePolygonManipulation();
+      get().shadeLayerSelectShadings(null, useTransformerStore.getState());
+    }
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          shade: {
+            ...state.untrackedState.layers.shade,
+            selectedShadeForNewShading: shade,
           },
         },
       },

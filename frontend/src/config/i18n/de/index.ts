@@ -31,6 +31,7 @@ import privacyOptions from './privacyOptions.json';
 import readOnly from './readOnly.json';
 import routes from './routes.json';
 import seeds from './seeds.json';
+import shadeLayer from './shadeLayer.json';
 import team from './team.json';
 import timeline from './timeline.json';
 import toolboxTooltips from './toolboxTooltips.json';
@@ -76,4 +77,5 @@ export default {
   polygon,
   plantRelations,
   keybindings,
+  shadeLayer,
 };
