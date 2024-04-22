@@ -217,7 +217,7 @@ describe('Add a point between the two nearest points', () => {
       srid: '',
     };
 
-    expect(insertPointIntoLineSegmentWithLeastDistance(polygon, newPoint, 0)).toEqual({
+    expect(insertPointIntoLineSegmentWithLeastDistance(polygon, newPoint, 0).geometry).toEqual({
       rings: [
         [
           { x: 0, y: 0, srid: 0 },

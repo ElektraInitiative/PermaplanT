@@ -21,7 +21,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Add warn signs to sizes for multi-selected plant-areas _(Lukas Anton Lakits)_
 - _()_
 - _()_
-- _()_
+- Add points in middle of bezier polygon _(Daniel Steinkogler)_
 - _()_
 - _()_
 - _()_
