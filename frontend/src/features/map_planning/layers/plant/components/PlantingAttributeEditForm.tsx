@@ -23,8 +23,8 @@ const PlantingAttributeEditFormSchema = z
     addDate: z.nullable(z.string()).transform((value) => value || undefined),
     removeDate: z.nullable(z.string()).transform((value) => value || undefined),
     plantingNotes: z.nullable(z.string()),
-    sizeX: z.number().int().nullable(),
-    sizeY: z.number().int().nullable(),
+    sizeX: z.optional(z.number().int().or(z.nan())),
+    sizeY: z.optional(z.number().int().or(z.nan())),
   })
   .refine((schema) => !schema.removeDate || !schema.addDate || schema.addDate < schema.removeDate, {
     path: ['dateRelation'],
@@ -58,6 +58,8 @@ export type PlantingAttributeEditFormProps = EditPlantingAttributesProps & {
   addDateShowDifferentValueWarning?: boolean;
   removeDateShowDifferentValueWarning?: boolean;
   plantingNoteShowDifferentValueWarning?: boolean;
+  sizeXDifferentValueWarning?: boolean;
+  sizeYDifferentValueWarning?: boolean;
   removeDateDefaultValue: string;
   plantingNotesDefaultValue: string;
   widthDefaultValue: number | undefined;
@@ -139,12 +141,12 @@ export function MultiplePlantingsAttributeForm({
 
   const getCommonWidth = () => {
     const comparisonWidth = plantings[0].sizeX;
-    const existsCommonWidth = plantings.every((planting) => planting.sizeY === comparisonWidth);
+    const existsCommonWidth = plantings.every((planting) => planting.sizeX === comparisonWidth);
     return existsCommonWidth ? comparisonWidth : undefined;
   };
 
   const getCommonHeight = () => {
-    const comparisonHeight = plantings[0].sizeX;
+    const comparisonHeight = plantings[0].sizeY;
     const existsCommonHeight = plantings.every((planting) => planting.sizeY === comparisonHeight);
     return existsCommonHeight ? comparisonHeight : undefined;
   };
@@ -163,6 +165,12 @@ export function MultiplePlantingsAttributeForm({
         )}
         plantingNoteShowDifferentValueWarning={plantings.some(
           (planting) => planting.plantingNotes !== getCommonPlantingNotes(),
+        )}
+        sizeXDifferentValueWarning={plantings.some(
+          (planting) => planting.sizeX !== getCommonWidth(),
+        )}
+        sizeYDifferentValueWarning={plantings.some(
+          (planting) => planting.sizeY !== getCommonHeight(),
         )}
         removeDateDefaultValue={getCommonRemoveDate() ?? ''}
         plantingNotesDefaultValue={getCommonPlantingNotes() ?? ''}
@@ -183,6 +191,8 @@ function PlantingAttributeEditForm({
   addDateShowDifferentValueWarning,
   removeDateShowDifferentValueWarning,
   plantingNoteShowDifferentValueWarning,
+  sizeXDifferentValueWarning,
+  sizeYDifferentValueWarning,
   removeDateDefaultValue,
   plantingNotesDefaultValue,
   onWidthChange,
@@ -264,25 +274,30 @@ function PlantingAttributeEditForm({
               <span className="text-neutral-500">{plantCountInfo.total}</span>
             </div>
           )}
-          <DebouncedSimpleFormInput
-            onValid={onWidthChange}
-            type="number"
-            id="sizeX"
-            data-testid="planting-attribute-edit-form__size-x"
-            disabled={isReadOnlyMode}
-            labelContent={t('plantings:width')}
-            className="w-36"
-          />
-
-          <DebouncedSimpleFormInput
-            onValid={onHeightChange}
-            type="number"
-            id="sizeY"
-            data-testid="planting-attribute-edit-form__size-y"
-            disabled={isReadOnlyMode}
-            labelContent={t('plantings:height')}
-            className="w-36"
-          />
+          <div className="flex gap-2">
+            <DebouncedSimpleFormInput
+              onValid={onWidthChange}
+              type="number"
+              id="sizeX"
+              data-testid="planting-attribute-edit-form__size-x"
+              disabled={isReadOnlyMode}
+              labelContent={t('plantings:width')}
+              className="w-36"
+            />
+            {sizeXDifferentValueWarning && <MultiplePlantingsDifferentValueAlert />}
+          </div>
+          <div className="flex gap-2">
+            <DebouncedSimpleFormInput
+              onValid={onHeightChange}
+              type="number"
+              id="sizeY"
+              data-testid="planting-attribute-edit-form__size-y"
+              disabled={isReadOnlyMode}
+              labelContent={t('plantings:height')}
+              className="w-36"
+            />
+            {sizeYDifferentValueWarning && <MultiplePlantingsDifferentValueAlert />}
+          </div>
           <hr className="my-4 border-neutral-700" />
         </div>
       )}

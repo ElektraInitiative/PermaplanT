@@ -1,7 +1,11 @@
+// Pipeline for releases, which is manually triggered on the jenkins webapp
+
+// Function duplicated in `Jenkinsfile`
 def node_info() {
     echo "Running stage on ${env.NODE_NAME}"
 }
 
+// Function duplicated in `Jenkinsfile` the command parameter
 def wait_for_db() {
     retry(6) {
         sleep(time: 5, unit: 'SECONDS')
@@ -43,6 +47,7 @@ def copyDocumentation() {
 }
 
 stage('Build Schema') {
+    // duplicated in `Build in Docker` stage
     node('docker') {
         node_info()
 
@@ -68,6 +73,7 @@ stage('Build in Docker') {
     def parallelBuild = [:]
 
     parallelBuild['build-backend'] = {
+        // duplicated in `Build Schema` stage
         node('docker') {
             node_info()
 
@@ -85,7 +91,7 @@ stage('Build in Docker') {
 
                     stash includes: 'backend/target/release/backend', name: 'backend'
 
-                    sh 'cargo doc --document-private-items'
+                    sh 'cd backend && cargo doc --document-private-items'
                     stash includes: 'backend/target/doc/**/*', name: 'cargodoc'
                 }
             }
@@ -93,6 +99,7 @@ stage('Build in Docker') {
     }
 
     parallelBuild['build-frontend'] = {
+        // duplicated in `Jenkinsfile.testAndBuildFrontend()`
         node('docker') {
             node_info()
 
@@ -121,6 +128,7 @@ stage('Build in Docker') {
         }
     }
 
+    // duplicated in `Jenkinsfile.release.testAndBuildMdbook()`
     parallelBuild['build-mdbook'] = {
         node('docker') {
             node_info()
@@ -138,6 +146,7 @@ stage('Build in Docker') {
     parallel(parallelBuild)
 }
 
+// similar to `Deploy PR/Dev` stage in `Jenkinsfile`
 stage('Deploy Prod') {
     node('permaplant && prod') {
         checkout scm

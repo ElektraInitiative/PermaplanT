@@ -80,8 +80,8 @@ export function PlantLayerLeftToolbar() {
       id: selectedPlanting.id,
       x: selectedPlanting.x,
       y: selectedPlanting.y,
-      sizeX: Math.round(sizeX),
-      sizeY: Math.round(sizeY),
+      sizeX: isNaN(sizeX) ? selectedPlanting.sizeX : Math.round(sizeX),
+      sizeY: isNaN(sizeY) ? selectedPlanting.sizeY : Math.round(sizeY),
       rotation: selectedPlanting.rotation,
     }));
 
