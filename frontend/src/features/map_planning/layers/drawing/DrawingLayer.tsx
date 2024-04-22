@@ -5,7 +5,7 @@ import { Vector2d } from 'konva/lib/types';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Ellipse, Layer, Line, Rect } from 'react-konva';
 import * as uuid from 'uuid';
-import { DrawingDto, DrawingShapeType, LayerType } from '@/api_types/definitions';
+import { DrawingShapeType, DrawingDto, LayerType } from '@/api_types/definitions';
 import {
   KEYBINDINGS_SCOPE_DRAWING_LAYER,
   createKeyBindingsAccordingToConfig,
@@ -13,6 +13,7 @@ import {
 import { useKeyHandlers } from '@/hooks/useKeyHandlers';
 import useMapStore from '../../store/MapStore';
 import { useTransformerStore } from '../../store/transformer/TransformerStore';
+import { PolygonPoint } from '../../types/PolygonTypes';
 import { useIsDrawingLayerActive } from '../../utils/layer-utils';
 import { CreateDrawingAction, UpdateDrawingAction } from './actions';
 import { useDeleteSelectedDrawings } from './hooks/useDeleteSelectedDrawings';
@@ -559,6 +560,20 @@ function DrawingLayer(props: DrawingLayerProps) {
     e.target.moveToTop();
   };
 
+  const handleUnselectDrawing: KonvaEventListener<Konva.Stage, MouseEvent> = useCallback(
+    (e) => {
+      // only unselect if we are clicking on the background
+      if (e.target instanceof Konva.Shape) {
+        return;
+      }
+
+      if (editMode) return;
+
+      useMapStore.getState().selectDrawings([]);
+    },
+    [editMode],
+  );
+
   const handleSelectDrawing: KonvaEventListener<Konva.Stage, MouseEvent> = useCallback(() => {
     const selectedDrawings = (foundDrawings: DrawingDto[], konvaNode: Konva.Node) => {
       const drawingNode = konvaNode.getAttr('object');
@@ -654,6 +669,8 @@ function DrawingLayer(props: DrawingLayerProps) {
     useMapStore.getState().stageRef.current?.on('mousemove.draw', handleMouseMove);
     useMapStore.getState().stageRef.current?.on('mouseup.endDrawing', handleMouseUp);
     useMapStore.getState().stageRef.current?.on('mouseup.selectDrawing', handleSelectDrawing);
+    useMapStore.getState().stageRef.current?.on('click.selectDrawing', handleUnselectDrawing);
+
     transformerActions.addEventListener('dragend.drawings', handleMoveDrawing);
     transformerActions.addEventListener('transformend.drawings', handleTransformDrawing);
 
@@ -662,6 +679,8 @@ function DrawingLayer(props: DrawingLayerProps) {
       useMapStore.getState().stageRef.current?.off('mousemove.draw');
       useMapStore.getState().stageRef.current?.off('mouseup.endDrawing');
       useMapStore.getState().stageRef.current?.off('mouseup.selectDrawing');
+      useMapStore.getState().stageRef.current?.off('click.selectDrawing');
+
       transformerActions.removeEventListener('dragend.drawings');
       transformerActions.removeEventListener('transformend.drawings');
     };
@@ -672,15 +691,16 @@ function DrawingLayer(props: DrawingLayerProps) {
     handleMoveDrawing,
     handleSelectDrawing,
     handleTransformDrawing,
+    handleUnselectDrawing,
     props.listening,
   ]);
 
-  const updateNewBezierLinePoints = (points: number[][]) => {
+  const updateNewBezierLinePoints = (points: PolygonPoint[]) => {
     if (!newBezierLine) return;
 
     setNewBezierLine({
       ...newBezierLine,
-      points: points,
+      points: points.map((p) => [p.x, p.y]),
     });
   };
 
@@ -689,26 +709,38 @@ function DrawingLayer(props: DrawingLayerProps) {
   return (
     <>
       <Layer {...layerProps} name={`${LayerType.Drawing}`}>
-        {bezierLines.map((bezierLine, i) => (
-          <BezierPolygon
-            key={`bezier-line-${i}`}
-            transformerRef={transformerRef}
-            id={bezierLine.id}
-            object={bezierLine}
-            editMode={editDrawingId === bezierLine.id ? editMode : undefined}
-            onPointsChanged={(p) => handleBezierPointsChanged(bezierLine.id, p)}
-            initialPoints={bezierLine.properties.points}
-            strokeWidth={bezierLine.strokeWidth}
-            onLineClick={handleShapeClicked}
-            color={bezierLine.color}
-            fillEnabled={bezierLine.fillEnabled}
-            x={bezierLine.x}
-            y={bezierLine.y}
-            scaleX={bezierLine.scaleX}
-            scaleY={bezierLine.scaleY}
-            onDragStart={moveToTop}
-          ></BezierPolygon>
-        ))}
+        {bezierLines.map((bezierLine, i) => {
+          return (
+            <BezierPolygon
+              key={`bezier-line-${i}`}
+              transformerRef={transformerRef}
+              id={bezierLine.id}
+              object={bezierLine}
+              editMode={editDrawingId === bezierLine.id ? editMode : undefined}
+              onPointsChanged={(p) =>
+                handleBezierPointsChanged(
+                  bezierLine.id,
+                  p.map((p) => [p.x, p.y]),
+                )
+              }
+              initialPoints={bezierLine.properties.points.map((p) => {
+                return {
+                  x: p[0],
+                  y: p[1],
+                };
+              })}
+              strokeWidth={bezierLine.strokeWidth}
+              onLineClick={handleShapeClicked}
+              color={bezierLine.color}
+              x={bezierLine.x}
+              y={bezierLine.y}
+              scaleX={bezierLine.scaleX}
+              scaleY={bezierLine.scaleY}
+              rotation={bezierLine.rotation}
+              onDragStart={moveToTop}
+            ></BezierPolygon>
+          );
+        })}
 
         {newBezierLine && (
           <BezierPolygon
@@ -716,7 +748,12 @@ function DrawingLayer(props: DrawingLayerProps) {
             key={`new-bezier-line`}
             onFinishLine={handleFinishBezierLine}
             onPointsChanged={updateNewBezierLinePoints}
-            initialPoints={newBezierLine.points}
+            initialPoints={newBezierLine.points.map((p) => {
+              return {
+                x: p[0],
+                y: p[1],
+              };
+            })}
             editMode={selectedShape == DrawingShapeType.BezierPolygon ? 'draw' : undefined}
             strokeWidth={selectedStrokeWidth}
             color={selectedColor}
