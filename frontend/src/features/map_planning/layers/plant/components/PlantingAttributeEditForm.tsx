@@ -375,7 +375,7 @@ export function MultiplePlantingsDifferentValueAlert() {
         data-tooltip-content={t('plantings:multiple_plantings_different_value_alert')}
         className="mb-3 mt-auto h-5 w-5 flex-shrink-0 text-orange-400"
       />
-      <Tooltip id="multiple-plantings-different-value-alert" />
+      <Tooltip id="multiple-plantings-different-value-alert" className="z-20" />
     </>
   );
 }
