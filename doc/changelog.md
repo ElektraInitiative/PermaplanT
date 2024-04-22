@@ -37,7 +37,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Increase cargo net.retry configuration to handle random network errors during CI. _(Christoph Schreiner)_
 - _()_
 - _()_
 - _()_
