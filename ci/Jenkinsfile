@@ -52,7 +52,10 @@ def runDockerPostgresSidecar(String command,  List<String> stashsrc = [], List<S
             node_info()
             checkout scm
             def rustImage = docker.build('permaplant-rust:ci', './ci/container-images/permaplant-rust')
-            docker.image('postgis/postgis:13-3.1').withRun('-e "POSTGRES_USER=ci" -e "POSTGRES_PASSWORD=ci"') { c ->
+            docker.image('postgis/postgis:13-3.1').withRun("-e 'POSTGRES_USER=ci' -e 'POSTGRES_PASSWORD=ci' \
+                -e 'CARGO_HOME=/var/cache/rust/cargo-home' \
+                -v '${PWD}:/var/cache/rust' \
+                -w '/var/cache/rust'") { c ->
                 rustImage.inside("--link ${c.id}:db \
                 -e 'DATABASE_URL=postgres://ci:ci@db/ci' \
                 -e 'BIND_ADDRESS_HOST=127.0.0.1' \
@@ -75,7 +78,7 @@ def runDockerPostgresSidecar(String command,  List<String> stashsrc = [], List<S
                         stash includes: stashsrc[i], name: stashdir[i]
                     }
                 }
-            }
+                }
         }
     }
 }
@@ -227,7 +230,6 @@ def copyDocumentation(String location) {
         )
         ]
     )
-
 }
 
 // PIPELINE BEGIN
@@ -292,88 +294,89 @@ timeout(time: 2, unit: 'HOURS') {
     }
 }
 
-if (env.BRANCH_NAME.startsWith('PR')){
-lock("${env.NODE_NAME}-exclusive") {
-    // `Deploy PR` stage similar to `Deploy Dev` and `Jenkinsfile.release.Deploy Prod`
-    stage('Deploy PR') {
-        node('permaplant && pr') {
-            node_info()
+if (env.BRANCH_NAME.startsWith('PR')) {
+    lock("${env.NODE_NAME}-exclusive") {
+        // `Deploy PR` stage similar to `Deploy Dev` and `Jenkinsfile.release.Deploy Prod`
+        stage('Deploy PR') {
+            node('permaplant && master') {
+                node_info()
 
-            checkout scm
+                checkout scm
 
-            echo "Workspace is '${WORKSPACE}'"
-            echo 'Ensure permaplant service is stopped'
-            sh 'sudo /usr/sbin/service permaplant stop'
+                echo "Workspace is '${WORKSPACE}'"
+                echo 'Ensure permaplant service is stopped'
+                sh 'sudo /usr/sbin/service permaplant stop'
 
-            withEnv(['DATABASE_URL=postgres://permaplant:permaplant@127.0.0.1/permaplant']) {
-                echo 'Resetting the CI DB ...'
-                sh 'sudo /usr/local/bin/permaplant-reset-ci.sh'
+                withEnv(['DATABASE_URL=postgres://permaplant:permaplant@127.0.0.1/permaplant']) {
+                    echo 'Resetting the CI DB ...'
+                    sh 'sudo /usr/local/bin/permaplant-reset-ci.sh'
 
-                echo 'Unstash Artifacts'
-                unstash 'schema.rs'
-                unstash 'frontend'
-                unstash 'backend'
-                unstash 'storybook'
-                unstash 'typedoc'
-                unstash 'mdbook'
-                unstash 'cargodoc'
+                    echo 'Unstash Artifacts'
+                    unstash 'schema.rs'
+                    unstash 'frontend'
+                    unstash 'backend'
+                    unstash 'storybook'
+                    unstash 'typedoc'
+                    unstash 'mdbook'
+                    unstash 'cargodoc'
 
-                echo 'Deploying to PR'
-                sh "sudo /usr/local/bin/permaplant-deploy.sh pr ${WORKSPACE}"
+                    echo 'Deploying to PR'
+                    sh "sudo /usr/local/bin/permaplant-deploy.sh pr ${WORKSPACE}"
 
-                echo 'Loading Data to PR'
-                dir('scraper') {
-                    sh 'npm ci'
-                    sh 'mkdir ./data/'
-                    sh 'cp /data/*.csv ./data/'
-                    sh 'npm run insert'
-                    sh 'rm -rf ./data/'
-                    sh 'rm -rf ./node_modules/'
+                    echo 'Loading Data to PR'
+                    dir('scraper') {
+                        sh 'npm ci'
+                        sh 'mkdir ./data/'
+                        sh 'cp /data/*.csv ./data/'
+                        sh 'npm run insert'
+                        sh 'rm -rf ./data/'
+                        sh 'rm -rf ./node_modules/'
+                    }
+
+                    copyDocumentation('pr')
                 }
-
-                copyDocumentation('pr')
             }
         }
-    }
 
-    stage('E2E Tests') {
-        node('docker') {
-            node_info()
-            checkout scm
-            def target = 'https://pr.permaplant.net'
-            if (env.BRANCH_NAME == 'master') {
-                echo 'Skipping E2E Tests for master'
-                return
-            }
-            try {
-                docker.build('permaplant-e2e:ci', './e2e').inside('-e E2E_URL=' + target) {
-                    wait_for_db('curl --fail https://pr.permaplant.net/api/config')
-                    sh 'make test-e2e'
+        stage('E2E Tests') {
+            node('docker') {
+                node_info()
+                checkout scm
+                def target = 'https://pr.permaplant.net'
+                if (env.BRANCH_NAME == 'master') {
+                    echo 'Skipping E2E Tests for master'
+                    return
                 }
+                try {
+                    docker.build('permaplant-e2e:ci', './e2e').inside('-e E2E_URL=' + target) {
+                        wait_for_db('curl --fail https://pr.permaplant.net/api/config')
+                        sh 'make test-e2e'
+                    }
             } catch (err) {
-                echo "Error occurred during the e2eImage.inside block: ${err}"
+                    echo "Error occurred during the e2eImage.inside block: ${err}"
                 // rethrow so build fails
                 // groovylint-disable-next-line
                 throw err;
             } finally {
-                archiveArtifacts artifacts: 'e2e/test-results/**', fingerprint: true,  allowEmptyArchive: true
-                archiveArtifacts artifacts: 'e2e/test-reports/report.html', fingerprint: true,  allowEmptyArchive: true
-                cucumber failedFeaturesNumber: -1, failedScenariosNumber: -1, failedStepsNumber: -1, \
+                    archiveArtifacts artifacts: 'e2e/test-results/**', fingerprint: true,  allowEmptyArchive: true
+                    archiveArtifacts artifacts: 'e2e/test-reports/report.html', fingerprint: true,
+                    allowEmptyArchive: true
+                    cucumber failedFeaturesNumber: -1, failedScenariosNumber: -1, failedStepsNumber: -1, \
                 fileIncludePattern: 'e2e/test-reports/cucumber.json', pendingStepsNumber: -1, skippedStepsNumber: -1, \
                 sortingMethod: 'ALPHABETICAL', undefinedStepsNumber: -1
-                deleteDir()
+                    deleteDir()
+                }
             }
         }
     }
 }
-}
 
-// Deploying to Dev only happens on branch "master"
-if (env.BRANCH_NAME == 'master') {
+// Deploying to Dev only happens on branch "master" and "dev"
+if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'dev') {
     try {
         // `Deploy Dev` stage similar to `Deploy PR` and `Jenkinsfile.release.Deploy Prod`
-        stage('Deploy Dev') {
-            node('permaplant && dev') {
+        stage("Deploy ${env.BRANCH_NAME}") {
+            node("permaplant && ${env.BRANCH_NAME}") {
                 node_info()
 
                 checkout scm
@@ -387,10 +390,10 @@ if (env.BRANCH_NAME == 'master') {
                 unstash 'mdbook'
                 unstash 'cargodoc'
 
-                echo 'Deploying to Dev ...'
-                sh "sudo /usr/local/bin/permaplant-deploy.sh dev ${WORKSPACE}"
+                echo "Deploying to ${env.BRANCH_NAME} ..."
+                sh "sudo /usr/local/bin/permaplant-deploy.sh ${env.BRANCH_NAME} ${WORKSPACE}"
 
-                copyDocumentation('dev')
+                copyDocumentation("${env.BRANCH_NAME}")
             }
         }
     } catch (Exception e) { // groovylint-disable-line

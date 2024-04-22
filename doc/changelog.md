@@ -21,7 +21,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Add warn signs to sizes for multi-selected plant-areas _(Lukas Anton Lakits)_
 - _()_
 - _()_
-- _()_
+- CI: avoid cargo index rebuild _(Filip Markovic)_
 - _()_
 - _()_
 - _()_
