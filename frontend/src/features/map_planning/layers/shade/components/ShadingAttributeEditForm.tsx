@@ -7,7 +7,7 @@ import { Shade, ShadingDto } from '@/api_types/definitions';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
 import { DebouncedSimpleFormInput } from '@/components/Form/DebouncedSimpleFormInput';
 import SelectMenu from '@/components/Form/SelectMenu';
-import { SelectOption } from '@/components/Form/SelectMenuTypes';
+import { SelectOption } from '@/components/Form/SelectMenu';
 import { ShadingGeometryToolForm } from '@/features/map_planning/layers/shade/components/ShadingGeometryToolForm';
 import { useIsReadOnlyMode } from '@/features/map_planning/utils/ReadOnlyModeContext';
 import { useDebouncedSubmit } from '@/hooks/useDebouncedSubmit';
