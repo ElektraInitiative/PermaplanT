@@ -6,6 +6,7 @@
   "draw_bezier_polygon_hint": "Klicken Sie mit der linken Maustaste, um einen Punkt zu setzen. Klicken Sie mit der rechten Maustaste, um die Zeichnung zu beenden.",
   "edit_bezier_polygon_hint": "Klicken Sie mit der linken Maustaste, um einen Punkt zu setzen.",
   "delete_bezier_polygon_point_hint": "Klicken Sie auf einen Punkt, um ihn zu löschen.",
+  "bezier_polygon_add_points_between_hint": "Klicken Sie auf die Map, um einen Punkt hinzuzufügen.",
 
   "draw_rectangle_tooltip": "Rechteck zeichnen.",
   "draw_ellipse_tooltip": "Ellipse zeichnen.",
@@ -13,6 +14,8 @@
   "draw_bezier_polygon_tooltip": "Freies Polygon zeichnen.",
   "edit_bezier_polygon_tooltip": "Freies Polygon bearbeiten.",
   "delete_bezier_polygon_point_tooltip": "Punkte löschen.",
+  "bezier_polygon_add_points_between_tooltip": "Punkte zwischen zwei Punkten hinzufügen.",
+
 
   "delete": "Element löschen",
   "delete_multiple_drawings": "Elemente löschen",

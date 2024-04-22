@@ -6,6 +6,7 @@
   "draw_bezier_polygon_hint": "Use left-click to add points, right-click to finish current polygon.",
   "edit_bezier_polygon_hint": "Use left-click to add points.",
   "delete_bezier_polygon_point_hint": "Click on a point to delete it.",
+  "bezier_polygon_add_points_between_hint": "Click on the map to add points between two points.",
 
   "draw_rectangle_tooltip": "Draw rectangle.",
   "draw_ellipse_tooltip": "Draw ellipse.",
@@ -13,6 +14,7 @@
   "draw_bezier_polygon_tooltip": "Draw bezier polygon.",
   "edit_bezier_polygon_tooltip": "Edit bezier polygon.",
   "delete_bezier_polygon_point_tooltip": "Delete points.",
+  "bezier_polygon_add_points_between_tooltip": "Add points between two points.",
 
   "delete": "Delete Drawing",
   "delete_multiple_drawings": "Delete Drawings",

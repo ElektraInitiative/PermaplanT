@@ -3,7 +3,8 @@
 FROM rust:1.67.1-slim-bookworm AS builder
 
 ENV MDBOOK_VERSION=0.4.23 \
-    MDBOOK_MERMAID_VERSION=0.12.6
+    MDBOOK_MERMAID_VERSION=0.12.6 \
+    CARGO_NET_RETRY=10
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
