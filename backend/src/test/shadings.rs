@@ -11,11 +11,11 @@ use uuid::Uuid;
 use crate::{
     model::{
         dto::{
+            core::TimelinePage,
             shadings::{
                 DeleteShadingDto, NewShadingDto, ShadingDto, UpdateShadingDto,
                 UpdateValuesShadingDto,
             },
-            TimelinePage,
         },
         r#enum::{layer_type::LayerType, shade::Shade},
     },
@@ -68,7 +68,7 @@ async fn test_can_search_shadings() {
     let (token, app) = init_test_app(pool.clone()).await;
 
     let resp = test::TestRequest::get()
-        .uri("/api/maps/-1/layers/shade/shadings?layer_id=-1&relative_to_date=2023-05-08")
+        .uri("/api/maps/-1/layers/shade/shadings")
         .insert_header((header::AUTHORIZATION, token.clone()))
         .send_request(&app)
         .await;
@@ -78,7 +78,7 @@ async fn test_can_search_shadings() {
     assert_eq!(page.results.len(), 1);
 
     let resp = test::TestRequest::get()
-        .uri("/api/maps/-1/layers/shade/shadings?relative_to_date=2023-05-08")
+        .uri("/api/maps/-1/layers/shade/shadings")
         .insert_header((header::AUTHORIZATION, token))
         .send_request(&app)
         .await;
@@ -112,17 +112,19 @@ async fn test_create_fails_with_invalid_layer() {
 
     let new_shading = NewShadingDto {
         id: Some(Uuid::new_v4()),
-        action_id: Uuid::new_v4(),
         shade: Shade::LightShade,
         geometry: small_rectangle(),
         layer_id: -1,
         add_date: None,
     };
 
+    let mut shading_vec = Vec::new();
+    shading_vec.push(new_shading);
+
     let resp = test::TestRequest::post()
         .uri("/api/maps/-1/layers/shade/shadings")
         .insert_header((header::AUTHORIZATION, token))
-        .set_json(new_shading)
+        .set_json(shading_vec)
         .send_request(&app)
         .await;
     assert_eq!(resp.status(), StatusCode::INTERNAL_SERVER_ERROR);
@@ -149,17 +151,19 @@ async fn test_can_create_shadings() {
 
     let new_shading = NewShadingDto {
         id: Some(Uuid::new_v4()),
-        action_id: Uuid::new_v4(),
         layer_id: -1,
         shade: Shade::LightShade,
         geometry: small_rectangle(),
         add_date: None,
     };
 
+    let mut shading_vec = Vec::new();
+    shading_vec.push(new_shading);
+
     let resp = test::TestRequest::post()
         .uri("/api/maps/-1/layers/shade/shadings")
         .insert_header((header::AUTHORIZATION, token))
-        .set_json(new_shading)
+        .set_json(shading_vec)
         .send_request(&app)
         .await;
     assert_eq!(resp.status(), StatusCode::CREATED);
@@ -193,22 +197,25 @@ async fn test_can_update_shadings() {
     let (token, app) = init_test_app(pool.clone()).await;
 
     let update_data = UpdateValuesShadingDto {
+        id: shading_id,
         shade: Some(Shade::PermanentDeepShade),
         geometry: None,
-        action_id: Uuid::new_v4(),
     };
-    let update_object = UpdateShadingDto::Update(update_data);
+    let mut update_vec = Vec::new();
+    update_vec.push(update_data);
+
+    let update_object = UpdateShadingDto::Update(update_vec);
 
     let resp = test::TestRequest::patch()
-        .uri(&format!("/api/maps/-1/layers/shade/shadings/{shading_id}"))
+        .uri(&format!("/api/maps/-1/layers/shade/shadings/"))
         .insert_header((header::AUTHORIZATION, token))
         .set_json(update_object)
         .send_request(&app)
         .await;
     assert_eq!(resp.status(), StatusCode::OK);
 
-    let shading: ShadingDto = test::read_body_json(resp).await;
-    assert_eq!(shading.shade, Shade::PermanentDeepShade);
+    let shading: Vec<ShadingDto> = test::read_body_json(resp).await;
+    assert_eq!(shading[0].shade, Shade::PermanentDeepShade);
 }
 
 #[actix_rt::test]
@@ -238,12 +245,13 @@ async fn test_can_delete_shading() {
     .await;
     let (token, app) = init_test_app(pool.clone()).await;
 
+    let mut delete_vec = Vec::new();
+    delete_vec.push(DeleteShadingDto { id: shading_id });
+
     let resp = test::TestRequest::delete()
-        .uri(&format!("/api/maps/-1/layers/shade/shadings/{shading_id}",))
+        .uri(&format!("/api/maps/-1/layers/shade/shadings/",))
         .insert_header((header::AUTHORIZATION, token.clone()))
-        .set_json(DeleteShadingDto {
-            action_id: Uuid::new_v4(),
-        })
+        .set_json(delete_vec)
         .send_request(&app)
         .await;
     assert_eq!(resp.status(), StatusCode::OK);
