@@ -25,7 +25,7 @@ function getStyle(color: string) {
   };
 }
 
-type EditableTextInputProps = {
+interface EditableTextInputProps extends React.InputHTMLAttributes<HTMLTextAreaElement> {
   x: number;
   y: number;
   scaleX: number;
@@ -35,7 +35,7 @@ type EditableTextInputProps = {
   color: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onKeyDown: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
-};
+}
 
 export function EditableTextInput({
   x,
@@ -47,6 +47,7 @@ export function EditableTextInput({
   onKeyDown,
   height,
   color,
+  ...props
 }: EditableTextInputProps) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -63,6 +64,7 @@ export function EditableTextInput({
       <textarea
         ref={inputRef}
         value={value}
+        {...props}
         onChange={onChange}
         onKeyDown={onKeyDown}
         rows={1}

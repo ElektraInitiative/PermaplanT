@@ -12,7 +12,7 @@ import CircleDottedIcon from '@/svg/icons/circle-dotted.svg?react';
 import SimpleFormTextArea from './SimpleFormTextArea';
 
 type DebouncedSimpleFormTextAreatProps<T extends FieldValues = FieldValues> = {
-  /** A function that takes the from values.
+  /** A function that takes the form values.
    * It is called if the settled value of the input is valid */
   onValid: SubmitHandler<T>;
   /** A function that takes the form error.
