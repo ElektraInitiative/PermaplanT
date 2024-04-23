@@ -49,7 +49,14 @@ const useAuthEffect = () => {
 };
 
 const handleGlobalKeyDown = (event: KeyboardEvent): void => {
-  // Prevent the default behavior of Ctrl+A to select all text
+  // Prevent the default behavior of Ctrl+A to select all text if the focus is not on an input or textarea
+  if (
+    document?.activeElement?.tagName === 'INPUT' ||
+    document?.activeElement?.tagName === 'TEXTAREA'
+  ) {
+    return;
+  }
+
   if (event.ctrlKey && event.key === 'a') {
     event.preventDefault();
   }
