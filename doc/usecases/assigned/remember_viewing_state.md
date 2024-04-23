@@ -17,6 +17,7 @@
     He zooms into the map.  
     He scrolls/drags the map's viewport.  
     He sets layer _B_ invisible.  
+    He sets layer _C_ with transparency.  
     He turns off the grid display.  
     He hides the plant labels.  
     He closes the browser, opens it again and logs in.
@@ -26,6 +27,7 @@
     - zoomed-in on the map
     - all plants visible on the map's viewport
     - layer _B_ invisible
+    - layer _C_ has the same transparency
     - grid display turned off
     - plant labels hidden
 - **Alternative scenario:**

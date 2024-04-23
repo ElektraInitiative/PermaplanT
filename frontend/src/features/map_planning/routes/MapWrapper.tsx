@@ -20,6 +20,7 @@ import useGetTimeLineData from '../hooks/useGetTimelineData';
 import { useMapId } from '../hooks/useMapId';
 import useMapStore from '../store/MapStore';
 import { handleRemoteAction } from '../store/RemoteActions';
+import { useTimelineStore } from '../store/TimeLineStore';
 import { mapEditorSteps, tourOptions } from '../utils/EditorTour';
 import { ReadOnlyModeContextProvider } from '../utils/ReadOnlyModeContext';
 
@@ -31,7 +32,7 @@ function getDefaultLayer(layerType: LayerType, layers?: LayerDto[]) {
 }
 
 const useInitializeTimeline = (mapId: number) => {
-  const timeLineVisibleYears = useMapStore((state) => state.untrackedState.timeLineVisibleYears);
+  const timeLineVisibleYears = useTimelineStore((state) => state.timeLineVisibleYears);
   const timeLineEvents = useGetTimeLineData(
     mapId,
     timeLineVisibleYears.from,
@@ -40,15 +41,12 @@ const useInitializeTimeline = (mapId: number) => {
 
   useEffect(() => {
     if (timeLineEvents) {
-      useMapStore.setState((state) => ({
+      useTimelineStore.setState((state) => ({
         ...state,
-        untrackedState: {
-          ...state.untrackedState,
-          timeLineEvents: {
-            daily: timeLineEvents.daily,
-            monthly: timeLineEvents.monthly,
-            yearly: timeLineEvents.yearly,
-          },
+        timeLineEvents: {
+          daily: timeLineEvents.daily,
+          monthly: timeLineEvents.monthly,
+          yearly: timeLineEvents.yearly,
         },
       }));
     }

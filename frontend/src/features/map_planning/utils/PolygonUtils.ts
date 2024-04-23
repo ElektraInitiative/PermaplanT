@@ -21,59 +21,67 @@ export function insertPointIntoLineSegmentWithLeastDistance(
   pointToInsert: PolygonPoint,
   minCoordinateDelta: number,
   edgeRing?: number,
-): PolygonGeometry {
+  isClosed = true,
+): { geometry: PolygonGeometry; insertedAfterIndex: number } {
   const newGeometry: PolygonGeometry = deepCopyGeometry(geometry);
 
   let smallestTotalDistanceToLine = Infinity;
   let insertNewPointAfterIndex = -1;
 
-  geometry.rings[edgeRing ?? 0]
-    // the last point is identical to the first point
-    .slice(0, geometry.rings[edgeRing ?? 0].length - 1)
-    .forEach((value, index, array) => {
-      const firstPoint = value;
-      const secondPoint = array[(index + 1) % array.length];
+  const rings = newGeometry.rings[edgeRing ?? 0].slice(0, isClosed ? -1 : undefined);
 
-      // Due to winding order we don't know how the first and second point are situated relative to each other.
-      const leftPoint = firstPoint.x < secondPoint.x ? firstPoint : secondPoint;
-      const rightPoint = firstPoint.x > secondPoint.x ? firstPoint : secondPoint;
-      const lowerPoint = firstPoint.y < secondPoint.y ? firstPoint : secondPoint;
-      const upperPoint = firstPoint.y > secondPoint.y ? firstPoint : secondPoint;
+  rings.forEach((value, index, array) => {
+    const firstPoint = value;
+    const secondPoint = array[(index + 1) % array.length];
 
-      const newPointBetweenFirstAndSecondPointX =
-        leftPoint.x < pointToInsert.x &&
-        rightPoint.x > pointToInsert.x &&
-        Math.abs(rightPoint.x - leftPoint.x) > minCoordinateDelta;
-      const newPointBetweenFirstAndSecondPointY =
-        lowerPoint.y < pointToInsert.y &&
-        upperPoint.y > pointToInsert.y &&
-        Math.abs(rightPoint.y - leftPoint.y) > minCoordinateDelta;
+    // We don't want to insert a point between the first and last point of an unclosed ring.
+    if (!isClosed && index == array.length - 1) return;
 
-      // The distance calculation below would no longer be accurate because the formula was designed for lines of
-      // infinite length that go through points instead of fixed length line segments.
-      if (!newPointBetweenFirstAndSecondPointX && !newPointBetweenFirstAndSecondPointY) return;
+    // Due to winding order we don't know how the first and second point are situated relative to each other.
+    const leftPoint = firstPoint.x < secondPoint.x ? firstPoint : secondPoint;
+    const rightPoint = firstPoint.x > secondPoint.x ? firstPoint : secondPoint;
+    const lowerPoint = firstPoint.y < secondPoint.y ? firstPoint : secondPoint;
+    const upperPoint = firstPoint.y > secondPoint.y ? firstPoint : secondPoint;
 
-      // https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
-      const distanceToLine =
-        Math.abs(
-          (secondPoint.x - firstPoint.x) * (firstPoint.y - pointToInsert.y) -
-            (firstPoint.x - pointToInsert.x) * (secondPoint.y - firstPoint.y),
-        ) /
-        Math.sqrt(
-          (secondPoint.x - firstPoint.x) * (secondPoint.x - firstPoint.x) +
-            (secondPoint.y - firstPoint.y) * (secondPoint.y - firstPoint.y),
-        );
+    const newPointBetweenFirstAndSecondPointX =
+      leftPoint.x < pointToInsert.x &&
+      rightPoint.x > pointToInsert.x &&
+      Math.abs(rightPoint.x - leftPoint.x) > minCoordinateDelta;
+    const newPointBetweenFirstAndSecondPointY =
+      lowerPoint.y < pointToInsert.y &&
+      upperPoint.y > pointToInsert.y &&
+      Math.abs(rightPoint.y - leftPoint.y) > minCoordinateDelta;
 
-      if (distanceToLine < smallestTotalDistanceToLine) {
-        smallestTotalDistanceToLine = distanceToLine;
-        insertNewPointAfterIndex = index;
-      }
-    });
+    // The distance calculation below would no longer be accurate because the formula was designed for lines of
+    // infinite length that go through points instead of fixed length line segments.
+    if (!newPointBetweenFirstAndSecondPointX && !newPointBetweenFirstAndSecondPointY) return;
+
+    // https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
+    const distanceToLine =
+      Math.abs(
+        (secondPoint.x - firstPoint.x) * (firstPoint.y - pointToInsert.y) -
+          (firstPoint.x - pointToInsert.x) * (secondPoint.y - firstPoint.y),
+      ) /
+      Math.sqrt(
+        (secondPoint.x - firstPoint.x) * (secondPoint.x - firstPoint.x) +
+          (secondPoint.y - firstPoint.y) * (secondPoint.y - firstPoint.y),
+      );
+
+    if (distanceToLine < smallestTotalDistanceToLine) {
+      smallestTotalDistanceToLine = distanceToLine;
+      insertNewPointAfterIndex = index;
+    }
+  });
 
   // The algorithm above might discard all line segments in some cases.
   // If this is the case we use the function bellow as our "fallback-algorithm"
   if (insertNewPointAfterIndex == -1)
-    return insertBetweenPointsWithLeastTotalDistance(newGeometry, pointToInsert, edgeRing);
+    return insertBetweenPointsWithLeastTotalDistance(
+      newGeometry,
+      pointToInsert,
+      edgeRing,
+      isClosed,
+    );
 
   const ring = newGeometry.rings[edgeRing ?? 0];
   newGeometry.rings[edgeRing ?? 0] = ring
@@ -81,7 +89,7 @@ export function insertPointIntoLineSegmentWithLeastDistance(
     .concat([pointToInsert])
     .concat(ring.slice(insertNewPointAfterIndex + 1, ring.length));
 
-  return newGeometry;
+  return { geometry: newGeometry, insertedAfterIndex: insertNewPointAfterIndex };
 }
 
 /**
@@ -96,28 +104,28 @@ export function insertBetweenPointsWithLeastTotalDistance(
   geometry: PolygonGeometry,
   pointToInsert: PolygonPoint,
   edgeRing?: number,
-): PolygonGeometry {
+  isClosed = true,
+): { geometry: PolygonGeometry; insertedAfterIndex: number } {
   const newGeometry: PolygonGeometry = deepCopyGeometry(geometry);
 
   let smallestTotalDistance = Infinity;
   let insertNewPointAfterIndex = -1;
 
-  newGeometry.rings[edgeRing ?? 0]
-    // the last point is identical to the first point
-    .slice(0, newGeometry.rings[edgeRing ?? 0].length - 1)
-    .forEach((value, index, array) => {
-      const firstPoint = value;
-      const secondPoint = array[(index + 1) % array.length];
+  const rings = newGeometry.rings[edgeRing ?? 0].slice(0, isClosed ? -1 : undefined);
 
-      const distanceOne = calculateDistance(pointToInsert, firstPoint);
-      const distanceTwo = calculateDistance(pointToInsert, secondPoint);
+  rings.forEach((value, index, array) => {
+    const firstPoint = value;
+    const secondPoint = array[(index + 1) % array.length];
 
-      const totalDistance = distanceOne + distanceTwo;
-      if (totalDistance < smallestTotalDistance) {
-        smallestTotalDistance = totalDistance;
-        insertNewPointAfterIndex = index;
-      }
-    });
+    const distanceOne = calculateDistance(pointToInsert, firstPoint);
+    const distanceTwo = calculateDistance(pointToInsert, secondPoint);
+
+    const totalDistance = distanceOne + distanceTwo;
+    if (totalDistance < smallestTotalDistance) {
+      smallestTotalDistance = totalDistance;
+      insertNewPointAfterIndex = index;
+    }
+  });
 
   const ring = newGeometry.rings[edgeRing ?? 0];
   newGeometry.rings[edgeRing ?? 0] = ring
@@ -125,7 +133,7 @@ export function insertBetweenPointsWithLeastTotalDistance(
     .concat([pointToInsert])
     .concat(ring.slice(insertNewPointAfterIndex + 1, ring.length));
 
-  return newGeometry;
+  return { geometry: newGeometry, insertedAfterIndex: insertNewPointAfterIndex };
 }
 
 /**

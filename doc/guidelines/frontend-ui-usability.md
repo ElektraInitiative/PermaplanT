@@ -180,3 +180,19 @@ Error messages should fulfill following criteria:
 
 E.g.:  
 "Sorry, I **cannot communicate** with my server, there is probably some network problem or the server is down. _Please retry later._"
+
+## Z-Index
+
+For a clean and maintainable layout, z-index should be used sparingly. Isolate z-index control to the **root element** of each component that needs overlapping elements.
+This creates staking contexts within components, preventing z-index conflicts across the application.
+If an element within a component doesn't require special z-index positioning, leave it to the default value of **'auto'**.
+
+List of z-index values currently present in the application, for future reference:
+
+- _BottomStatusPanel_ (inner Component of BaseStage.tsx): 10
+- _Tooltip_ in _PlanningAttributeEditForm_ component: 20
+- _Leaflet_ elements from OpenStreetMap (zoom +/- buttons, citation label on bottom right): 800 (note: pre-defined value coming from the external library used)
+- _Navbar_: 1001 (note: value chosen to be guaranteed "on top" of "Leaflet" elements)
+- _TransparentBackground_ (usage in modals): 1010
+- _ModalContainer_ (usage in modals): 1020
+- _Toast notifications_: 9999 (note: pre-defined value coming from the external library used)

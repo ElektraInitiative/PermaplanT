@@ -11,6 +11,7 @@ import { DebouncedSimpleFormInput } from '@/components/Form/DebouncedSimpleFormI
 import { DebouncedSimpleFormTextArea } from '@/components/Form/DebouncedSimpleFormTextArea';
 import EditIcon from '@/svg/icons/edit.svg?react';
 import EraserIcon from '@/svg/icons/eraser.svg?react';
+import PencilPlusIcon from '@/svg/icons/pencil-plus.svg?react';
 import useMapStore from '../../store/MapStore';
 import { DrawingLayerStatusPanelContent } from './DrawingLayerStatusPanelContent';
 
@@ -373,6 +374,22 @@ export function DrawingAttributeEditForm({
             title={t('drawings:edit_bezier_polygon_tooltip')}
           >
             <EditIcon></EditIcon>
+          </IconButton>
+
+          <IconButton
+            isToolboxIcon={true}
+            renderAsActive={editMode === 'add'}
+            onClick={() => {
+              drawingLayerSetEditMode(drawingId, 'add');
+              setStatusPanelContent(
+                <DrawingLayerStatusPanelContent
+                  text={t('drawings:bezier_polygon_add_points_between_hint')}
+                />,
+              );
+            }}
+            title={t('drawings:bezier_polygon_add_points_between_tooltip')}
+          >
+            <PencilPlusIcon></PencilPlusIcon>
           </IconButton>
 
           <IconButton

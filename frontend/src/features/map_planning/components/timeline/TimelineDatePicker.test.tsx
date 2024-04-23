@@ -1,8 +1,7 @@
 import { render } from '@testing-library/react';
 import ReactTestUtils, { act } from 'react-dom/test-utils';
 import { createDays, createYearsAndMonths } from '../../hooks/useGetTimelineData';
-import useMapStore from '../../store/MapStore';
-import { UNTRACKED_DEFAULT_STATE, UntrackedMapSlice } from '../../store/MapStoreTypes';
+import { useTimelineStore } from '../../store/TimeLineStore';
 import TimelineDatePicker from './TimelineDatePicker';
 
 const onSelectChange = vi.fn();
@@ -184,21 +183,18 @@ describe('handleYearItemChange', () => {
 });
 
 function setupTimeline() {
-  useMapStore.setState(createStoreWithTimelineData());
+  useTimelineStore.setState(createStoreWithTimelineData());
 }
 
-function createStoreWithTimelineData(): Pick<UntrackedMapSlice, 'untrackedState'> {
+function createStoreWithTimelineData() {
   const { years, months } = createYearsAndMonths(2000, 2021, {}, {});
   const days = createDays(2000, 2021, {});
 
   return {
-    untrackedState: {
-      ...UNTRACKED_DEFAULT_STATE,
-      timeLineEvents: {
-        yearly: years,
-        monthly: months,
-        daily: days,
-      },
+    timeLineEvents: {
+      yearly: years,
+      monthly: months,
+      daily: days,
     },
   };
 }
