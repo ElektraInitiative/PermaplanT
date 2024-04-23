@@ -7,6 +7,7 @@ import SquareFilled from '@/svg/icons/square-filled.svg?react';
 import HatchDownIcon from '@/svg/icons/texture_down.svg?react';
 import HatchUpIcon from '@/svg/icons/texture_up.svg?react';
 import CrosshatchIcon from '@/svg/icons/track.svg?react';
+import WaveIcon from '@/svg/icons/wavy-line.svg?react';
 
 interface DrawingLayerFillPatternProps {
   selectedPattern: FillPatternType;
@@ -69,6 +70,16 @@ export function DrawingLayerFillPatterns({
             }}
           >
             <PointsPatternIcon></PointsPatternIcon>
+          </IconButton>
+
+          <IconButton
+            isToolboxIcon={true}
+            renderAsActive={selectedPattern === FillPatternType.Wave}
+            onClick={() => {
+              onChange(FillPatternType.Wave);
+            }}
+          >
+            <WaveIcon></WaveIcon>
           </IconButton>
 
           <IconButton

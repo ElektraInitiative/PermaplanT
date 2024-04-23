@@ -110,6 +110,8 @@ pub enum FillPatternType {
     CrossHatch,
     #[serde(rename = "points")]
     Points,
+    #[serde(rename = "wave")]
+    Wave,
 }
 
 /// Used to change the `add_date` of a drawing.
