@@ -29,7 +29,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Fixed bug to reenable Ctrl+A in text inputes _(Daniel Steinkogler)_
 - _()_
 - _()_
 - _()_
