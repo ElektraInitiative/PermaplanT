@@ -863,7 +863,7 @@ function DrawingLayer(props: DrawingLayerProps) {
               transformerRef={transformerRef}
               id={bezierLine.id}
               object={bezierLine}
-              editMode={editDrawingId === bezierLine.id ? editMode : undefined}             
+              editMode={editDrawingId === bezierLine.id ? editMode : undefined}
               strokeWidth={properties.strokeWidth}
               color={properties.color}
               fillPattern={properties.fillPattern}
@@ -873,7 +873,7 @@ function DrawingLayer(props: DrawingLayerProps) {
                   p.map((p) => [p.x, p.y]),
                 )
               }
-              initialPoints={bezierLine.properties.points.map((p) => {
+              initialPoints={properties.points.map((p) => {
                 return {
                   x: p[0],
                   y: p[1],
