@@ -194,7 +194,7 @@ export interface UntrackedMapSlice {
   drawingLayerActivateDrawingMode: (shape: DrawingShapeType) => void;
   drawingLayerClearSelectedShape: () => void;
   drawingLayerSetSelectedColor: (color: string) => void;
-  drawingLayerSetSelectedIconPath: (color: string) => void;
+  drawingLayerSetSelectedIconPath: (path: string) => void;
   drawingLayerSetFillPattern: (fill: FillPatternType) => void;
   drawingLayerSetSelectedStrokeWidth: (strokeWidth: number) => void;
   drawingLayerSetEditMode: (drawingId?: string, editMode?: DrawingLayerEditMode) => void;

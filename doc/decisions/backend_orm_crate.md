@@ -1,4 +1,4 @@
-p# Backend ORM/SQL Crate
+# Backend ORM/SQL Crate
 
 ## Problem
 

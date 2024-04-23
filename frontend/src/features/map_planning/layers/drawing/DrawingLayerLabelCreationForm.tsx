@@ -47,12 +47,12 @@ export function DrawingLayerLabelCreationForm() {
 
       <hr className="my-4 border-neutral-700" />
 
-      <LabelTestPropertyForm />
+      <LabelTextPropertyForm />
     </>
   );
 }
 
-function LabelTestPropertyForm(): ReactElement {
+function LabelTextPropertyForm(): ReactElement {
   const { t } = useTranslation(['drawings']);
 
   const setSelectedColor = useMapStore((state) => state.drawingLayerSetSelectedColor);

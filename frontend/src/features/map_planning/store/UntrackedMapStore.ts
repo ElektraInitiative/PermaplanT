@@ -470,7 +470,7 @@ export const createUntrackedMapSlice: StateCreator<
       },
     }));
   },
-  drawingLayerSetSelectedIconPath(color) {
+  drawingLayerSetSelectedIconPath(path) {
     set((state) => ({
       ...state,
       untrackedState: {
@@ -479,7 +479,7 @@ export const createUntrackedMapSlice: StateCreator<
           ...state.untrackedState.layers,
           drawing: {
             ...state.untrackedState.layers.drawing,
-            selectedIconPath: color,
+            selectedIconPath: path,
           },
         },
       },

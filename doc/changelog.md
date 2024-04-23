@@ -60,7 +60,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Added fill patterns, labels and images to drawing layer _(Daniel Steinkogler, Jannis Adamek)_
 - _()_
 - _()_
 - _()_
@@ -136,7 +136,6 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Add key combinations for map geometry _(Daniel Steinkogler)_
 - Add documentation for adding a new field to an entity _(Christoph Schreiner)_
 - Add tooltips to show keybindings _(Daniel Steinkogler)_
-- Added fill patterns, labels and images to drawing layer _(Daniel Steinkogler, Jannis Adamek)_
 - Use arrow keys to navigate between timepicker sliders and fix timeline performance issues _(Daniel Steinkogler)_
 - Use integer for plant spread and height _(Christoph Schreiner)_
 - Increased zoom scaling factor for Map Editor / faster zooming _(Samuel)_
