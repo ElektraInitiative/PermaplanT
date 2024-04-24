@@ -115,7 +115,7 @@ export function generatePointsPatternAsImage(color: string) {
 }
 
 export function generateWavePatternImage(color: string) {
-  const svgString = `<svg xmlns="http://www.w3.org/2000/svg" width="50.88pt" height="40.88pt" viewBox="0 0 50.88 40.88">
+  const svgString = `<svg xmlns="http://www.w3.org/2000/svg" width="30.88pt" height="24.88pt" viewBox="0 0 50.88 40.88">
     <g fill="none">
       <path fill="none" stroke="${color}" stroke-width="0.72" stroke-linecap="round" stroke-linejoin="bevel" d="M0 4.69282C0.985137 2.01278 2.25742 -0.0865862 6.4321 0.00274856C10.6068 0.0920833 10.0866 4.90362 15.1422 4.96083C19.8024 5.01356 20.9323 3.05163 21.7084 0.00274856" />
       <path fill="none" stroke="${color}" stroke-width="0.72" stroke-linecap="round" stroke-linejoin="bevel" d="M0 6.11078C0.559054 4.03921 2.32533 -0.0924735 6.47423 0.00157876C10.6232 0.095631 10.3594 6.00832 15.3838 6.06855C20.0152 6.12407 19.749 5.10587 21.2043 2.55455" />

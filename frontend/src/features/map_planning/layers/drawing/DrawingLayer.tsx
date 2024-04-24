@@ -934,6 +934,7 @@ function DrawingLayer(props: DrawingLayerProps) {
               fillPatternRepeat="repeat"
               fillPatternScaleX={1 / (line.scaleX * mapScaleX)}
               fillPatternScaleY={1 / (line.scaleY * mapScaleY)}
+              strokeScaleEnabled={false}
               closed={properties.fillPattern !== 'none'}
               strokeWidth={properties.strokeWidth}
               tension={0.1}
@@ -994,6 +995,7 @@ function DrawingLayer(props: DrawingLayerProps) {
               strokeWidth={properties.strokeWidth}
               scaleX={rectangle.scaleX}
               scaleY={rectangle.scaleY}
+              strokeScaleEnabled={false}
               onClick={handleShapeClicked}
               draggable
               onDragStart={moveToTop}
@@ -1042,6 +1044,7 @@ function DrawingLayer(props: DrawingLayerProps) {
               fillPatternImage={getFillPattern(properties.fillPattern, properties.color)}
               fillPatternRepeat="repeat"
               stroke={properties.color}
+              strokeScaleEnabled={false}
               fillPattern={properties.fillPattern}
               strokeWidth={properties.strokeWidth}
               onClick={handleShapeClicked}
