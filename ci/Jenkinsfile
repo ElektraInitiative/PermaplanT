@@ -291,7 +291,8 @@ timeout(time: 2, unit: 'HOURS') {
     }
 }
 
-if (env.BRANCH_NAME.startsWith('MR')) {
+// TODO: change from `PR` to `MR`
+if (env.BRANCH_NAME.startsWith('PR')) {
     lock("${env.NODE_NAME}-exclusive") {
         // `Deploy MR` stage similar to `Deploy Dev` and `Jenkinsfile.release.Deploy Prod`
         stage('Deploy MR') {
