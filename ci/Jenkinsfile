@@ -227,7 +227,6 @@ def copyDocumentation(String location) {
         )
         ]
     )
-
 }
 
 // PIPELINE BEGIN
@@ -292,84 +291,85 @@ timeout(time: 2, unit: 'HOURS') {
     }
 }
 
-if (env.BRANCH_NAME.startsWith('PR')){
-lock("${env.NODE_NAME}-exclusive") {
-    // `Deploy PR` stage similar to `Deploy Dev` and `Jenkinsfile.release.Deploy Prod`
-    stage('Deploy PR') {
-        node('permaplant && master') {
-            node_info()
+if (env.BRANCH_NAME.startsWith('MR')) {
+    lock("${env.NODE_NAME}-exclusive") {
+        // `Deploy MR` stage similar to `Deploy Dev` and `Jenkinsfile.release.Deploy Prod`
+        stage('Deploy MR') {
+            node('permaplant && master') {
+                node_info()
 
-            checkout scm
+                checkout scm
 
-            echo "Workspace is '${WORKSPACE}'"
-            echo 'Ensure permaplant service is stopped'
-            sh 'sudo /usr/sbin/service permaplant stop'
+                echo "Workspace is '${WORKSPACE}'"
+                echo 'Ensure permaplant service is stopped'
+                sh 'sudo /usr/sbin/service permaplant stop'
 
-            withEnv(['DATABASE_URL=postgres://permaplant:permaplant@127.0.0.1/permaplant']) {
-                echo 'Resetting the CI DB ...'
-                sh 'sudo /usr/local/bin/permaplant-reset-ci.sh'
+                withEnv(['DATABASE_URL=postgres://permaplant:permaplant@127.0.0.1/permaplant']) {
+                    echo 'Resetting the CI DB ...'
+                    sh 'sudo /usr/local/bin/permaplant-reset-ci.sh'
 
-                echo 'Unstash Artifacts'
-                unstash 'schema.rs'
-                unstash 'frontend'
-                unstash 'backend'
-                unstash 'storybook'
-                unstash 'typedoc'
-                unstash 'mdbook'
-                unstash 'cargodoc'
+                    echo 'Unstash Artifacts'
+                    unstash 'schema.rs'
+                    unstash 'frontend'
+                    unstash 'backend'
+                    unstash 'storybook'
+                    unstash 'typedoc'
+                    unstash 'mdbook'
+                    unstash 'cargodoc'
 
-                echo 'Deploying to PR'
-                sh "sudo /usr/local/bin/permaplant-deploy.sh pr ${WORKSPACE}"
+                    echo 'Deploying to MR'
+                    sh "sudo /usr/local/bin/permaplant-deploy.sh mr ${WORKSPACE}"
 
-                echo 'Loading Data to PR'
-                dir('scraper') {
-                    sh 'npm ci'
-                    sh 'mkdir ./data/'
-                    sh 'cp /data/*.csv ./data/'
-                    sh 'npm run insert'
-                    sh 'rm -rf ./data/'
-                    sh 'rm -rf ./node_modules/'
+                    echo 'Loading Data to MR'
+                    dir('scraper') {
+                        sh 'npm ci'
+                        sh 'mkdir ./data/'
+                        sh 'cp /data/*.csv ./data/'
+                        sh 'npm run insert'
+                        sh 'rm -rf ./data/'
+                        sh 'rm -rf ./node_modules/'
+                    }
+
+                    copyDocumentation('mr')
                 }
-
-                copyDocumentation('pr')
             }
         }
-    }
 
-    stage('E2E Tests') {
-        node('docker') {
-            node_info()
-            checkout scm
-            def target = 'https://pr.permaplant.net'
-            if (env.BRANCH_NAME == 'master') {
-                echo 'Skipping E2E Tests for master'
-                return
-            }
-            try {
-                docker.build('permaplant-e2e:ci', './e2e').inside('-e E2E_URL=' + target) {
-                    wait_for_db('curl --fail https://pr.permaplant.net/api/config')
-                    sh 'make test-e2e'
+        stage('E2E Tests') {
+            node('docker') {
+                node_info()
+                checkout scm
+                def target = 'https://mr.permaplant.net'
+                if (env.BRANCH_NAME == 'master') {
+                    echo 'Skipping E2E Tests for master'
+                    return
                 }
+                try {
+                    docker.build('permaplant-e2e:ci', './e2e').inside('-e E2E_URL=' + target) {
+                        wait_for_db('curl --fail https://mr.permaplant.net/api/config')
+                        sh 'make test-e2e'
+                    }
             } catch (err) {
-                echo "Error occurred during the e2eImage.inside block: ${err}"
+                    echo "Error occurred during the e2eImage.inside block: ${err}"
                 // rethrow so build fails
                 // groovylint-disable-next-line
                 throw err;
             } finally {
-                archiveArtifacts artifacts: 'e2e/test-results/**', fingerprint: true,  allowEmptyArchive: true
-                archiveArtifacts artifacts: 'e2e/test-reports/report.html', fingerprint: true,  allowEmptyArchive: true
-                cucumber failedFeaturesNumber: -1, failedScenariosNumber: -1, failedStepsNumber: -1, \
+                    archiveArtifacts artifacts: 'e2e/test-results/**', fingerprint: true,  allowEmptyArchive: true
+                    archiveArtifacts artifacts: 'e2e/test-reports/report.html', fingerprint: true,  
+                        allowEmptyArchive: true
+                    cucumber failedFeaturesNumber: -1, failedScenariosNumber: -1, failedStepsNumber: -1, \
                 fileIncludePattern: 'e2e/test-reports/cucumber.json', pendingStepsNumber: -1, skippedStepsNumber: -1, \
                 sortingMethod: 'ALPHABETICAL', undefinedStepsNumber: -1
-                deleteDir()
+                    deleteDir()
+                }
             }
         }
     }
 }
-}
 
-// Deploying to Dev only happens on branch "master" and "dev"
-if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'dev') {    
+// Deploying to master and dev
+if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'dev') {
     try {
         // `Deploy Dev` stage similar to `Deploy PR` and `Jenkinsfile.release.Deploy Prod`
         stage("Deploy ${env.BRANCH_NAME}") {
