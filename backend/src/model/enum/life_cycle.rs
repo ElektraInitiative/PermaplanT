@@ -7,7 +7,7 @@ use utoipa::ToSchema;
 
 #[allow(clippy::missing_docs_in_private_items)] // TODO: See #97.
 #[typeshare]
-#[derive(Serialize, Deserialize, DbEnum, Debug, ToSchema)]
+#[derive(Serialize, Deserialize, DbEnum, Debug, PartialEq, Eq, ToSchema, Clone, Copy)]
 #[ExistingTypePath = "crate::schema::sql_types::LifeCycle"]
 pub enum LifeCycle {
     #[serde(rename = "annual")]
