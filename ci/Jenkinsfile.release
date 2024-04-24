@@ -27,23 +27,22 @@ def copyDocumentation() {
             sshTransfer(
                 sourceFiles: 'backend/target/doc/**/*',
                 removePrefix: 'backend/target/doc/',
-                remoteDirectory: "www/cargodoc"
+                remoteDirectory: 'www/cargodoc'
             ),
             sshTransfer(
                 sourceFiles: 'book/html/**/*',
                 removePrefix: 'book/html/',
-                remoteDirectory: "www/mdbook"
+                remoteDirectory: 'www/mdbook'
             ),
             sshTransfer(
                 sourceFiles: 'frontend/storybook-static/**/*',
                 removePrefix: 'frontend/storybook-static/',
-                remoteDirectory: "www/storybook"
+                remoteDirectory: 'www/storybook'
             )
             ]
         )
         ]
     )
-
 }
 
 stage('Build Schema') {
