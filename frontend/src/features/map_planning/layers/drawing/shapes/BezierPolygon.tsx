@@ -8,12 +8,12 @@ import { Circle, Line } from 'react-konva';
 import { DrawingDto, FillPatternType } from '@/api_types/definitions';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { DrawingLayerEditMode } from '@/features/map_planning/store/MapStoreTypes';
-import { getFillPattern } from '@/utils/fillPatterns';
 import { PolygonPoint } from '@/features/map_planning/types/PolygonTypes';
 import {
   flattenRing,
   insertPointIntoLineSegmentWithLeastDistance,
 } from '@/features/map_planning/utils/PolygonUtils';
+import { getFillPattern } from '@/utils/fillPatterns';
 
 export type BezierPolygonProps = {
   transformerRef?: React.MutableRefObject<Konva.Transformer | null>;
@@ -31,6 +31,8 @@ export type BezierPolygonProps = {
   y: number;
   scaleX: number;
   scaleY: number;
+  fillPatternScaleX?: number;
+  fillPatternScaleY?: number;
   rotation?: number;
   fillPattern?: FillPatternType;
 };
@@ -61,6 +63,8 @@ function BezierPolygon({
   y,
   scaleX,
   scaleY,
+  fillPatternScaleX,
+  fillPatternScaleY,
   rotation,
   fillPattern,
 }: BezierPolygonProps) {
@@ -368,6 +372,8 @@ function BezierPolygon({
           scaleY={scaleY}
           rotation={rotation}
           fillPattern={fillPattern}
+          fillPatternScaleX={fillPatternScaleX}
+          fillPatternScaleY={fillPatternScaleY}
           fill={fillPattern == 'fill' ? color : undefined}
           fillPatternImage={getFillPattern(fillPattern, color)}
           fillPatternRepeat="repeat"

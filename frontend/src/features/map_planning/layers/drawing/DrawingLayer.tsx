@@ -884,6 +884,8 @@ function DrawingLayer(props: DrawingLayerProps) {
               y={bezierLine.y}
               scaleX={bezierLine.scaleX}
               scaleY={bezierLine.scaleY}
+              fillPatternScaleX={1 / (bezierLine.scaleX * mapScaleX)}
+              fillPatternScaleY={1 / (bezierLine.scaleY * mapScaleY)}
               rotation={bezierLine.rotation}
               onDragStart={moveToTop}
             ></BezierPolygon>
