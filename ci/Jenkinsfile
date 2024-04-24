@@ -9,7 +9,7 @@ def node_info() {
 
 // Function duplicated in `Jenkinsfile.release` without the command parameter
 def wait_for_db(String command) {
-    retry(6) {
+    retry(10) {
         sleep(time: 5, unit: 'SECONDS')
         sh "${command}"
     }

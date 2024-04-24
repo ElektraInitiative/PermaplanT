@@ -23,12 +23,7 @@ import updateAddDatePlanting, {
 } from '../../api/plantingApi';
 import useMapStore from '../../store/MapStore';
 import { Action, TrackedMapState } from '../../store/MapStoreTypes';
-import {
-  decreaseAddedPlantsForDate,
-  increaseAddedPlantsForDate,
-  timlineEventsUpdateAdedDate,
-  timlineEventsUpdateRemoveDate,
-} from '../../utils/TimelineEventsHelper';
+import { useTimelineStore } from '../../store/TimeLineStore';
 import { filterVisibleObjects } from '../../utils/filterVisibleObjects';
 
 export class CreatePlantAction
@@ -53,7 +48,7 @@ export class CreatePlantAction
 
   apply(state: TrackedMapState): TrackedMapState {
     const timelineDate = useMapStore.getState().untrackedState.timelineDate;
-    increaseAddedPlantsForDate(this._data[0].addDate || timelineDate);
+    useTimelineStore.getState().increaseAddedEventsForDate(this._data[0].addDate || timelineDate);
 
     return {
       ...state,
@@ -108,7 +103,10 @@ export class DeletePlantAction
         (obj) => obj.id === deleteActionPayload.id,
       );
       if (plant?.addDate) {
-        decreaseAddedPlantsForDate(plant.addDate);
+        useTimelineStore.getState().decreaseAddedEventsForDate(plant.addDate);
+      }
+      if (plant?.removeDate) {
+        useTimelineStore.getState().decreaseRemovedEventsForDate(plant.removeDate);
       }
     }
 
@@ -313,7 +311,9 @@ export class UpdateAddDatePlantAction
         (obj) => obj.id === addDateActionPayload.id,
       );
       if (plant?.addDate && addDateActionPayload.addDate) {
-        timlineEventsUpdateAdedDate(plant.addDate, addDateActionPayload.addDate);
+        useTimelineStore
+          .getState()
+          .timelineEventsUpdateAddedDate(plant.addDate, addDateActionPayload.addDate);
       }
     }
 
@@ -453,7 +453,10 @@ export class UpdateRemoveDatePlantAction
       const plant = state.layers.plants.loadedObjects.find(
         (obj) => obj.id === removeDateActionPayload.id,
       );
-      timlineEventsUpdateRemoveDate(plant?.removeDate, removeDateActionPayload.removeDate);
+
+      useTimelineStore
+        .getState()
+        .timelineEventsUpdateRemoveDate(plant?.removeDate, removeDateActionPayload.removeDate);
     }
 
     return {

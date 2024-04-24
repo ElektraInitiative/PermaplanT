@@ -9,7 +9,7 @@ export type PolygonGeometry = {
   /**
    * ID of the coordinate type used by the backend.
    */
-  srid: string;
+  srid?: string;
   /**
    * Coordinate data used to construct the polygon.
    */
@@ -39,7 +39,7 @@ export type PolygonPoint = {
   /**
    * ID of the coordinate type used by the backend.
    */
-  srid: number;
+  srid?: number;
 };
 
 export const DEFAULT_SRID = 4326;
