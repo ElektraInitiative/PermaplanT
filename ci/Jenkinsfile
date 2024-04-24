@@ -296,7 +296,7 @@ if (env.BRANCH_NAME.startsWith('PR')) {
     lock("${env.NODE_NAME}-exclusive") {
         // `Deploy MR` stage similar to `Deploy Dev` and `Jenkinsfile.release.Deploy Prod`
         stage('Deploy MR') {
-            node('permaplant && master') {
+            node('permaplant && mr') {
                 node_info()
 
                 checkout scm
