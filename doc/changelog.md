@@ -11,7 +11,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - CI: added pipeline for master.permplant.net and other name changes for pages _(Filip Markovic)_
 - Added Meeting Agenda&Notes for 15.04.2024 9:00 _(Markus Raab, Daniel)_
 - _()_
-- _()_
+- Removed Blossoms from Frontend (Text from guided tour, awarding Blossoms at the end of the tour) _(Andrei Dinu)_
 - _()_
 - _()_
 - Fixed warning text from left toolbar being cut by map elements. _(Andrei Dinu)_

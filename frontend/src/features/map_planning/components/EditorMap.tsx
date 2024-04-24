@@ -3,8 +3,7 @@ import Konva from 'konva';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ShepherdTourContext } from 'react-shepherd';
-import { toast } from 'react-toastify';
-import { GainedBlossomsDto, LayerDto, LayerType } from '@/api_types/definitions';
+import { LayerDto, LayerType } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import CancelConfirmationModal from '@/components/Modals/ExtendedModal';
 import {
@@ -23,7 +22,6 @@ import GridIcon from '@/svg/icons/grid-dots.svg?react';
 import RedoIcon from '@/svg/icons/redo.svg?react';
 import TagsIcon from '@/svg/icons/tags.svg?react';
 import UndoIcon from '@/svg/icons/undo.svg?react';
-import { gainBlossom } from '../api/gainBlossom';
 import { useCompleteTour, useReenableTour } from '../hooks/tourHookApi';
 import BaseLayer from '../layers/base/BaseLayer';
 import BaseLayerRightToolbar from '../layers/base/components/BaseLayerRightToolbar';
@@ -71,7 +69,7 @@ export const EditorMap = ({ layers }: MapProps) => {
   const timelineDate = useMapStore((state) => state.untrackedState.timelineDate);
   const updateTimelineDate = useMapStore((state) => state.updateTimelineDate);
   const tour = useContext(ShepherdTourContext);
-  const { t } = useTranslation(['timeline', 'blossoms', 'common', 'guidedTour', 'toolboxTooltips']);
+  const { t } = useTranslation(['timeline', 'common', 'guidedTour', 'toolboxTooltips']);
   const isReadOnlyMode = useIsReadOnlyMode();
   const [show, setShow] = useState(false);
   const [timeLineState, setTimeLineState] = useState<'loading' | 'idle'>('idle');
@@ -167,25 +165,12 @@ export const EditorMap = ({ layers }: MapProps) => {
   }
 
   useEffect(() => {
-    const _tourCompletionBlossom = async () => {
-      const blossom: GainedBlossomsDto = {
-        blossom: 'graduation_day',
-        times_gained: 1,
-        gained_date: new Date().toISOString().split('T')[0],
-      };
-      await gainBlossom(blossom);
-      toast.success(`${t('blossoms:blossom_gained')} ${t('blossoms:types.graduation_day')}`, {
-        icon: '\u{1F338}',
-      });
-    };
-
     tour?.start();
     if (tour && tour.steps.length > 0) {
       tour?.on('cancel', () => {
         setShow(true);
       });
       tour?.on('complete', () => {
-        _tourCompletionBlossom();
         completeTour();
       });
     }
