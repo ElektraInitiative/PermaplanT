@@ -5,7 +5,8 @@ pub mod blossoms_impl;
 pub mod drawings;
 pub mod drawings_impl;
 pub mod guided_tours_impl;
-pub mod layer_impl;
+pub mod layers;
+pub mod layers_impl;
 pub mod map_impl;
 pub mod plant_layer;
 pub mod plantings;
@@ -26,7 +27,7 @@ use postgis_diesel::types::Polygon;
 use uuid::Uuid;
 
 use crate::schema::{
-    base_layer_images, blossoms, gained_blossoms, guided_tours, layers, maps, plants, seeds, users,
+    base_layer_images, blossoms, gained_blossoms, guided_tours, maps, plants, seeds, users,
 };
 
 use super::r#enum::experience::Experience;
@@ -836,36 +837,6 @@ pub struct UpdateMap {
 pub struct UpdateMapGeometry {
     /// New Map Bounds
     pub geometry: Polygon<Point>,
-}
-
-/// The `Layer` entity.
-#[derive(Identifiable, Queryable)]
-#[diesel(table_name = layers)]
-pub struct Layer {
-    /// The id of the layer.
-    pub id: i32,
-    /// The id of the map this layer belongs to.
-    pub map_id: i32,
-    /// The type of layer.
-    pub type_: LayerType,
-    /// The name of the layer.
-    pub name: String,
-    /// A flag indicating if this layer is an user created alternative.
-    pub is_alternative: bool,
-}
-
-/// The `NewLayer` entity.
-#[derive(Insertable)]
-#[diesel(table_name = layers)]
-pub struct NewLayer {
-    /// The id of the map this layer belongs to.
-    pub map_id: i32,
-    /// The type of layer.
-    pub type_: LayerType,
-    /// The name of the layer.
-    pub name: String,
-    /// A flag indicating if this layer is an user created alternative.
-    pub is_alternative: bool,
 }
 
 /// The `BaseLayerImages` entity.

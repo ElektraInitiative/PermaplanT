@@ -8,9 +8,11 @@ use typeshare::typeshare;
 use utoipa::{IntoParams, ToSchema};
 use uuid::Uuid;
 
+use self::layers::LayerDto;
+
 use super::r#enum::{
-    experience::Experience, include_archived_seeds::IncludeArchivedSeeds, layer_type::LayerType,
-    membership::Membership, privacy_option::PrivacyOption, quality::Quality, quantity::Quantity,
+    experience::Experience, include_archived_seeds::IncludeArchivedSeeds, membership::Membership,
+    privacy_option::PrivacyOption, quality::Quality, quantity::Quantity,
     relation_type::RelationType, salutation::Salutation,
 };
 
@@ -23,8 +25,8 @@ pub mod drawings;
 pub mod drawings_impl;
 pub mod guided_tours_impl;
 pub mod layer_impl;
+pub mod layers;
 pub mod map_impl;
-pub mod new_layer_impl;
 pub mod new_map_impl;
 pub mod new_seed_impl;
 pub mod page_impl;
@@ -333,48 +335,6 @@ pub struct Coordinates {
     pub latitude: f64,
     /// Longitude of the point.
     pub longitude: f64,
-}
-
-/// The whole information of a map version.
-#[typeshare]
-#[derive(Serialize, Deserialize, ToSchema)]
-pub struct LayerDto {
-    /// The id of the layer.
-    pub id: i32,
-    /// The id of the map this layer belongs to.
-    pub map_id: i32,
-    /// The type of layer.
-    pub type_: LayerType,
-    /// The name of the layer.
-    pub name: String,
-    /// A flag indicating if this layer is an user created alternative.
-    pub is_alternative: bool,
-}
-
-/// The information of a layer neccessary for its creation.
-#[typeshare]
-#[derive(Serialize, Deserialize, ToSchema)]
-pub struct NewLayerDto {
-    /// The id of the map this layer belongs to.
-    pub map_id: i32,
-    /// The type of layer.
-    pub type_: LayerType,
-    /// The name of the layer.
-    pub name: String,
-    /// A flag indicating if this layer is an user created alternative.
-    pub is_alternative: bool,
-}
-
-/// Query parameters for searching layers.
-#[typeshare]
-#[derive(Debug, Deserialize, IntoParams)]
-pub struct LayerSearchParameters {
-    /// The parent map.
-    pub map_id: Option<i32>,
-    /// The type of layer.
-    pub type_: Option<LayerType>,
-    /// Whether or not the layer is an alternative.
-    pub is_alternative: Option<bool>,
 }
 
 /// Query parameters for connecting to a map.

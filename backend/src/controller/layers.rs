@@ -1,12 +1,15 @@
 //! Layer endpoints.
 
 use actix_web::{
-    delete, get, post,
+    delete, get, post, put,
     web::{Data, Json, Path, Query},
     HttpResponse, Result,
 };
 
-use crate::{config::data::AppDataInner, model::dto::LayerSearchParameters};
+use crate::{
+    config::data::AppDataInner,
+    model::dto::{layers::LayerRenameDto, LayerSearchParameters},
+};
 use crate::{model::dto::NewLayerDto, service::layer};
 
 /// Endpoint for searching layers.
@@ -84,11 +87,67 @@ pub async fn find_by_id(
 )]
 #[post("")]
 pub async fn create(
+    path: Path<i32>,
     new_layer: Json<NewLayerDto>,
     app_data: Data<AppDataInner>,
 ) -> Result<HttpResponse> {
-    let dto = layer::create(new_layer.0, &app_data).await?;
+    let dto = layer::create(path.into_inner(), new_layer.into_inner(), &app_data).await?;
     Ok(HttpResponse::Created().json(dto))
+}
+
+/// Endpoint for reodering layers.
+///
+/// # Errors
+/// * If the connection to the database could not be established.
+#[utoipa::path(
+    context_path = "/api/maps/{map_id}/layers",
+    params(
+        ("map_id" = i32, Path, description = "The id of the map"),
+    ),
+    request_body = Vec<i32>,
+    responses(
+        (status = 200, description = "Layers have been reordered")
+    ),
+    security(
+        ("oauth2" = [])
+    )
+)]
+#[put("/order")]
+pub async fn reorder(
+    path: Path<i32>,
+    order: Json<Vec<i32>>,
+    app_data: Data<AppDataInner>,
+) -> Result<HttpResponse> {
+    layer::reorder(path.into_inner(), order, &app_data).await?;
+    Ok(HttpResponse::Ok().finish())
+}
+
+/// Endpoint for renaming layers.
+///
+/// # Errors
+/// * If the connection to the database could not be established.
+#[utoipa::path(
+    context_path = "/api/maps/{map_id}/layers/{layer_id}/name",
+    params(
+        ("map_id" = i32, Path, description = "The id of the map"),
+        ("layer_id" = i32, Path, description = "The id of the layer"),
+    ),
+    request_body = LayerRenameDto,
+    responses(
+        (status = 200, description = "Layer has been renamed")
+    ),
+    security(
+        ("oauth2" = [])
+    )
+)]
+#[put("/order")]
+pub async fn rename(
+    path: Path<i32>,
+    dto: Json<LayerRenameDto>,
+    app_data: Data<AppDataInner>,
+) -> Result<HttpResponse> {
+    layer::rename(path.into_inner(), dto.into_inner(), &app_data).await?;
+    Ok(HttpResponse::Ok().finish())
 }
 
 /// Endpoint for deleting a layer.

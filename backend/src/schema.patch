@@ -1,15 +1,12 @@
-diff --git a/backend/src/schema.rs b/backend/src/schema.rs 2023-07-20
-index 54f26f46..68427977 100644
---- a/backend/src/schema.rs
-+++ b/backend/src/schema.rs
-@@ -10,20 +10,12 @@ pub mod sql_types {
-     pub struct ExternalSource;
+--- src/schema.rs	2024-04-23 23:15:12.521217867 +0200
++++ src/schema_tmp.rs	2024-04-23 23:18:06.133856878 +0200
+@@ -19,20 +19,12 @@
 
      #[derive(diesel::sql_types::SqlType)]
      #[diesel(postgres_type(name = "fertility"))]
      pub struct Fertility;
 
--    #[derive(diesel::sql_types::SqlType)]
+     #[derive(diesel::sql_types::SqlType)]
 -    #[diesel(postgres_type(name = "geography"))]
 -    pub struct Geography;
 -
@@ -17,14 +14,15 @@ index 54f26f46..68427977 100644
 -    #[diesel(postgres_type(name = "geometry"))]
 -    pub struct Geometry;
 -
-     #[derive(diesel::sql_types::SqlType)]
+-    #[derive(diesel::sql_types::SqlType)]
      #[diesel(postgres_type(name = "growth_rate"))]
      pub struct GrowthRate;
 
      #[derive(diesel::sql_types::SqlType)]
      #[diesel(postgres_type(name = "herbaceous_or_woody"))]
-@@ -100,16 +92,15 @@ diesel::table! {
-         is_alternative -> Bool,
+     pub struct HerbaceousOrWoody;
+@@ -185,16 +177,15 @@
+         order_index -> Int4,
      }
  }
 

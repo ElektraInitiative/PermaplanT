@@ -44,6 +44,8 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                                 .service(layers::find)
                                 .service(layers::find_by_id)
                                 .service(layers::create)
+                                .service(layers::reorder)
+                                .service(layers::rename)
                                 .service(layers::delete)
                                 .service(
                                     web::scope("/base/images")
@@ -54,13 +56,6 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                                 .service(
                                     web::scope("/base/{layer_id}/images")
                                         .service(base_layer_image::find),
-                                )
-                                .service(
-                                    web::scope("/drawings")
-                                        .service(drawings::find)
-                                        .service(drawings::create)
-                                        .service(drawings::update)
-                                        .service(drawings::delete),
                                 )
                                 .service(
                                     web::scope("/plants")

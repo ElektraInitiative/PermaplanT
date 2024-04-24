@@ -66,12 +66,11 @@ pub async fn create(
     let result = Map::create(new_map, user_id, &mut conn).await?;
     for layer_type in &LAYER_TYPES {
         let new_layer = NewLayerDto {
-            map_id: result.id,
             type_: *layer_type,
             name: format!("{layer_type} Layer"),
             is_alternative: false,
         };
-        let layer = Layer::create(new_layer, &mut conn).await?;
+        let layer = Layer::create(result.id, new_layer, &mut conn).await?;
 
         // Immediately initialize a base layer image,
         // because the frontend would always have to create one

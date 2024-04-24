@@ -14,8 +14,9 @@ use serde::Serialize;
 use typeshare::typeshare;
 use uuid::Uuid;
 
-use super::{
+use crate::model::dto::{
     drawings::DrawingDto,
+    layers::LayerDto,
     plantings::{
         DeletePlantingDto, MovePlantingDto, TransformPlantingDto, UpdateAddDatePlantingDto,
         UpdatePlantingNoteDto, UpdateRemoveDatePlantingDto,
@@ -38,6 +39,14 @@ pub struct Action {
 /// An enum representing all the actions that can be broadcasted via [`crate::sse::broadcaster::Broadcaster`].
 #[serde(tag = "type", content = "payload")]
 pub enum ActionType {
+    /// An action used to broadcast creation of a layer.
+    CreateLayer(LayerDto),
+    /// An action used to broadcast deletion of a layer.
+    DeleteLayer(i32),
+    /// An action used to broadcast the new ordering of the layers.
+    /// The payload is a list of ids.
+    ReorderLayers(Vec<i32>),
+
     /// An action used to broadcast creation of a plant.
     CreatePlanting(Vec<CreatePlantActionPayload>),
     /// An action used to broadcast deletion of a plant.
@@ -69,9 +78,9 @@ pub enum ActionType {
     DeleteDrawing(Vec<Uuid>),
     /// An action used to broadcast the update of an existing drawing shape.
     UpdateDrawing(Vec<DrawingDto>),
-    /// An action used to update the `add_date` of a drawing.
+    /// An action used to broadcast the update of `add_date` of a drawing.
     UpdateDrawingAddDate(Vec<DrawingDto>),
-    /// An action used to update the `remove_date` of a drawing.
+    /// An action used to broadcast the update of `remove_date` of a drawing.
     UpdateDrawingRemoveDate(Vec<DrawingDto>),
 }
 
