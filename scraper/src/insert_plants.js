@@ -1,7 +1,6 @@
 import pgPromise from "pg-promise";
-import csv from "csvtojson";
 import dbPlantsColumns from "./helpers/dp_plants_columns.js";
-import { sanitizeColumnNames } from "./helpers/helpers.js";
+import { sanitizeColumnNames, readCsv } from "./helpers/helpers.js";
 
 import { config } from "dotenv";
 
@@ -98,7 +97,7 @@ function sanitizeValues(jsonArray) {
 async function insertPlants(fileName) {
   console.log("[INFO] Starting the insertion of plants into database.");
 
-  const jsonArray = await csv().fromFile(fileName);
+  const jsonArray = await readCsv(fileName);
 
   sanitizeColumnNames(jsonArray);
 

@@ -1,3 +1,18 @@
+import csv from "csvtojson";
+
+/*
+ * Reads a CSV file and returns a JSON array.
+ * Logs filename on error and exits the process.
+ */
+async function readCsv(file) {
+  try {
+    return await csv().fromFile(file);
+  } catch (error) {
+    console.error(`[ERROR] Error reading CSV file '${file}': ${error}`);
+    process.exit(1);
+  }
+}
+
 /**
  * Capitalizes the first character of every word in a string.
  *
@@ -133,4 +148,5 @@ export {
   capitalizeWords,
   cleanUpJsonForCsv,
   processMeasurement,
+  readCsv,
 };

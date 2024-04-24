@@ -1,20 +1,19 @@
 import fs from "fs";
 import path from "path";
 import { parse as json2csv } from "json2csv";
-import csv from "csvtojson";
-import { cleanUpJsonForCsv } from "./helpers/helpers.js";
+import { cleanUpJsonForCsv, readCsv } from "./helpers/helpers.js";
 import { applyOverride } from "./helpers/override.js";
 
 const deletionsFile = "00_DELETIONS.csv";
 
 async function loadMergedDataset() {
-  return csv().fromFile("data/mergedDatasets.csv");
+  return readCsv("data/mergedDatasets.csv");
 }
 
 async function applyDeletions(plants) {
   console.log(`[INFO] Deleting plants from data/overrides/${deletionsFile}`);
 
-  const deletePlants = await csv().fromFile(`data/overrides/${deletionsFile}`);
+  const deletePlants = await readCsv(`data/overrides/${deletionsFile}`);
 
   deletePlants.forEach((overridePlant) => {
     // find the plant

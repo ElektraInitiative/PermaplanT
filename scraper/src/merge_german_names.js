@@ -1,13 +1,12 @@
 import fs from "fs";
 import { parse as json2csv } from "json2csv";
-import csv from "csvtojson";
-import { cleanUpJsonForCsv } from "./helpers/helpers.js";
+import { cleanUpJsonForCsv, readCsv } from "./helpers/helpers.js";
 import { applyOverride } from "./helpers/override.js";
 
 const germanCommonNames = "data/germanCommonNames.csv";
 
 async function loadMergedDataset() {
-  return csv().fromFile("data/mergedDatasets.csv");
+  return readCsv("data/mergedDatasets.csv");
 }
 
 async function applyGermanNames(plants) {

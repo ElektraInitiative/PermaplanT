@@ -1,7 +1,7 @@
 import fs from "fs";
 import { parse as json2csv } from "json2csv";
-import csv from "csvtojson";
 import columnMapping from "./column_mapping_permapeople.js";
+import { readCsv } from "./helpers/helpers.js";
 
 /**
  * Sanitize the column names of the csv files.
@@ -49,8 +49,8 @@ function sanitizeColumnNames(jsonArray) {
 async function compareDatabases() {
   const allPlants = [];
 
-  const practicalPlants = await csv().fromFile("data/detail.csv"); // Practical plants dataset
-  const permapeople = await csv().fromFile("data/permapeopleRawData.csv"); // Permapeople dataset
+  const practicalPlants = await readCsv("data/detail.csv"); // Practical plants dataset
+  const permapeople = await readCsv("data/permapeopleRawData.csv"); // Permapeople dataset
 
   sanitizeColumnNames(practicalPlants);
   sanitizeColumnNames(permapeople);

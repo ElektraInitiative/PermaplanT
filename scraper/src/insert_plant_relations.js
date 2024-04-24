@@ -1,7 +1,7 @@
 import pgPromise from "pg-promise";
-import csv from "csvtojson";
 
 import { config } from "dotenv";
+import { readCsv } from "./helpers/helpers.js";
 
 config({
   path: ".env.local",
@@ -97,8 +97,8 @@ async function start(companionsFilePath, antagonistFilePath) {
     "[INFO] Starting the insertion of plant relations into database."
   );
 
-  const companionsJsonArray = await csv().fromFile(companionsFilePath);
-  const antagonistJsonArray = await csv().fromFile(antagonistFilePath);
+  const companionsJsonArray = await readCsv(companionsFilePath);
+  const antagonistJsonArray = await readCsv(antagonistFilePath);
   const uniquePlantNameIdMap = new Map();
 
   //fill map with plantnames from the csv

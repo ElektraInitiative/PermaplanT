@@ -2,8 +2,7 @@ import axios from "axios";
 import axiosRetry from "axios-retry";
 import fs from "fs";
 import { parse as json2csv } from "json2csv";
-import csv from "csvtojson";
-import { capitalizeWords } from "./helpers/helpers.js";
+import { capitalizeWords, readCsv } from "./helpers/helpers.js";
 
 let GermanNamesFound = 0;
 
@@ -184,7 +183,7 @@ async function fetchGermanNames() {
     fs.mkdirSync("data/overrides");
   }
 
-  let plants = await csv().fromFile("data/mergedDatasets.csv");
+  let plants = await readCsv("data/mergedDatasets.csv");
 
   await fetchGermanNamesForPlantsConcurrent(plants);
 

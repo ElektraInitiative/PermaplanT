@@ -17,6 +17,9 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Fixed warning text from left toolbar being cut by map elements. _(Andrei Dinu)_
 - Added paragraph about z-index usage to Frontend UI Usability Guideline in Docs _(Andrei Dinu)_
 - _()_
+- Scraper: Error message of missing csv files now contains file name _(Christoph Schreiner)_
+- _()_
+- _()_
 - Add tests for hooks in frontend/layers _(Lukas Anton Lakits)_
 - _()_
 - Add warn signs to sizes for multi-selected plant-areas _(Lukas Anton Lakits)_
