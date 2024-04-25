@@ -58,6 +58,13 @@ pub async fn create(
 ) -> Result<MapDto, ServiceError> {
     let mut conn = app_data.pool.get().await?;
 
+    if Map::is_name_taken(&new_map.name, &mut conn).await? {
+        return Err(ServiceError::new(
+            StatusCode::CONFLICT,
+            "Map name already taken".to_owned(),
+        ));
+    }
+
     let geometry_validation_result = is_valid_map_geometry(&new_map.geometry);
     if let Some(error) = geometry_validation_result {
         return Err(error);
