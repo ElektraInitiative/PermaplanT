@@ -5,6 +5,7 @@ import {
   BaseLayerImageDto,
   DrawingDto,
   DrawingShapeType,
+  FillPatternType,
   LayerDto,
   LayerType,
   PlantingDto,
@@ -193,7 +194,8 @@ export interface UntrackedMapSlice {
   drawingLayerActivateDrawingMode: (shape: DrawingShapeType) => void;
   drawingLayerClearSelectedShape: () => void;
   drawingLayerSetSelectedColor: (color: string) => void;
-  drawingLayerSetFillEnabled: (fill: boolean) => void;
+  drawingLayerSetSelectedIconPath: (path: string) => void;
+  drawingLayerSetFillPattern: (fill: FillPatternType) => void;
   drawingLayerSetSelectedStrokeWidth: (strokeWidth: number) => void;
   drawingLayerSetEditMode: (drawingId?: string, editMode?: DrawingLayerEditMode) => void;
   selectDrawings: (drawings: DrawingDto[] | null, transformerStore?: TransformerStore) => void;
@@ -295,8 +297,9 @@ export const UNTRACKED_DEFAULT_STATE: UntrackedMapState = {
         visible: true,
         opacity: 1,
         selectedShape: null,
+        selectedIconPath: undefined,
         selectedColor: 'black',
-        fillEnabled: false,
+        fillPattern: 'none',
         selectedStrokeWidth: 3,
         selectedDrawings: [],
         editMode: undefined,
@@ -425,7 +428,8 @@ export type UntrackedDrawingLayerState = UntrackedLayerState & {
   selectedShape: DrawingShapeType | null;
   selectedDrawings: DrawingDto[] | null;
   selectedColor: string;
-  fillEnabled: boolean;
+  selectedIconPath?: string;
+  fillPattern: FillPatternType;
   selectedStrokeWidth: number;
   editMode: DrawingLayerEditMode;
   editDrawingId?: string;

@@ -18,4 +18,8 @@ pub enum DrawingShapeType {
     FreeLine,
     #[db_rename = "bezier polygon"]
     BezierPolygon,
+    #[db_rename = "label text"]
+    LabelText,
+    #[db_rename = "image"]
+    Image,
 }

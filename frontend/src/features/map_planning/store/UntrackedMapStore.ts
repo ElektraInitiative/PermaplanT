@@ -2,6 +2,7 @@ import Konva from 'konva';
 import { Vector2d } from 'konva/lib/types';
 import { createRef } from 'react';
 import { StateCreator } from 'zustand';
+import { FillPatternType } from '@/api_types/definitions';
 import { FrontendOnlyLayerType } from '@/features/map_planning/layers/_frontend_only';
 import { SelectionRectAttrs } from '../types/SelectionRectAttrs';
 import { convertToDate } from '../utils/date-utils';
@@ -469,8 +470,7 @@ export const createUntrackedMapSlice: StateCreator<
       },
     }));
   },
-
-  drawingLayerSetFillEnabled(fill: boolean) {
+  drawingLayerSetSelectedIconPath(path) {
     set((state) => ({
       ...state,
       untrackedState: {
@@ -479,7 +479,22 @@ export const createUntrackedMapSlice: StateCreator<
           ...state.untrackedState.layers,
           drawing: {
             ...state.untrackedState.layers.drawing,
-            fillEnabled: fill,
+            selectedIconPath: path,
+          },
+        },
+      },
+    }));
+  },
+  drawingLayerSetFillPattern(fillPattern: FillPatternType) {
+    set((state) => ({
+      ...state,
+      untrackedState: {
+        ...state.untrackedState,
+        layers: {
+          ...state.untrackedState.layers,
+          drawing: {
+            ...state.untrackedState.layers.drawing,
+            fillPattern: fillPattern,
           },
         },
       },
@@ -515,6 +530,7 @@ export const createUntrackedMapSlice: StateCreator<
             ...state.untrackedState.layers.drawing,
             selectedShape: shape,
             selectedDrawings: null,
+            selectedIconPath: undefined,
           },
         },
       },

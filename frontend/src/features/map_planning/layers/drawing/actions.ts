@@ -38,9 +38,6 @@ export class CreateDrawingAction
     const newDrawings = this._data.map((newDrawing) => {
       return {
         ...newDrawing,
-        properties: {
-          ...newDrawing.properties,
-        },
       };
     });
 
@@ -142,12 +139,17 @@ export class UpdateDrawingAction
           if (updatedDrawing) {
             return {
               ...updatedDrawing,
+              variant: {
+                ...drawing.variant,
+                properties: {
+                  ...updatedDrawing.variant.properties,
+                },
+              },
             };
           }
         }
-
         return drawing;
-      });
+      }) as DrawingDto[];
     };
 
     return {

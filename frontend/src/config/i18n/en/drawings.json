@@ -4,32 +4,38 @@
   "draw_ellipse_hint": "Use mouse to draw an ellipse.",
   "draw_free_line_hint": "Use mouse to draw a line.",
   "draw_bezier_polygon_hint": "Use left-click to add points, right-click to finish current polygon.",
+  "place_text_hint": "Click to place text.",
+  "place_image_hint": "Click to place image.",
   "edit_bezier_polygon_hint": "Use left-click to add points.",
   "delete_bezier_polygon_point_hint": "Click on a point to delete it.",
   "bezier_polygon_add_points_between_hint": "Click on the map to add points between two points.",
-
   "draw_rectangle_tooltip": "Draw rectangle.",
   "draw_ellipse_tooltip": "Draw ellipse.",
   "draw_free_line_tooltip": "Draw free line.",
+  "place_text_tooltip": "Place text.",
   "draw_bezier_polygon_tooltip": "Draw bezier polygon.",
   "edit_bezier_polygon_tooltip": "Edit bezier polygon.",
   "delete_bezier_polygon_point_tooltip": "Delete points.",
   "bezier_polygon_add_points_between_tooltip": "Add points between two points.",
-
   "delete": "Delete Drawing",
   "delete_multiple_drawings": "Delete Drawings",
-
-
   "add_date": "Added on",
   "remove_date": "Removed on",
   "color": "Color",
+  "text": "Text",
   "strokeWidth": "Stroke Width",
   "fillEnabled": "Fill Enabled",
-
-
   "error_invalid_add_remove_date": "Remove date must be after add date.",
   "operations": "Edit Points",
   "edit_mode": "Activate Edit Mode",
-
-  "error_init_layer": "Sorry, I'm having trouble loading drawn elements from my server. Please try again later."
+  "error_init_layer": "Sorry, I'm having trouble loading drawn elements from my server. Please try again later.",
+  "fillPattern": "Fill Pattern",
+  "select_image": "Select Image",
+  "drawing_layer_right_toolbar": {
+    "tab_headers":{
+      "shapes": "Shapes",
+      "text": "Text",
+      "images": "Images"
+    }
+  }
 }

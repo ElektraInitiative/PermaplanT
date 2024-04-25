@@ -5,7 +5,7 @@ import { range } from 'lodash';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import React from 'react';
 import { Circle, Line } from 'react-konva';
-import { DrawingDto } from '@/api_types/definitions';
+import { DrawingDto, FillPatternType } from '@/api_types/definitions';
 import useMapStore from '@/features/map_planning/store/MapStore';
 import { DrawingLayerEditMode } from '@/features/map_planning/store/MapStoreTypes';
 import { PolygonPoint } from '@/features/map_planning/types/PolygonTypes';
@@ -13,6 +13,7 @@ import {
   flattenRing,
   insertPointIntoLineSegmentWithLeastDistance,
 } from '@/features/map_planning/utils/PolygonUtils';
+import { getFillPattern } from '@/utils/fillPatterns';
 
 export type BezierPolygonProps = {
   transformerRef?: React.MutableRefObject<Konva.Transformer | null>;
@@ -30,8 +31,10 @@ export type BezierPolygonProps = {
   y: number;
   scaleX: number;
   scaleY: number;
+  fillPatternScaleX?: number;
+  fillPatternScaleY?: number;
   rotation?: number;
-  fillEnabled?: boolean;
+  fillPattern?: FillPatternType;
 };
 
 function getBetweenPoint(p1: PolygonPoint, p2: PolygonPoint, p: number) {
@@ -60,8 +63,10 @@ function BezierPolygon({
   y,
   scaleX,
   scaleY,
+  fillPatternScaleX,
+  fillPatternScaleY,
   rotation,
-  fillEnabled,
+  fillPattern,
 }: BezierPolygonProps) {
   const [points, setPoints] = useState<PolygonPoint[]>(initialPoints);
   const [, setActivePoint] = useState(-1);
@@ -366,11 +371,14 @@ function BezierPolygon({
           scaleX={scaleX}
           scaleY={scaleY}
           rotation={rotation}
+          fillPattern={fillPattern}
+          fillPatternScaleX={fillPatternScaleX}
+          fillPatternScaleY={fillPatternScaleY}
+          fill={fillPattern == 'fill' ? color : undefined}
+          fillPatternImage={getFillPattern(fillPattern, color)}
           fillPatternRepeat="repeat"
           draggable
-          fill={color}
-          fillEnabled={fillEnabled}
-          closed={fillEnabled}
+          closed={fillPattern !== 'none'}
           onDragStart={onDragStart}
         />
       )}

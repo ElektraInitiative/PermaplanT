@@ -9,7 +9,6 @@ import { getImage } from '@/features/nextcloud_integration/api/getImages';
  */
 export function useFileExists(path: string) {
   const webdav = useNextcloudWebDavClient();
-
   const { isError, isLoading } = useQuery(['webdav', path], {
     queryFn: () => getImage(path, webdav as WebDAVClient),
     refetchOnWindowFocus: false,

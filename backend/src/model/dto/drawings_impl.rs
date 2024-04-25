@@ -1,13 +1,66 @@
 use super::drawings::{
-    DrawingDto, UpdateAddDateDrawingDto, UpdateDrawingsDto, UpdateRemoveDateDrawingDto,
+    DrawingDto, DrawingVariant, UpdateAddDateDrawingDto, UpdateDrawingsDto,
+    UpdateRemoveDateDrawingDto,
 };
-use crate::model::entity::drawings::{Drawing, UpdateDrawing};
+use crate::model::{
+    entity::drawings::{Drawing, UpdateDrawing},
+    r#enum::drawing_shape_type::DrawingShapeType,
+};
+
+impl DrawingVariant {
+    pub fn to_enum_and_json(&self) -> (DrawingShapeType, serde_json::Value) {
+        match self {
+            DrawingVariant::Rectangle(x) => (
+                DrawingShapeType::Rectangle,
+                serde_json::to_value(&x).unwrap(),
+            ),
+            DrawingVariant::Ellipse(x) => {
+                (DrawingShapeType::Ellipse, serde_json::to_value(&x).unwrap())
+            }
+            DrawingVariant::FreeLine(x) => (
+                DrawingShapeType::FreeLine,
+                serde_json::to_value(&x).unwrap(),
+            ),
+            DrawingVariant::BezierPolygon(x) => (
+                DrawingShapeType::BezierPolygon,
+                serde_json::to_value(&x).unwrap(),
+            ),
+            DrawingVariant::LabelText(x) => (
+                DrawingShapeType::LabelText,
+                serde_json::to_value(&x).unwrap(),
+            ),
+            DrawingVariant::Image(x) => {
+                (DrawingShapeType::Image, serde_json::to_value(&x).unwrap())
+            }
+        }
+    }
+}
 
 impl From<Drawing> for DrawingDto {
     fn from(drawing: Drawing) -> Self {
+        let drawing_variant = match drawing.shape_type {
+            DrawingShapeType::Rectangle => {
+                DrawingVariant::Rectangle(serde_json::from_value(drawing.properties).unwrap())
+            }
+            DrawingShapeType::Ellipse => {
+                DrawingVariant::Ellipse(serde_json::from_value(drawing.properties).unwrap())
+            }
+            DrawingShapeType::FreeLine => {
+                DrawingVariant::FreeLine(serde_json::from_value(drawing.properties).unwrap())
+            }
+            DrawingShapeType::BezierPolygon => {
+                DrawingVariant::BezierPolygon(serde_json::from_value(drawing.properties).unwrap())
+            }
+            DrawingShapeType::LabelText => {
+                DrawingVariant::LabelText(serde_json::from_value(drawing.properties).unwrap())
+            }
+            DrawingShapeType::Image => {
+                DrawingVariant::Image(serde_json::from_value(drawing.properties).unwrap())
+            }
+        };
         Self {
             id: drawing.id,
-            shape_type: drawing.shape_type,
+            variant: drawing_variant,
             layer_id: drawing.layer_id,
             add_date: drawing.add_date,
             remove_date: drawing.remove_date,
@@ -16,19 +69,16 @@ impl From<Drawing> for DrawingDto {
             scale_y: drawing.scale_y,
             x: drawing.x,
             y: drawing.y,
-            color: drawing.color,
-            fill_enabled: drawing.fill_enabled,
-            stroke_width: drawing.stroke_width,
-            properties: drawing.properties,
         }
     }
 }
 
 impl From<DrawingDto> for Drawing {
     fn from(drawing_dto: DrawingDto) -> Self {
+        let (shape_type, properties) = drawing_dto.variant.to_enum_and_json();
         Self {
             id: drawing_dto.id,
-            shape_type: drawing_dto.shape_type,
+            shape_type,
             layer_id: drawing_dto.layer_id,
             add_date: drawing_dto.add_date,
             remove_date: drawing_dto.remove_date,
@@ -37,19 +87,17 @@ impl From<DrawingDto> for Drawing {
             scale_y: drawing_dto.scale_y,
             x: drawing_dto.x,
             y: drawing_dto.y,
-            color: drawing_dto.color,
-            fill_enabled: drawing_dto.fill_enabled,
-            stroke_width: drawing_dto.stroke_width,
-            properties: drawing_dto.properties,
+            properties,
         }
     }
 }
 
 impl From<DrawingDto> for UpdateDrawing {
     fn from(drawing_dto: DrawingDto) -> Self {
+        let (shape_type, properties) = drawing_dto.variant.to_enum_and_json();
         Self {
             id: drawing_dto.id,
-            shape_type: Some(drawing_dto.shape_type),
+            shape_type: Some(shape_type),
             layer_id: Some(drawing_dto.layer_id),
             add_date: Some(drawing_dto.add_date),
             remove_date: Some(drawing_dto.remove_date),
@@ -58,10 +106,7 @@ impl From<DrawingDto> for UpdateDrawing {
             scale_y: Some(drawing_dto.scale_y),
             x: Some(drawing_dto.x),
             y: Some(drawing_dto.y),
-            color: Some(drawing_dto.color),
-            fill_enabled: Some(drawing_dto.fill_enabled),
-            stroke_width: Some(drawing_dto.stroke_width),
-            properties: Some(drawing_dto.properties),
+            properties: Some(properties),
         }
     }
 }

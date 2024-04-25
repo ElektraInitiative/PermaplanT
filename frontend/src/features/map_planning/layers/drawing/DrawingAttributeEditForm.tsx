@@ -6,7 +6,9 @@ import { z } from 'zod';
 import { DrawingDto, DrawingShapeType } from '@/api_types/definitions';
 import IconButton from '@/components/Button/IconButton';
 import SimpleButton, { ButtonVariant } from '@/components/Button/SimpleButton';
+import { DebouncedFillPatternSelector } from '@/components/Form/DebouncedFillPatternSelector';
 import { DebouncedSimpleFormInput } from '@/components/Form/DebouncedSimpleFormInput';
+import { DebouncedSimpleFormTextArea } from '@/components/Form/DebouncedSimpleFormTextArea';
 import EditIcon from '@/svg/icons/edit.svg?react';
 import EraserIcon from '@/svg/icons/eraser.svg?react';
 import PencilPlusIcon from '@/svg/icons/pencil-plus.svg?react';
@@ -18,9 +20,13 @@ const DrawingAttributeEditFormSchema = z
   .object({
     addDate: z.nullable(z.string()).transform((value) => value || undefined),
     removeDate: z.nullable(z.string()).transform((value) => value || undefined),
-    color: z.string(),
-    strokeWidth: z.number().nullable(),
-    fillEnabled: z.boolean().nullable(),
+    text: z.nullable(z.string()).transform((value) => value || undefined),
+    color: z.nullable(z.string()).transform((value) => value || undefined),
+    strokeWidth: z.number().optional().nullable(),
+    fillPattern: z
+      .nullable(z.string())
+      .optional()
+      .transform((value) => value || undefined),
   })
   .refine((schema) => !schema.removeDate || !schema.addDate || schema.addDate < schema.removeDate, {
     path: ['dateRelation'],
@@ -30,35 +36,55 @@ export type EditDrawingAttributesProps = {
   onAddDateChange: (addDate: DrawingFormData) => void;
   onRemoveDateChange: (removeDate: DrawingFormData) => void;
   onColorChange: (color: DrawingFormData) => void;
+  onTextChange: (text: DrawingFormData) => void;
   onStrokeWidthChange: (strokeWidth: DrawingFormData) => void;
-  onFillEnabledChange: (fillEnabled: DrawingFormData) => void;
+  onFillPatternChange: (fillPattern: DrawingFormData) => void;
   onDeleteClick: () => void;
   isReadOnlyMode: boolean;
 };
 
+export type DrawingFormData =
+  | Pick<DrawingDto, 'addDate' | 'removeDate' | 'scaleX' | 'scaleY'> & {
+      color?: string;
+      strokeWidth?: number;
+      fillPattern?: string;
+      text?: string;
+    };
+
+export type DrawingFormInput = {
+  id: string;
+  type: DrawingShapeType;
+  addDate?: string;
+  removeDate?: string;
+  color?: string;
+  strokeWidth?: number;
+  fillPattern?: string;
+  text?: string;
+};
+
 export type EditSingleDrawingProps = EditDrawingAttributesProps & {
-  drawing: DrawingDto;
+  drawing: DrawingFormInput;
 };
 
 export type EditMultipleDrawingsProps = EditDrawingAttributesProps & {
-  drawings: DrawingDto[];
+  drawings: DrawingFormInput[];
 };
 
 export type DrawingAttributeEditFormProps = EditDrawingAttributesProps & {
   drawingId?: string;
   addDateDefaultValue: string;
   removeDateDefaultValue: string;
-  colorDefaultValue: string;
+  colorDefaultValue?: string;
+  textDefaultValue?: string;
   strokeWidthDefaultValue?: number;
-  fillEnabledDefaultValue?: boolean;
+  fillPatternDefaultValue?: string;
   multipleDrawings?: boolean;
   showShapeEditButton: boolean;
+  showColor: boolean;
+  showStrokeWidth: boolean;
+  showFillPattern: boolean;
+  showText: boolean;
 };
-
-export type DrawingFormData = Pick<
-  DrawingDto,
-  'addDate' | 'removeDate' | 'scaleX' | 'scaleY' | 'color' | 'strokeWidth' | 'fillEnabled'
->;
 
 export function SingleDrawingAttributeForm({
   drawing,
@@ -66,8 +92,9 @@ export function SingleDrawingAttributeForm({
   onRemoveDateChange,
   onDeleteClick,
   onColorChange,
+  onTextChange,
   onStrokeWidthChange,
-  onFillEnabledChange,
+  onFillPatternChange,
   isReadOnlyMode,
 }: EditSingleDrawingProps) {
   return (
@@ -77,16 +104,22 @@ export function SingleDrawingAttributeForm({
         removeDateDefaultValue={drawing.removeDate ?? ''}
         colorDefaultValue={drawing.color ?? ''}
         strokeWidthDefaultValue={drawing.strokeWidth ?? 0}
-        fillEnabledDefaultValue={drawing.fillEnabled}
+        fillPatternDefaultValue={drawing.fillPattern}
+        textDefaultValue={drawing.text}
         onAddDateChange={onAddDateChange}
         onRemoveDateChange={onRemoveDateChange}
         onDeleteClick={onDeleteClick}
         onColorChange={onColorChange}
+        onTextChange={onTextChange}
+        showColor={drawing.color !== undefined}
+        showStrokeWidth={drawing.strokeWidth !== undefined}
+        showFillPattern={drawing.fillPattern !== undefined}
+        showText={drawing.type === DrawingShapeType.LabelText}
         onStrokeWidthChange={onStrokeWidthChange}
-        onFillEnabledChange={onFillEnabledChange}
+        onFillPatternChange={onFillPatternChange}
         isReadOnlyMode={isReadOnlyMode}
         drawingId={drawing.id}
-        showShapeEditButton={drawing.shapeType === DrawingShapeType.BezierPolygon}
+        showShapeEditButton={drawing.type === DrawingShapeType.BezierPolygon}
       />
     </div>
   );
@@ -99,7 +132,7 @@ export function MultipleDrawingAttributeForm({
   onDeleteClick,
   onColorChange,
   onStrokeWidthChange,
-  onFillEnabledChange,
+  onFillPatternChange,
   isReadOnlyMode,
 }: EditMultipleDrawingsProps) {
   const getCommonAddDate = () => {
@@ -114,26 +147,39 @@ export function MultipleDrawingAttributeForm({
     return existsCommonDate ? comparisonDate : '';
   };
 
+  const hasAnyShapeColor = drawings.some((drawing) => drawing.color !== undefined);
+  const hasAnyShapeStrokeWidth = drawings.some((drawing) => drawing.strokeWidth !== undefined);
+  const hasAnyShapeFillPattern = drawings.some((drawing) => drawing.fillPattern !== undefined);
+
   const getCommonColor = () => {
     const color = drawings[0].color;
     const existsCommonColor = drawings.every((drawing) => drawing.color === color);
-    return existsCommonColor ? color : '#000000';
+    return existsCommonColor ? color : undefined;
+  };
+
+  const getCommonText = () => {
+    const text = drawings[0].text;
+    const existsCommonText = drawings.every((drawing) => drawing.text === text);
+    return existsCommonText ? text : undefined;
   };
 
   const getCommonStrokeWidth = () => {
     const strokeWidth = drawings[0].strokeWidth;
+
     const existsCommonStrokeWidth = drawings.every(
       (drawing) => drawing.strokeWidth === strokeWidth,
     );
-    return existsCommonStrokeWidth ? strokeWidth : 0;
+
+    return existsCommonStrokeWidth ? strokeWidth : undefined;
   };
 
-  const getCommonFillEnabled = () => {
-    const fillEnabled = drawings[0].fillEnabled;
-    const existsCommonFillEnabled = drawings.every(
-      (drawing) => drawing.fillEnabled === fillEnabled,
+  const getCommonFillPattern = () => {
+    const fillPattern = drawings[0].fillPattern;
+    const existsCommonFillPattern = drawings.every(
+      (drawing) => drawing.fillPattern === fillPattern,
     );
-    return existsCommonFillEnabled ? fillEnabled : false;
+
+    return existsCommonFillPattern ? fillPattern : undefined;
   };
 
   return (
@@ -143,13 +189,19 @@ export function MultipleDrawingAttributeForm({
         removeDateDefaultValue={getCommonRemoveDate() ?? ''}
         colorDefaultValue={getCommonColor()}
         strokeWidthDefaultValue={getCommonStrokeWidth()}
-        fillEnabledDefaultValue={getCommonFillEnabled()}
+        fillPatternDefaultValue={getCommonFillPattern()}
+        textDefaultValue={getCommonText()}
         onAddDateChange={onAddDateChange}
         onRemoveDateChange={onRemoveDateChange}
         onDeleteClick={onDeleteClick}
         onColorChange={onColorChange}
+        onTextChange={onColorChange}
+        showColor={hasAnyShapeColor}
+        showStrokeWidth={hasAnyShapeStrokeWidth}
+        showFillPattern={hasAnyShapeFillPattern}
+        showText={drawings.every((drawing) => drawing.type === DrawingShapeType.LabelText)}
         onStrokeWidthChange={onStrokeWidthChange}
-        onFillEnabledChange={onFillEnabledChange}
+        onFillPatternChange={onFillPatternChange}
         isReadOnlyMode={isReadOnlyMode}
         multipleDrawings={true}
         showShapeEditButton={false}
@@ -163,17 +215,23 @@ export function DrawingAttributeEditForm({
   addDateDefaultValue,
   removeDateDefaultValue,
   colorDefaultValue,
+  textDefaultValue,
   strokeWidthDefaultValue,
-  fillEnabledDefaultValue,
+  fillPatternDefaultValue,
   onAddDateChange,
   onRemoveDateChange,
   onDeleteClick,
   onColorChange,
+  onTextChange,
   onStrokeWidthChange,
-  onFillEnabledChange,
+  onFillPatternChange,
   isReadOnlyMode,
   multipleDrawings = false,
   showShapeEditButton,
+  showColor,
+  showStrokeWidth,
+  showFillPattern,
+  showText,
 }: DrawingAttributeEditFormProps) {
   const { t } = useTranslation(['drawings']);
 
@@ -181,15 +239,15 @@ export function DrawingAttributeEditForm({
     defaultValues: {
       addDate: addDateDefaultValue,
       removeDate: removeDateDefaultValue,
-      color: colorDefaultValue,
-      strokeWidth: strokeWidthDefaultValue,
-      fillEnabled: fillEnabledDefaultValue,
+      text: textDefaultValue ?? '',
+      color: colorDefaultValue ?? '',
+      strokeWidth: strokeWidthDefaultValue ?? 0,
+      fillPattern: fillPatternDefaultValue,
     },
     resolver: zodResolver(DrawingAttributeEditFormSchema),
   });
 
-  const showStrokeWidth = strokeWidthDefaultValue !== undefined && strokeWidthDefaultValue > 0;
-  const showFillEnabled = fillEnabledDefaultValue !== undefined;
+  const showProperties = showStrokeWidth || showFillPattern || showColor;
 
   const drawingLayerSetEditMode = useMapStore((state) => state.drawingLayerSetEditMode);
   const editMode = useMapStore((state) => state.untrackedState.layers.drawing.editMode);
@@ -200,16 +258,18 @@ export function DrawingAttributeEditForm({
     formInfo.reset({
       addDate: addDateDefaultValue,
       removeDate: removeDateDefaultValue,
-      color: colorDefaultValue,
-      strokeWidth: strokeWidthDefaultValue,
-      fillEnabled: fillEnabledDefaultValue,
+      color: colorDefaultValue ?? '',
+      text: textDefaultValue ?? '',
+      strokeWidth: strokeWidthDefaultValue ?? 0,
+      fillPattern: fillPatternDefaultValue,
     });
   }, [
     addDateDefaultValue,
     removeDateDefaultValue,
     colorDefaultValue,
+    textDefaultValue,
     strokeWidthDefaultValue,
-    fillEnabledDefaultValue,
+    fillPatternDefaultValue,
     formInfo,
   ]);
 
@@ -243,18 +303,33 @@ export function DrawingAttributeEditForm({
         />
       </div>
 
-      <hr className="my-4 border-neutral-700" />
+      {showProperties && <hr className="my-4 border-neutral-700" />}
 
-      <div className="flex gap-2">
-        <DebouncedSimpleFormInput
-          id="color"
-          type="color"
-          labelContent={t('drawings:color')}
-          className="w-36"
-          disabled={isReadOnlyMode}
-          onValid={onColorChange}
-        />
-      </div>
+      {showText && (
+        <div className="flex gap-2">
+          <DebouncedSimpleFormTextArea
+            id="text"
+            type="text"
+            labelText={t('drawings:text')}
+            className="h-32 w-36"
+            disabled={isReadOnlyMode}
+            onValid={onTextChange}
+          />
+        </div>
+      )}
+
+      {showColor && (
+        <div className="flex gap-2">
+          <DebouncedSimpleFormInput
+            id="color"
+            type="color"
+            labelContent={t('drawings:color')}
+            className="w-36"
+            disabled={isReadOnlyMode}
+            onValid={onColorChange}
+          />
+        </div>
+      )}
 
       {showStrokeWidth && (
         <div className="mt-2 flex gap-2">
@@ -273,15 +348,12 @@ export function DrawingAttributeEditForm({
         </div>
       )}
 
-      {showFillEnabled && (
+      {showFillPattern && (
         <div className="flex gap-2">
-          <DebouncedSimpleFormInput
-            id="fillEnabled"
-            type="checkbox"
-            labelContent={t('drawings:fillEnabled')}
-            className="h-4 w-4"
-            disabled={isReadOnlyMode}
-            onValid={onFillEnabledChange}
+          <DebouncedFillPatternSelector
+            id="fillPattern"
+            onValid={onFillPatternChange}
+            labelContent={t('drawings:fillPattern')}
           />
         </div>
       )}

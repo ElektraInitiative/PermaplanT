@@ -1,0 +1,9 @@
+  .dark-react-tabs__tab--selected {
+    border-color: #aaa;
+    color: white;
+    border-radius: 5px 5px 0 0;
+  }
+
+  .dark-react-tabs__tab--selected::after {
+    display: none;
+  }

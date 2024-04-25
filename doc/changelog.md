@@ -61,7 +61,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - _()_
 - _()_
 - _()_
-- _()_
+- Added fill patterns, labels and images to drawing layer _(Daniel Steinkogler, Jannis Adamek)_
 - _()_
 - _()_
 - _()_
