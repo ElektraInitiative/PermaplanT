@@ -12,7 +12,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 - Added Meeting Agenda&Notes for 15.04.2024 9:00 _(Markus Raab, Daniel)_
 - _()_
 - _()_
-- _()_
+- Adjusted size and positon of initial view of map, as well as default map polygon, to have entire map in view by default _(Andrei Dinu)_
 - _()_
 - Fixed warning text from left toolbar being cut by map elements. _(Andrei Dinu)_
 - Added paragraph about z-index usage to Frontend UI Usability Guideline in Docs _(Andrei Dinu)_

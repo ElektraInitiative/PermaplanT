@@ -96,9 +96,14 @@ export const BaseStage = ({
   const viewRect = useMapStore((store) => store.untrackedState.editorViewRect);
   useEffect(() => {
     if (viewRect.width !== 0 || viewRect.height !== 0) return;
+    // If we don't have a view or height set, set the initial stage and view rectangle to be centered on coordinates (0,0)
+
+    stage.x = Math.floor((containerRef.current?.offsetWidth ?? 0) / 2);
+    stage.y = Math.floor((containerRef.current?.offsetHeight ?? 0) / 2);
+
     updateViewRect({
-      x: 0,
-      y: 0,
+      x: Math.floor((containerRef.current?.offsetWidth ?? 0) / 2),
+      y: Math.floor((containerRef.current?.offsetHeight ?? 0) / 2),
       width: Math.floor(window.innerWidth / stage.scale),
       height: Math.floor(window.innerHeight / stage.scale),
     });
