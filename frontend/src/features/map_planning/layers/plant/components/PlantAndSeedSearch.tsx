@@ -92,7 +92,7 @@ export const PlantAndSeedSearch = () => {
               disabled={isReadOnlyMode}
               placeholder={t('plantSearch:placeholder')}
               handleSearch={(value) => {
-                plantSearchActions.searchPlants(value);
+                plantSearchActions.searchPlants({ searchTerm: value, pageNumber: 0 });
                 seedSearchActions.searchSeeds(value);
               }}
               ref={searchInputRef}

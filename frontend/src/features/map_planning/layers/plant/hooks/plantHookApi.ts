@@ -23,7 +23,8 @@ const PLANT_KEYS = {
   },
 
   detail: (plantId: number) => [{ ...PLANT_KEYS._helpers.details()[0], plantId }] as const,
-  search: (searchTerm: string) => [{ ...PLANT_KEYS._helpers.searches()[0], searchTerm }] as const,
+  search: (searchTerm: string, pageNumber: number) =>
+    [{ ...PLANT_KEYS._helpers.searches()[0], searchTerm, pageNumber }] as const,
   seasonalAvailable: (mapId: number, date: Date, page: number) =>
     [
       {
@@ -69,12 +70,12 @@ function findPlantByIdQueryFn({
  * A hook that returns some functions to search for plants.
  */
 export function usePlantSearch() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const debouncedSearchTerm = useDebouncedValue(searchTerm, 500);
+  const [searchParams, setSearchParams] = useState({ searchTerm: '', pageNumber: 0 });
+  const debouncedSearchParams = useDebouncedValue(searchParams, 500);
   const { t } = useTranslation(['plantSearch']);
 
   const queryInfo = useQuery({
-    queryKey: PLANT_KEYS.search(debouncedSearchTerm),
+    queryKey: PLANT_KEYS.search(debouncedSearchParams.searchTerm, debouncedSearchParams.pageNumber),
     queryFn: searchPlantsQueryFn,
     select: mapPageToList,
     meta: {
@@ -88,13 +89,13 @@ export function usePlantSearch() {
   });
 
   const clearSearchTerm = useCallback(() => {
-    setSearchTerm('');
+    setSearchParams({ searchTerm: '', pageNumber: 0 });
   }, []);
 
   return {
     queryInfo,
     actions: {
-      searchPlants: setSearchTerm,
+      searchPlants: setSearchParams,
       clearSearchTerm,
     },
   };
@@ -108,8 +109,9 @@ function searchPlantsQueryFn({
   queryKey,
 }: QueryFunctionContext<ReturnType<(typeof PLANT_KEYS)['search']>>) {
   const { searchTerm } = queryKey[0];
+  const { pageNumber } = queryKey[0];
 
-  return searchPlants(searchTerm, 0);
+  return searchPlants(searchTerm, pageNumber);
 }
 
 /**
