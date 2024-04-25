@@ -5,11 +5,11 @@ import { ONE_METER, TEN_CENTIMETERS } from '@/features/map_planning/utils/Consta
  * @param screenWidth current screen width
  */
 export function calculateGridStep(screenWidth: number): number {
-  if (screenWidth > 50 * ONE_METER) {
+  if (screenWidth > 70 * ONE_METER) {
     return 10 * ONE_METER;
   }
 
-  if (screenWidth > 10 * ONE_METER) {
+  if (screenWidth > 5 * ONE_METER) {
     return ONE_METER;
   }
 

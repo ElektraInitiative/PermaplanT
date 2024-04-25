@@ -77,6 +77,8 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 ## 0.4.0 - 12.4.2024
 
+- Display lines at y=0 and x=0 on the grid. _(Moritz)_
+- Fix a bug that caused the yard stick to jump around while zooming the map _(Moritz)_
 - needs new migrations
 - needs new scraper data (integer for plant spread and height)
 - pin python package versions for e2e tests #1200 _(4ydan)_

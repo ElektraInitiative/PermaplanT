@@ -23,10 +23,22 @@ export const Grid = (rect: ViewRect) => {
         strokeWidth={gridDotSize}
         stroke={colors.secondary[500]}
         points={[startX, y, endX, y]}
-        dash={[gridDotSize, gridStep - gridDotSize]}
+        dash={y !== 0 ? [gridDotSize / 2, gridStep - gridDotSize, gridDotSize / 2, 0] : []}
+        key={`grid-line-y-${y}`}
       ></Line>,
     );
   }
 
-  return <Group>{lines}</Group>;
+  return (
+    <Group>
+      {lines}
+      {/* Forms a cross with the solid line at y = 0 to indicate where the origin is. */}
+      <Line
+        strokeWidth={gridDotSize}
+        stroke={colors.secondary[500]}
+        points={[0, startY, 0, endY]}
+        key={`grid-line-x`}
+      ></Line>
+    </Group>
+  );
 };

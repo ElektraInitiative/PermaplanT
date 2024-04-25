@@ -92,17 +92,14 @@ export const BaseStage = ({
 
   const { isSelectedLayerVisible } = useSelectedLayerVisibility();
 
-  const updateViewRect = useMapStore((store) => store.updateViewRect);
-  const viewRect = useMapStore((store) => store.untrackedState.editorViewRect);
   useEffect(() => {
-    if (viewRect.width !== 0 || viewRect.height !== 0) return;
-    updateViewRect({
-      x: 0,
-      y: 0,
+    useMapStore.getState().updateViewRect({
+      x: Math.floor(stage.x / stage.scale),
+      y: Math.floor(stage.y / stage.scale),
       width: Math.floor(window.innerWidth / stage.scale),
       height: Math.floor(window.innerHeight / stage.scale),
     });
-  });
+  }, [stage.scale, stage.x, stage.y]);
 
   const onStageWheel = (e: KonvaEventObject<WheelEvent>) => {
     e.evt.preventDefault();
@@ -124,18 +121,9 @@ export const BaseStage = ({
       }
     } else {
       if (scrollable) {
-        handleScroll(e.evt.deltaX, e.evt.deltaY, targetStage);
+        handleScroll(e.evt.deltaX, e.evt.deltaY, targetStage, setStage);
       }
     }
-
-    if (stageRef.current === null) return;
-
-    updateViewRect({
-      x: Math.floor(stageRef.current.getAbsolutePosition().x / stage.scale),
-      y: Math.floor(stageRef.current.getAbsolutePosition().y / stage.scale),
-      width: Math.floor(window.innerWidth / stage.scale),
-      height: Math.floor(window.innerHeight / stage.scale),
-    });
   };
 
   // Event listener responsible for allowing stage-dragging only via middle mouse button
@@ -155,13 +143,6 @@ export const BaseStage = ({
   const onStageDragEnd = (e: KonvaEventObject<DragEvent>) => {
     listeners?.stageDragEndListeners.forEach((listener) => listener(e));
     if (stageRef.current === null) return;
-
-    updateViewRect({
-      x: Math.floor(stageRef.current.getAbsolutePosition().x / stage.scale),
-      y: Math.floor(stageRef.current.getAbsolutePosition().y / stage.scale),
-      width: Math.floor(window.innerWidth / stage.scale),
-      height: Math.floor(window.innerHeight / stage.scale),
-    });
   };
 
   // Event listener responsible for updating the selection rectangle's size
