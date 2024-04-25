@@ -10,6 +10,7 @@ Syntax: `- short text describing the change _(Your Name)_`
 
 - CI: added pipeline for master.permplant.net and other name changes for pages _(Filip Markovic)_
 - Added Meeting Agenda&Notes for 15.04.2024 9:00 _(Markus Raab, Daniel)_
+- Added Meeting Agenda&Notes for 22.04.2024 9:00 _(Markus Raab, Christoph)_
 - _()_
 - _()_
 - _()_
